@@ -1,6 +1,8 @@
 
 package mkw;
 
+import mk8dx.GpD;
+import mk8dx.RaceD;
 import shared.Format;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -224,6 +226,16 @@ public class Event {
         }else{
             return currentGp.getMostRecentRace();
         }
+    }
+
+    public boolean nodc(){
+        boolean nodc = true;
+        for(Gp gp:completedGps){
+            if(gp.nodc()==false){
+                nodc = false;
+            }
+        }
+        return nodc;
     }
 
 

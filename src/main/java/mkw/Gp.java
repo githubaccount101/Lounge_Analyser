@@ -9,7 +9,7 @@ public class Gp {
     private ArrayList<Race> races = new ArrayList();
     private Event event;
     private int gpId;
-    private String id;
+    private double id;
 
     private int racePoints;
     private int dcPts = 0;
@@ -18,7 +18,7 @@ public class Gp {
     public Gp(Event event, int gpId){
         this.event = event;
         this.gpId = gpId;
-        this.id = this.event.getEventId()+"-"+this.gpId;
+        this.id = 1.0*(this.gpId)/10+1.0*this.event.getEventId();
         this.maxRaces = 4;
     }
 
@@ -147,7 +147,7 @@ public class Gp {
         return gpId;
     }
 
-    public String getId() {
+    public double getId() {
         return id;
     }
 
@@ -159,6 +159,10 @@ public class Gp {
         return races;
     }
 
+    public int getTotalPoints(){
+        return  totalPoints;
+    }
+
     public int getMissedRacesFromdc() {
         int count = 0;
         for(Race r:races){
@@ -167,6 +171,23 @@ public class Gp {
             }
         }
         return count;
+    }
+
+    public boolean nodc(){
+        boolean nodc = true;
+        for(Race r : getRaces()){
+            if(r.isPlaceholder()){
+                nodc = false;
+            }
+        }
+        return nodc;
+    }
+
+    public boolean fourRacesPlayed(){
+        if(racesPlayedInGp==4){
+            return true;
+        }
+        return false;
     }
 
     public boolean mostRecentRaceWasMissed(){

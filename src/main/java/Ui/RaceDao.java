@@ -81,7 +81,6 @@ public class RaceDao {
                 System.out.println("The driver name is " + meta.getDriverName());
                 System.out.println("A new database has been created.");
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -90,32 +89,47 @@ public class RaceDao {
     private void createTables() {
 
         // SQL statement for creating a new table
-        String sql = "CREATE TABLE IF NOT EXISTS races (raceid int, eventid int, gpid varchar(10), tier int, format varchar(10), track varchar(50), start int, finish int, players int, points int, satout boolean)";
+        String sql = "CREATE TABLE IF NOT EXISTS races (raceid int, eventid int, gpid REAL, tier int, format varchar(10)," +
+                " track varchar(50), start int, finish int, players int, points int, satout boolean)";
         String sql2 = "DELETE FROM races";
-        String sql3 = "CREATE TABLE IF NOT EXISTS racesD (raceid int, eventid int, tier varchar(10), format varchar(10), track varchar(50), start int, finish int, points int, satout boolean)";
+        String sql3 = "CREATE TABLE IF NOT EXISTS racesD (raceid int, eventid int, tier varchar(10), format varchar(10), " +
+                "track varchar(50), start int, finish int, points int, satout boolean)";
         String sql4 = "DELETE FROM racesD";
+        String sql5 = "CREATE TABLE IF NOT EXISTS events (eventid int,points int, nodc boolean)";
+        String sql6 = "DELETE FROM events";
+        String sql7 = "CREATE TABLE IF NOT EXISTS eventsD (eventid int,points int, nodc boolean)";
+        String sql8 = "DELETE FROM eventsD";
+        String sql9 = "CREATE TABLE IF NOT EXISTS gps (gpid REAL,points int, nodc boolean, fullgp boolean)";
+        String sql10 = "DELETE FROM gps";
+
 
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
-            // create a new table
+
             stmt.execute(sql);
             stmt.execute(sql2);
             stmt.execute(sql3);
             stmt.execute(sql4);
+            stmt.execute(sql5);
+            stmt.execute(sql6);
+            stmt.execute(sql7);
+            stmt.execute(sql8);
+            stmt.execute(sql9);
+            stmt.execute(sql10);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void insert(int raceid, int eventid, String gpid, int tier, String format, String track, int start, int finish, int players, int points, boolean satout) {
+    private void insert(int raceid, int eventid, double gpid, int tier, String format, String track, int start, int finish, int players, int points, boolean satout) {
         String sql = "INSERT INTO races(raceid, eventid, gpid, tier, format, track, start, finish, players, points, satout) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, raceid);
             pstmt.setInt(2, eventid);
-            pstmt.setString(3, gpid);
+            pstmt.setDouble(3, gpid);
             pstmt.setInt(4, tier);
             pstmt.setString(5, format);
             pstmt.setString(6, track);
@@ -130,7 +144,7 @@ public class RaceDao {
         }
     }
 
-    public void insertD(int raceid, int eventid, String tier, String format, String track, int start, int finish, int points, boolean satout) {
+    private void insertD(int raceid, int eventid, String tier, String format, String track, int start, int finish, int points, boolean satout) {
         String sql = "INSERT INTO racesD(raceid, eventid, tier, format, track, start, finish, points, satout) VALUES(?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = this.connect();
@@ -150,10 +164,52 @@ public class RaceDao {
         }
     }
 
+    private void insertEvent(int eventId, int points, boolean nodc){
+        String sql = "INSERT INTO events (eventId, points, nodc) VALUES(?,?,?)";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, eventId);
+            pstmt.setInt(2, points);
+            pstmt.setBoolean(3,nodc);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void insertEventD(int eventId, int points, boolean nodc){
+        String sql = "INSERT INTO eventsD (eventId, points, nodc) VALUES(?,?,?)";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, eventId);
+            pstmt.setInt(2, points);
+            pstmt.setBoolean(3,nodc);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void insertGp(double gpId, int points, boolean nodc, boolean fullGp){
+        String sql = "INSERT INTO gps (gpid, points, nodc , fullgp) VALUES(?,?,?,?)";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, gpId);
+            pstmt.setInt(2, points);
+            pstmt.setBoolean(3,nodc);
+            pstmt.setBoolean(4,fullGp);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void storeEvent(){
         if(recentEvents.isEmpty() == false){
             for (Event e : this.recentEvents) {
+                insertEvent(e.getEventId(),e.getFinalPoints(), e.nodc());
                 for (Gp gp : e.getCompletedGps()) {
+                    insertGp(gp.getId(), gp.getTotalPoints(), gp.nodc(), gp.fourRacesPlayed());
                     for (Race r : gp.getRaces()) {
                         storeRace(r);
                     }
@@ -180,6 +236,7 @@ public class RaceDao {
 
         if(recentEventsD.isEmpty() == false){
             for (EventD e : recentEventsD) {
+                insertEventD(e.getEventId(),e.getFinalPoints(), e.nodc());
                 for (GpD gp : e.getCompletedGps()) {
                     for (RaceD r : gp.getRaces()) {
                         storeRaceD(r);
@@ -216,31 +273,41 @@ public class RaceDao {
             int tier = Integer.parseInt(Tier.randomTier().getTier());
             String tierD = TierD.randomTierD().getTier();
             boolean satout = false;
+            int tpoints = 0;
 
             for(int n = 1; n<=3; n++){
+                int gpoints = 0;
+                double gpid = 1.0*n/10+1.0*i;
                 for(int x = 1; x<=4;x++){
-                    String gpid = String.valueOf(i)+"-"+String.valueOf(n);
+
                     String track = Track.randomTrack().getFullName();
                     int start = rng.nextInt(12)+1;
                     int finish = rng.nextInt(12)+1;
                     int players = 12;
                     int points = p12[finish-1];
+                    tpoints+=points;
+                    gpoints+=points;
 
                     insert(raceid, eventid, gpid, tier, format, track, start, finish, players, points, satout);
                     raceid++;
                 }
+                insertGp(gpid,gpoints,true,true);
             }
+            insertEvent(eventid,tpoints,true);
+
+            int tpointsD = 0;
             for(int k=1;k<=12;k++){
 
                 String track = TrackD.randomTrackD().getFullName();
                 int start = rng.nextInt(12)+1;
                 int finish = rng.nextInt(12)+1;
                 int points = p12d[finish-1];
+                tpointsD+=points;
 
                 insertD(raceidD, eventid, tierD, format, track, start, finish, points, satout);
                 raceidD++;
             }
-
+            insertEventD(eventid,tpointsD,true);
         }
 
     }

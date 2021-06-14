@@ -247,6 +247,16 @@ public class EventD {
         return inDcStandby;
     }
 
+    public boolean nodc(){
+        boolean nodc = true;
+        for(GpD gp:completedGps){
+            if(gp.nodc()==false){
+                nodc = false;
+            }
+        }
+        return nodc;
+    }
+
     public void endEventEarly(){
         for(int i=this.racesPlayed+1; i<=raceLimit; i++){
             this.dcStandby();
@@ -288,7 +298,7 @@ public class EventD {
     }
 
     public void preRaceStatus() {
-        System.out.println("");
+
         System.out.println("");
         System.out.println("------------------------------------------------------------------------------------------------");
         System.out.println("Entering Data For: GP " + getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()

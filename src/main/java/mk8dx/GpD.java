@@ -157,6 +157,16 @@ public class GpD {
         this.dcPts = dcPts;
     }
 
+    public boolean nodc(){
+        boolean nodc = true;
+        for(RaceD r : getRaces()){
+            if(r.isPlaceholder()){
+                nodc = false;
+            }
+        }
+        return nodc;
+    }
+
     public String toString(){
         return "GP Status:: Event: "+this.event.getEventId()+", GP: "+gpId+", Races-Played: "+racesPlayedInGp+", Points: "+racePoints+", DC Points: "+dcPts;
     }

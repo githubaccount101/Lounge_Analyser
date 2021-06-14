@@ -94,7 +94,7 @@ public class Race {
         return raceId;
     }
 
-    public String getGpId(){
+    public double getGpId(){
         return this.gp.getId();
     }
 

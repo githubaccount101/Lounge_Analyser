@@ -12,6 +12,7 @@ public class Main {
         Ui ui = new Ui(scanner, dao);
 
         dao.setUp();
-        ui.start();
+        dao.generate100();
+
     }
 }
