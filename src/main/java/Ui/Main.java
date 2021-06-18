@@ -12,7 +12,10 @@ public class Main {
         Ui ui = new Ui(scanner, dao);
 
         dao.setUp();
-        dao.generate100();
+        dao.resetTables();
+        dao.generateRandom(3);
+        ui.start();
+
 
     }
 }

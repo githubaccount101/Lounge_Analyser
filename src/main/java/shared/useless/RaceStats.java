@@ -1,11 +1,9 @@
-package Ui;
+package shared.useless;
 
-import java.util.List;
 import java.util.ArrayList;
 import mkw.Event;
 import mk8dx.EventD;
-import java.sql.*;
-import java.util.Random;
+
 @Deprecated
 class RaceStats {
 

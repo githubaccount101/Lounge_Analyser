@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class EventD {
     private Scanner scanner;
     private final static int raceLimit = 12;
-    private static int totalEvents = 0;
 
     private final TierD tier;
     private final Format format;
@@ -29,14 +28,13 @@ public class EventD {
     public boolean outOfStandby = false;
     public boolean backToStandby = false;
 
-    public EventD(TierD tier, Format format, Scanner scanner) {
+    public EventD(TierD tier, Format format, Scanner scanner, int eventsPlayed) {
         this.scanner = scanner;
 
         this.tier = tier;
         this.format = format;
 
-        EventD.totalEvents++;
-        this.eventId = totalEvents;
+        this.eventId = eventsPlayed+1;
 
         this.currentGp = new GpD(this,gpPlayed+1);
     }
@@ -47,6 +45,9 @@ public class EventD {
         updateScoring();
         System.out.println("");
         System.out.println(currentGp);
+        if(racesPlayed>=12){
+            startNewGp();
+        }
         outOfStandby = false;
     }
 
@@ -131,12 +132,18 @@ public class EventD {
                 System.out.println("you are in dc standby because the prior race was missed and "
                         +"\n"+ "you were not able to rejoin before the next race started");
                 dcStandby();
+                if(racesPlayed>=12){
+                    startNewGp();
+                }
                 postRacestatus();
                 return;
             }
         }
         System.out.println("you have dc'd in this gp, the last race played was a normal race");
         dcStandby();
+        if(racesPlayed>=12){
+            startNewGp();
+        }
     }
 
     public void undoDD(){
@@ -188,6 +195,7 @@ public class EventD {
         System.out.println("removing race:" + currentGp.getMostRecentRace());
         currentGp.undoLastRace();
         this.racesPlayed--;
+        RaceD.setRaceCount(RaceD.getRaceCount()-1);
         this.updateScoring();
     }
 

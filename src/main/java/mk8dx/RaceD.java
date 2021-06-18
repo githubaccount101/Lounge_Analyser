@@ -1,6 +1,7 @@
 
 package mk8dx;
 
+import mkw.Race;
 import shared.Format;
 
 public class RaceD {
@@ -23,8 +24,6 @@ public class RaceD {
     private final static int[] p12 = {15,12, 10, 9,8, 7, 6, 5, 4, 3, 2, 1};
     private static int dcCount;
     private static int raceCount = 0;
-
-
 
     public RaceD(EventD event, GpD gp, int race, TrackD track, int start, int finish) {
         this.event = event;
@@ -56,6 +55,17 @@ public class RaceD {
 
         this.tier = event.getTier();
         this.format = event.getFormat();
+
+        raceCount++;
+        this.raceId = raceCount;
+    }
+
+    public static void setRaceCount(int raceCount) {
+        RaceD.raceCount = raceCount;
+    }
+
+    public static int getRaceCount() {
+        return raceCount;
     }
 
     private void allocatePoints(){
@@ -118,11 +128,11 @@ public class RaceD {
         if(track == null){
             return "[Event"+event.getEventId()+"] Race:" + race + ", track=" + track+ ", "
                     + "start=" + start + ", finish=" + finish + ", players=" + players + ", "
-                    + "points=" + points + ", satOut=" + satOut + '}';
+                    + "points=" + points + ", satOut=" + satOut + '}'+" raceid: "+raceId;
         }
         return "[Event"+event.getEventId()+"] Race:" + race + ", track=" + track.getFullName() + ", "
                 + "start=" + start + ", finish=" + finish + ", players=" + players + ", "
-                + "points=" + points + ", satOut=" + satOut + '}';
+                + "points=" + points + ", satOut=" + satOut + '}'+" raceid: "+raceId;
     }
 
 

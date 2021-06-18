@@ -10,7 +10,6 @@ import java.util.Scanner;
 public class Event {
     private Scanner scanner;
     private final static int raceLimit = 12;
-    private static int totalEvents = 0;
 
     private final Tier tier;
     private final Format format;
@@ -27,14 +26,13 @@ public class Event {
     private int totalPoints = 0;
     private boolean inDcStandby = false;
 
-    public Event(Tier tier, Format format, Scanner scanner) {
+    public Event(Tier tier, Format format, Scanner scanner, int storedEvents) {
         this.scanner = scanner;
 
         this.tier = tier;
         this.format = format;
 
-        Event.totalEvents++;
-        this.eventId = totalEvents;
+        this.eventId = storedEvents+1;
 
         this.currentGp = new Gp(this,gpPlayed+1);
     }
@@ -97,11 +95,12 @@ public class Event {
     public void manageDc(boolean onResults) {
         currentGp.getDcCompensation(onResults);
         this.updateScoring();
-        postRacestatus();
 
         if (currentGp.newGpRequired()) {
             startNewGp();
         }
+
+        postRacestatus();
     }
 
     public int getChancesToRejoin() {
@@ -139,6 +138,12 @@ public class Event {
                     manageDc(onResults);
                 }
             }
+            return;
+        }
+        if(currentGp.getRemainingRacesInGp()==1){
+            System.out.println("you have disconnected from the last race of the Gp");
+            dcStandby();
+            manageDc(onResults);
             return;
         }
         System.out.println("you have dc'd in this gp, the last race played was a normal race");
@@ -200,6 +205,7 @@ public class Event {
         System.out.println("removing race:" + currentGp.getMostRecentRace());
         currentGp.undoLastRace();
         this.racesPlayed--;
+        Race.setRaceCount(Race.getRaceCount()-1);
         this.updateScoring();
     }
 

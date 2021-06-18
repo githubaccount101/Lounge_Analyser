@@ -163,6 +163,7 @@ public class Gp {
         return  totalPoints;
     }
 
+
     public int getMissedRacesFromdc() {
         int count = 0;
         for(Race r:races){

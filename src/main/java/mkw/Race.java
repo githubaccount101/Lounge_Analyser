@@ -50,6 +50,7 @@ public class Race {
         this.raceId = raceCount;
     }
 
+
     private void allocatePoints(){
         if(this.players == 12){
             this.points = p12[this.finish-1];
@@ -114,6 +115,10 @@ public class Race {
         Race.raceCount = raceCount;
     }
 
+    public static int getRaceCount() {
+        return raceCount;
+    }
+
     public boolean isPlaceholder(){
         if(this.satOut==true){
             return true;
@@ -128,11 +133,11 @@ public class Race {
         if(track == null){
             return "[Event"+event.getEventId()+"] Race:" + race + ", track=" + track+ ", "
                     + "start=" + start + ", finish=" + finish + ", players=" + players + ", "
-                    + "points=" + points + ", satOut=" + satOut + '}';
+                    + "points=" + points + ", satOut=" + satOut + '}' +" raceid: "+raceId;
         }
         return "[Event"+event.getEventId()+"] Race:" + race + ", track=" + track.getFullName() + ", "
                 + "start=" + start + ", finish=" + finish + ", players=" + players + ", "
-                + "points=" + points + ", satOut=" + satOut + '}';
+                + "points=" + points + ", satOut=" + satOut + '}'+" raceid: "+raceId;
     }
 
     public String getInsert(){

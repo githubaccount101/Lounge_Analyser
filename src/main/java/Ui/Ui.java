@@ -1,6 +1,7 @@
 package Ui;
 
 
+import mkw.Race;
 import shared.Format;
 import java.util.Optional;
 import java.util.Scanner;
@@ -26,7 +27,7 @@ public class Ui {
 
 
         while(true){
-            System.out.println("e for entry, d for data, x to exit");
+            System.out.println("e for entry, x to exit");
             String input = scanner.nextLine();
 
             if(input.equals("x")){
@@ -36,20 +37,6 @@ public class Ui {
 
             if (input.equals("e")) {
                 enter();
-            }
-            if (input.equals("d")) {
-                boolean played = dao.isPlayed();
-                if (played) {
-                    System.out.println("This session's events");
-                    dao.printRecent();
-
-                    System.out.println("storing");
-                    dao.storeEvent();
-                    dao.storeEventD();
-
-                    dao.refresh();
-                    break;
-                }
             }
         }
     }
@@ -80,8 +67,15 @@ public class Ui {
 
     private void mogiTime(Tier t, Format f){
 
-        Event event = new Event(t,f, scanner);
+        int eventsplayed = dao.getEventsStored();
+        System.out.println("");
+        System.out.println("generating id's");
+        System.out.println("starting the "+(eventsplayed+1)+"th event and "+(dao.getRacesStored()+1)+"th race");
+        System.out.println("");
+        Event event = new Event(t,f, scanner, eventsplayed);
+        Race.setRaceCount(dao.getRacesStored());
         boolean onResults = false;
+
 
         while(event.getRacesPlayed()<12){
 
@@ -154,13 +148,25 @@ public class Ui {
 
         System.out.println("storing event, final points: "+event.getFinalPoints());
         dao.add(event);
-        System.out.println("these are the events in the dao");
+        System.out.println("This session's events");
         dao.printRecent();
+
+        System.out.println("storing");
+        dao.storeEvent();
+
+        dao.refresh();
+        System.out.println("back to main menu");
     }
 
     private void mogiTimeD(TierD t, Format f){
 
-        EventD event = new EventD(t,f, scanner);
+        int eventsplayed = dao.getEventsDStored();
+        System.out.println("");
+        System.out.println("generating id's");
+        System.out.println("starting the "+(eventsplayed+1)+"th event and "+(dao.getRacesDStored()+1)+"th race");
+        System.out.println("");
+        EventD event = new EventD(t,f, scanner, eventsplayed);
+        RaceD.setRaceCount(dao.getRacesDStored());
 
         while(event.getRacesPlayed()<12){
 
@@ -192,8 +198,6 @@ public class Ui {
                     if (undo) {
                         event.undoProtocall();
                         continue;
-                    }else{
-                        event.startNewGp();
                     }
                 }
                 continue;
@@ -227,16 +231,21 @@ public class Ui {
                 if (undo) {
                     event.undoProtocall();
                     continue;
-                }else{
-                    event.startNewGp();
                 }
             }
         }
 
         System.out.println("storing event, final points: "+event.getFinalPoints());
         dao.addD(event);
-        System.out.println("these are the events in the dao");
+
+        System.out.println("This session's events");
         dao.printRecent();
+
+        System.out.println("storing");
+        dao.storeEventD();
+
+        dao.refresh();
+        System.out.println("back to main menu");
     }
 
 

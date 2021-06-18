@@ -107,14 +107,31 @@ public class RaceDao {
              Statement stmt = conn.createStatement()) {
 
             stmt.execute(sql);
-            stmt.execute(sql2);
             stmt.execute(sql3);
-            stmt.execute(sql4);
             stmt.execute(sql5);
-            stmt.execute(sql6);
             stmt.execute(sql7);
-            stmt.execute(sql8);
             stmt.execute(sql9);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void resetTables(){
+
+        String sql2 = "DELETE FROM races";
+        String sql4 = "DELETE FROM racesD";
+        String sql6 = "DELETE FROM events";
+        String sql8 = "DELETE FROM eventsD";
+        String sql10 = "DELETE FROM gps";
+
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute(sql2);
+            stmt.execute(sql4);
+            stmt.execute(sql6);
+            stmt.execute(sql8);
             stmt.execute(sql10);
 
         } catch (SQLException e) {
@@ -259,7 +276,7 @@ public class RaceDao {
         System.out.println("storing race: "+r);
     }
 
-    public void generate100(){
+    public void generateRandom(int times){
         int[] p12 = {15,12, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0};
         int[] p12d = {15,12, 10, 9,8, 7, 6, 5, 4, 3, 2, 1};
         Random rng= new Random();
@@ -267,7 +284,7 @@ public class RaceDao {
         int raceid = 1;
         int raceidD= 1;
 
-        for(int i = 1;i<=100;i++){
+        for(int i = 1;i<=times;i++){
             int eventid = i;
             String format = Format.randomFormat().getFormat();
             int tier = Integer.parseInt(Tier.randomTier().getTier());
@@ -310,6 +327,114 @@ public class RaceDao {
             insertEventD(eventid,tpointsD,true);
         }
 
+    }
+
+    public int getEventsStored(){
+        String sql = "Select Count(eventid) FROM events";
+        String sql2 = "SELECT * FROM events WHERE eventid = (SELECT MAX(eventid) FROM events)";
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int events = 0;
+
+            while (rs.next()){
+                events = rs.getInt(1);
+            }
+            if(events == 0){
+                return events;
+            }
+
+            int idOfLatestEventPlayed = 0;
+            ResultSet rs2 = stmt.executeQuery(sql2);
+            idOfLatestEventPlayed = rs2.getInt(1);
+            return idOfLatestEventPlayed;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    public int getEventsDStored(){
+        String sql = "Select Count(eventid) FROM eventsD";
+        String sql2 = "SELECT * FROM eventsD WHERE eventid = (SELECT MAX(eventid) FROM eventsD)";
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int events = 0;
+
+            while (rs.next()){
+                events = rs.getInt(1);
+            }
+            if(events == 0){
+                return events;
+            }
+
+            int idOfLatestEventPlayed = 0;
+            ResultSet rs2 = stmt.executeQuery(sql2);
+            idOfLatestEventPlayed = rs2.getInt(1);
+            return idOfLatestEventPlayed;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    public int getRacesStored(){
+        String sql = "Select Count(raceid) FROM races";
+        String sql2 ="SELECT * FROM races WHERE raceid = (SELECT MAX(raceid) FROM races)";
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int count = 0;
+
+            while (rs.next()){
+                count = rs.getInt(1);
+            }
+
+            if(count == 0){
+                return count;
+            }
+            int idOfLatestRacePlayed = 0;
+            ResultSet rs2 = stmt.executeQuery(sql2);
+            idOfLatestRacePlayed = rs2.getInt(1);
+            return idOfLatestRacePlayed;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
+    }
+
+    public int getRacesDStored(){
+        String sql = "Select Count(raceid) FROM racesD";
+        String sql2 ="SELECT * FROM races WHERE raceid = (SELECT MAX(raceid) FROM racesD)";
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int count = 0;
+
+            while (rs.next()){
+                count = rs.getInt(1);
+            }
+
+            if(count == 0){
+                return count;
+            }
+            int idOfLatestRacePlayed = 0;
+            ResultSet rs2 = stmt.executeQuery(sql2);
+            idOfLatestRacePlayed = rs2.getInt(1);
+            return idOfLatestRacePlayed;
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return -1;
     }
 
     public void add(Event event){

@@ -1,36 +1,81 @@
+Ui/panels/Setter.java
+ Ui.panels.Setter
+Ui/panels/MkwRaceInputPanel.java
+ Ui.panels.MkwRaceInputPanel
 mk8dx/TierD.java
  mk8dx.TierD
+mkw/Track.java
+ mkw.Track
 mk8dx/TrackD.java
  mk8dx.TrackD
 mkw/Tier.java
  mkw.Tier
-testGui/DetailsPanel.java
- testGui.DetailsPanel
- testGui.DetailsPanel$1
-mk8dx/RaceD.java
- mk8dx.RaceD
+Ui/panels/Mk8dxAdvancedPanel.java
+ Ui.panels.Mk8dxAdvancedPanel
+Ui/panels/Mk8dxRaceInputPanel.java
+ Ui.panels.Mk8dxRaceInputPanel
+shared/useless/CardPanel.java
+ shared.useless.CardPanel
+ shared.useless.CardPanel$1
+ shared.useless.CardPanel$2
+ shared.useless.CardPanel$3
+Ui/panels/Mk8dxSummaryPanel.java
+ Ui.panels.Mk8dxSummaryPanel
 testGui/MainFrame.java
  testGui.MainFrame
  testGui.MainFrame$1
+Ui/panels/MkwDcPanel.java
+ Ui.panels.MkwDcPanel
 shared/Format.java
  shared.Format
+Ui/panels/SelectGamePanel.java
+ Ui.panels.SelectGamePanel
+ Ui.panels.SelectGamePanel$1
+ Ui.panels.SelectGamePanel$2
 testGui/Gui.java
  testGui.Gui
  testGui.Gui$1
-mk8dx/GpD.java
- mk8dx.GpD
-mk8dx/EventD.java
- mk8dx.EventD
-mkw/Track.java
- mkw.Track
-Ui/RaceStats.java
- Ui.RaceStats
+shared/useless/Holder.java
+ shared.useless.Holder
+Ui/panels/MkwMenuPanel.java
+ Ui.panels.MkwMenuPanel
+ Ui.panels.MkwMenuPanel$1
+ Ui.panels.MkwMenuPanel$2
+testGui/DetailsPanel.java
+ testGui.DetailsPanel
+ testGui.DetailsPanel$1
+Ui/panels/Mk8dxMenuPanel.java
+ Ui.panels.Mk8dxMenuPanel
+ Ui.panels.Mk8dxMenuPanel$1
+ Ui.panels.Mk8dxMenuPanel$2
+Ui/panels/Mk8dxEnterTfPanel.java
+ Ui.panels.Mk8dxEnterTfPanel
+ Ui.panels.Mk8dxEnterTfPanel$1
+ Ui.panels.Mk8dxEnterTfPanel$2
+Ui/panels/MkwEnterTfPanel.java
+ Ui.panels.MkwEnterTfPanel
+ Ui.panels.MkwEnterTfPanel$1
+ Ui.panels.MkwEnterTfPanel$2
+Ui/panels/MkwAdvancedPanel.java
+ Ui.panels.MkwAdvancedPanel
+Ui/panels/MkwSummaryPanel.java
+ Ui.panels.MkwSummaryPanel
+Ui/Gui.java
+ Ui.Gui
 mkw/Gp.java
  mkw.Gp
 mkw/Event.java
  mkw.Event
 mkw/Race.java
  mkw.Race
+mk8dx/EventD.java
+ mk8dx.EventD
+mk8dx/RaceD.java
+ mk8dx.RaceD
+shared/useless/RaceStats.java
+ shared.useless.RaceStats
+mk8dx/GpD.java
+ mk8dx.GpD
 Ui/Ui.java
  Ui.Ui
 Ui/Main.java
