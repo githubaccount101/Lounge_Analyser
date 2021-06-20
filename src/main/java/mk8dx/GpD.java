@@ -2,6 +2,8 @@
 package mk8dx;
 
 import mkw.*;
+import shared.Format;
+
 import java.util.ArrayList;
 
 public class GpD {
@@ -129,6 +131,14 @@ public class GpD {
 
     public int getGpId() {
         return gpId;
+    }
+
+    public TierD getTier(){
+        return event.getTier();
+    }
+
+    public Format getFormat(){
+        return event.getFormat();
     }
 
     public int getIdofRaceAboutToBePlayed(){

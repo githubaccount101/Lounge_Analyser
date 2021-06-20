@@ -4,7 +4,7 @@ package mk8dx;
 import shared.Format;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import Ui.Ui;
 
 public class EventD {
     private Scanner scanner;
@@ -28,7 +28,7 @@ public class EventD {
     public boolean outOfStandby = false;
     public boolean backToStandby = false;
 
-    public EventD(TierD tier, Format format, Scanner scanner, int eventsPlayed) {
+    public EventD(TierD tier, Format format, int eventsPlayed) {
         this.scanner = scanner;
 
         this.tier = tier;
@@ -109,6 +109,9 @@ public class EventD {
         racesPlayed++;
         currentGp.getDcCompensation();
         updateScoring();
+        if(isEventDone()){
+            startNewGp();
+        }
     }
 
     public void dcProcessD(){
@@ -121,7 +124,7 @@ public class EventD {
             return;
         }
         if (this.inDcStandby) {
-            rejoined = yesNo("were you able to rejoin the room before the next race started?");
+            rejoined = Ui.yesNo("were you able to rejoin the room before the next race started?");
             if (rejoined) {
                 outOfStandby = true;
                 this.updateScoring();
@@ -277,20 +280,19 @@ public class EventD {
         }
     }
 
-    private boolean yesNo(String question) {
-        while (true) {
-
-            System.out.println(question + "(y/n)");
-            String input = scanner.nextLine();
-
-            if (input.equals("y")) {
-                return true;
-            }
-            if (input.equals("n")) {
-                return false;
-            }
-            System.out.println("enter y or n");
+    public boolean currentGpIsUnplayed(){
+        if(currentGp.isUnplayed()){
+            return true;
         }
+        return false;
+    }
+
+    public int getRacePoints() {
+        return racePoints;
+    }
+
+    public int getDcPoints() {
+        return dcPoints;
     }
 
     public TierD getTier() {
@@ -303,6 +305,15 @@ public class EventD {
 
     public ArrayList<GpD> getCompletedGps() {
         return completedGps;
+    }
+
+
+
+    public String preRaceString(){
+        return "Entering Data For: GP " + getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()
+                + "(Race " + (getRacesPlayed() + 1) + " overall)"+
+                "\n" + "Races played: " + racesPlayed
+                + ", points: " + racePoints + ", dc points: " + dcPoints+", Total Points: "+totalPoints;
     }
 
     public void preRaceStatus() {
@@ -377,7 +388,7 @@ public class EventD {
         for (int i = 1; i <= asks; i++) {
 
             this.preRaceStatus();
-            rejoined = yesNo("were you able to rejoin the room before the GP ended because the room was reset?");
+            rejoined = Ui.yesNo("were you able to rejoin the room before the GP ended because the room was reset?");
             if (rejoined) {
                 manageDc();
                 resetProtocall();
@@ -469,7 +480,7 @@ public class EventD {
         }
         if(this.inDcStandby){
 
-            rejoined = yesNo("were you able to rejoin the room before the next race started?");
+            rejoined = Ui.yesNo("were you able to rejoin the room before the next race started?");
             if (rejoined) {
                 outOfStandby = true;
                 this.updateScoring();

@@ -1,84 +1,107 @@
 Ui/panels/Setter.java
  Ui.panels.Setter
-Ui/panels/MkwRaceInputPanel.java
- Ui.panels.MkwRaceInputPanel
-mk8dx/TierD.java
- mk8dx.TierD
-mkw/Track.java
- mkw.Track
-mk8dx/TrackD.java
- mk8dx.TrackD
-mkw/Tier.java
- mkw.Tier
-Ui/panels/Mk8dxAdvancedPanel.java
- Ui.panels.Mk8dxAdvancedPanel
-Ui/panels/Mk8dxRaceInputPanel.java
- Ui.panels.Mk8dxRaceInputPanel
+shared/useless/Holder.java
+ shared.useless.Holder
+Ui/panels/MkwDcPanel.java
+ Ui.panels.MkwDcPanel
+mk8dx/GpD.java
+ mk8dx.GpD
+Ui/panels/UsefulThings.java
+ Ui.panels.UsefulThings
+testGui/MainFrame.java
+ testGui.MainFrame
+ testGui.MainFrame$1
+Ui/panels/SelectGamePanel.java
+ Ui.panels.SelectGamePanel
+ Ui.panels.SelectGamePanel$1
+ Ui.panels.SelectGamePanel$2
+mk8dx/EventD.java
+ mk8dx.EventD
 shared/useless/CardPanel.java
  shared.useless.CardPanel
  shared.useless.CardPanel$1
  shared.useless.CardPanel$2
  shared.useless.CardPanel$3
-Ui/panels/Mk8dxSummaryPanel.java
- Ui.panels.Mk8dxSummaryPanel
-testGui/MainFrame.java
- testGui.MainFrame
- testGui.MainFrame$1
-Ui/panels/MkwDcPanel.java
- Ui.panels.MkwDcPanel
-shared/Format.java
- shared.Format
-Ui/panels/SelectGamePanel.java
- Ui.panels.SelectGamePanel
- Ui.panels.SelectGamePanel$1
- Ui.panels.SelectGamePanel$2
-testGui/Gui.java
- testGui.Gui
- testGui.Gui$1
-shared/useless/Holder.java
- shared.useless.Holder
-Ui/panels/MkwMenuPanel.java
- Ui.panels.MkwMenuPanel
- Ui.panels.MkwMenuPanel$1
- Ui.panels.MkwMenuPanel$2
-testGui/DetailsPanel.java
- testGui.DetailsPanel
- testGui.DetailsPanel$1
+mk8dx/RaceD.java
+ mk8dx.RaceD
 Ui/panels/Mk8dxMenuPanel.java
  Ui.panels.Mk8dxMenuPanel
  Ui.panels.Mk8dxMenuPanel$1
  Ui.panels.Mk8dxMenuPanel$2
+shared/Format.java
+ shared.Format
+Ui/panels/MkwAdvancedPanel.java
+ Ui.panels.MkwAdvancedPanel
+testGui/DetailsPanel.java
+ testGui.DetailsPanel
+ testGui.DetailsPanel$1
+mk8dx/TierD.java
+ mk8dx.TierD
+Ui/Main.java
+ Ui.Main
+Ui/panels/Mk8dxDcPanel.java
+ Ui.panels.Mk8dxDcPanel
+Ui/panels/Mk8dxSummaryPanel.java
+ Ui.panels.Mk8dxSummaryPanel
+mk8dx/TrackD.java
+ mk8dx.TrackD
+mkw/Track.java
+ mkw.Track
+mkw/Tier.java
+ mkw.Tier
+Ui/panels/MkwMenuPanel.java
+ Ui.panels.MkwMenuPanel
+ Ui.panels.MkwMenuPanel$1
+ Ui.panels.MkwMenuPanel$2
+Ui/panels/Mk8dxAdvancedPanel.java
+ Ui.panels.Mk8dxAdvancedPanel
+Ui/panels/InputVerifier.java
+ Ui.panels.InputVerifier
+Ui/panels/MkwSummaryPanel.java
+ Ui.panels.MkwSummaryPanel
+testGui/Gui.java
+ testGui.Gui
+ testGui.Gui$1
+mkw/Race.java
+ mkw.Race
+mkw/Event.java
+ mkw.Event
+Ui/RaceDao.java
+ Ui.RaceDao
+Ui/Ui.java
+ Ui.Ui
+mkw/Gp.java
+ mkw.Gp
+shared/useless/RaceStats.java
+ shared.useless.RaceStats
 Ui/panels/Mk8dxEnterTfPanel.java
  Ui.panels.Mk8dxEnterTfPanel
  Ui.panels.Mk8dxEnterTfPanel$1
  Ui.panels.Mk8dxEnterTfPanel$2
+Ui/panels/Mk8dxRaceInputPanel.java
+ Ui.panels.Mk8dxRaceInputPanel
+ Ui.panels.Mk8dxRaceInputPanel$1
+ Ui.panels.Mk8dxRaceInputPanel$2
+ Ui.panels.Mk8dxRaceInputPanel$3
+ Ui.panels.Mk8dxRaceInputPanel$4
+ Ui.panels.Mk8dxRaceInputPanel$5
+ Ui.panels.Mk8dxRaceInputPanel$6
+ Ui.panels.Mk8dxRaceInputPanel$7
+ Ui.panels.Mk8dxRaceInputPanel$8
 Ui/panels/MkwEnterTfPanel.java
  Ui.panels.MkwEnterTfPanel
  Ui.panels.MkwEnterTfPanel$1
  Ui.panels.MkwEnterTfPanel$2
-Ui/panels/MkwAdvancedPanel.java
- Ui.panels.MkwAdvancedPanel
-Ui/panels/MkwSummaryPanel.java
- Ui.panels.MkwSummaryPanel
 Ui/Gui.java
  Ui.Gui
-mkw/Gp.java
- mkw.Gp
-mkw/Event.java
- mkw.Event
-mkw/Race.java
- mkw.Race
-mk8dx/EventD.java
- mk8dx.EventD
-mk8dx/RaceD.java
- mk8dx.RaceD
-shared/useless/RaceStats.java
- shared.useless.RaceStats
-mk8dx/GpD.java
- mk8dx.GpD
-Ui/Ui.java
- Ui.Ui
-Ui/Main.java
- Ui.Main
-Ui/RaceDao.java
- Ui.RaceDao
+Ui/panels/MkwRaceInputPanel.java
+ Ui.panels.MkwRaceInputPanel
+ Ui.panels.MkwRaceInputPanel$1
+ Ui.panels.MkwRaceInputPanel$2
+ Ui.panels.MkwRaceInputPanel$3
+ Ui.panels.MkwRaceInputPanel$4
+ Ui.panels.MkwRaceInputPanel$5
+ Ui.panels.MkwRaceInputPanel$6
+ Ui.panels.MkwRaceInputPanel$7
+ Ui.panels.MkwRaceInputPanel$8
+ Ui.panels.MkwRaceInputPanel$9

@@ -15,12 +15,10 @@ public class Ui {
 
 
     private Scanner scanner;
-    private RaceDao dao;
 
-    public Ui(Scanner scanner, RaceDao dao) {
+    public Ui(Scanner scanner) {
 
         this.scanner = scanner;
-        this.dao = dao;
     }
 
     public void start(){
@@ -67,13 +65,13 @@ public class Ui {
 
     private void mogiTime(Tier t, Format f){
 
-        int eventsplayed = dao.getEventsStored();
+        int eventsplayed = RaceDao.getEventsStored();
         System.out.println("");
         System.out.println("generating id's");
-        System.out.println("starting the "+(eventsplayed+1)+"th event and "+(dao.getRacesStored()+1)+"th race");
+        System.out.println("starting the "+(eventsplayed+1)+"th event and "+(RaceDao.getRacesStored()+1)+"th race");
         System.out.println("");
-        Event event = new Event(t,f, scanner, eventsplayed);
-        Race.setRaceCount(dao.getRacesStored());
+        Event event = new Event(t,f, eventsplayed);
+        Race.setRaceCount(RaceDao.getRacesStored());
         boolean onResults = false;
 
 
@@ -147,26 +145,26 @@ public class Ui {
         }
 
         System.out.println("storing event, final points: "+event.getFinalPoints());
-        dao.add(event);
+        RaceDao.add(event);
         System.out.println("This session's events");
-        dao.printRecent();
+        RaceDao.printRecent();
 
         System.out.println("storing");
-        dao.storeEvent();
+        RaceDao.storeEvent();
 
-        dao.refresh();
+        RaceDao.refresh();
         System.out.println("back to main menu");
     }
 
     private void mogiTimeD(TierD t, Format f){
 
-        int eventsplayed = dao.getEventsDStored();
+        int eventsplayed = RaceDao.getEventsDStored();
         System.out.println("");
         System.out.println("generating id's");
-        System.out.println("starting the "+(eventsplayed+1)+"th event and "+(dao.getRacesDStored()+1)+"th race");
+        System.out.println("starting the "+(eventsplayed+1)+"th event and "+(RaceDao.getRacesDStored()+1)+"th race");
         System.out.println("");
-        EventD event = new EventD(t,f, scanner, eventsplayed);
-        RaceD.setRaceCount(dao.getRacesDStored());
+        EventD event = new EventD(t,f,eventsplayed);
+        RaceD.setRaceCount(RaceDao.getRacesDStored());
 
         while(event.getRacesPlayed()<12){
 
@@ -236,15 +234,15 @@ public class Ui {
         }
 
         System.out.println("storing event, final points: "+event.getFinalPoints());
-        dao.addD(event);
+        RaceDao.addD(event);
 
         System.out.println("This session's events");
-        dao.printRecent();
+        RaceDao.printRecent();
 
         System.out.println("storing");
-        dao.storeEventD();
+        RaceDao.storeEventD();
 
-        dao.refresh();
+        RaceDao.refresh();
         System.out.println("back to main menu");
     }
 
@@ -374,8 +372,10 @@ public class Ui {
         }
     }
 
-    private boolean yesNo(String question){
+    public static boolean yesNo(String question){
         while (true) {
+
+            Scanner scanner = new Scanner(System.in);
 
             System.out.println(question +"(y/n)");
             String input = scanner.nextLine();

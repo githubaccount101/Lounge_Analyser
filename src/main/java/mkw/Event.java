@@ -6,9 +6,10 @@ import mk8dx.RaceD;
 import shared.Format;
 import java.util.ArrayList;
 import java.util.Scanner;
+import Ui.Ui;
 
 public class Event {
-    private Scanner scanner;
+
     private final static int raceLimit = 12;
 
     private final Tier tier;
@@ -16,7 +17,7 @@ public class Event {
 
     private final int eventId;
 
-    private Gp currentGp;
+    public Gp currentGp;
     private final ArrayList<Gp> completedGps = new ArrayList<>();
     private int racesPlayed = 0;
     private int gpPlayed = 0;
@@ -24,10 +25,9 @@ public class Event {
     private int racePoints = 0;
     private int dcPoints = 0;
     private int totalPoints = 0;
-    private boolean inDcStandby = false;
+    public boolean inDcStandby = false;
 
-    public Event(Tier tier, Format format, Scanner scanner, int storedEvents) {
-        this.scanner = scanner;
+    public Event(Tier tier, Format format, int storedEvents) {
 
         this.tier = tier;
         this.format = format;
@@ -103,9 +103,6 @@ public class Event {
         postRacestatus();
     }
 
-    public int getChancesToRejoin() {
-        return currentGp.getRemainingRacesInGp();
-    }
 
     public void dcStandby() {
         System.out.println("");
@@ -128,7 +125,8 @@ public class Event {
             return;
         }
         if(this.inDcStandby){
-            rejoined = yesNo("were you able to rejoin the room before the GP ended because the room was reset?");
+
+            rejoined = Ui.yesNo("were you able to rejoin the room before the GP ended because the room was reset?");
             if (rejoined) {
                 manageDc(onResults);
                 resetProtocall();
@@ -234,6 +232,13 @@ public class Event {
         }
     }
 
+    public boolean currentGpIsUnplayed(){
+        if(currentGp.isUnplayed()){
+            return true;
+        }
+        return false;
+    }
+
     public boolean nodc(){
         boolean nodc = true;
         for(Gp gp:completedGps){
@@ -269,6 +274,14 @@ public class Event {
         return totalPoints;
     }
 
+    public int getRacePoints() {
+        return racePoints;
+    }
+
+    public int getDcPoints() {
+        return dcPoints;
+    }
+
     public int getCurrentlyPlayingGpId(){
         return currentGp.getGpId();
     }
@@ -300,20 +313,11 @@ public class Event {
         }
     }
 
-    private boolean yesNo(String question) {
-        while (true) {
-
-            System.out.println(question + "(y/n)");
-            String input = scanner.nextLine();
-
-            if (input.equals("y")) {
-                return true;
-            }
-            if (input.equals("n")) {
-                return false;
-            }
-            System.out.println("enter y or n");
-        }
+    public String preRaceString(){
+        return "Entering Data For: GP " + getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()
+                + "(Race " + (getRacesPlayed() + 1) + " overall)"+
+                "\n" + "Races played: " + racesPlayed
+                + ", points: " + racePoints + ", dc points: " + dcPoints+", Total Points: "+totalPoints;
     }
 
     public void preRaceStatus() {
@@ -388,7 +392,7 @@ public class Event {
         for (int i = 1; i <= asks; i++) {
 
             this.preRaceStatus();
-            rejoined = yesNo("were you able to rejoin the room before the GP ended because the room was reset?");
+            rejoined = Ui.yesNo("were you able to rejoin the room before the GP ended because the room was reset?");
             if (rejoined) {
                 manageDc(onResults);
                 resetProtocall();
@@ -445,5 +449,10 @@ public class Event {
         }
         System.out.println("the previous race is not the final race of a GP, but is normal race");
         removeMostRecentCompletedRace();
+    }
+
+    @Deprecated
+    public int getChancesToRejoin() {
+        return currentGp.getRemainingRacesInGp();
     }
 }

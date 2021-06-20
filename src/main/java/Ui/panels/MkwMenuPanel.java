@@ -42,5 +42,19 @@ public class MkwMenuPanel extends JPanel {
             }
         });
 
+        buttonSummary.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                card.show(cardPane, "mkwStats");
+            }
+        });
+
+        buttonAdvanced.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                card.show(cardPane, "mkwAdvStats");
+            }
+        });
+
     }
 }

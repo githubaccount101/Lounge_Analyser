@@ -8,14 +8,12 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        RaceDao dao  =  new RaceDao();
-        Ui ui = new Ui(scanner, dao);
 
-        dao.setUp();
-        dao.resetTables();
-        dao.generateRandom(3);
-        ui.start();
+        Ui ui = new Ui(scanner);
 
+        RaceDao.resetTables();
+
+        RaceDao.generateRandom(500);
 
     }
 }

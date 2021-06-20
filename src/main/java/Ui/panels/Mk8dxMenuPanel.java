@@ -41,5 +41,19 @@ public class Mk8dxMenuPanel extends JPanel  {
                 card.show(cardPane,"mk8dxTf");
             }
         });
+
+        buttonSummary.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                card.show(cardPane, "mk8dxStats");
+            }
+        });
+
+        buttonAdvanced.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                card.show(cardPane, "mk8dxAdvStats");
+            }
+        });
     }
 }

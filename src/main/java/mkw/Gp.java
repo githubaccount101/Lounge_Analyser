@@ -1,6 +1,8 @@
 
 package mkw;
 
+import shared.Format;
+
 import java.util.ArrayList;
 
 public class Gp {
@@ -161,6 +163,14 @@ public class Gp {
 
     public int getTotalPoints(){
         return  totalPoints;
+    }
+
+    public Tier getTier(){
+        return event.getTier();
+    }
+
+    public Format getFormat(){
+        return event.getFormat();
     }
 
 
