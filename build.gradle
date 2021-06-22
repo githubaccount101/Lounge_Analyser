@@ -21,7 +21,7 @@ test {
 
 task uberJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'Ui.Main'
+        attributes 'Main-Class': 'Ui.Gui'
     }
     archiveClassifier = 'uber'
 

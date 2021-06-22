@@ -13,8 +13,6 @@ public class Gui implements ActionListener {
     JFrame frame;
     JPanel cardPane;
     CardLayout card;
-    RaceDao dao = new RaceDao();
-
 
     public Gui() {
         frame = new JFrame("Lounge Data");
@@ -35,8 +33,8 @@ public class Gui implements ActionListener {
         MkwRaceInputPanel mkwRaceInput= new MkwRaceInputPanel(card, cardPane);
         MkwEnterTfPanel mkwTf = new MkwEnterTfPanel(card, cardPane, mkwRaceInput);
 
-        MkwStatsPanel mkwStats = new MkwStatsPanel(card, cardPane);
-        Mk8dxStatsPanel mk8dxStats = new Mk8dxStatsPanel(card, cardPane);
+        MkwSummaryPanel mkwStats = new MkwSummaryPanel(card, cardPane);
+        Mk8dxSummaryPanel mk8dxStats = new Mk8dxSummaryPanel(card, cardPane);
 
         MkwAdvStatsPanel mkwAdvStats = new MkwAdvStatsPanel(card, cardPane);
         Mk8dxAdvStatsPanel mk8dxAdvStats = new Mk8dxAdvStatsPanel(card, cardPane);
