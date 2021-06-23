@@ -41,7 +41,7 @@ public class Setter {
         yourcontainer.add(componente);
     }
 
-    public void addobjects(Component componente, Container yourcontainer, GridBagLayout layout, GridBagConstraints gbc,
+    public void addobjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc,
                            int gridx, int gridy, int gridwidth, int gridheight, double weightx, double weighty, boolean filled){
         gbc.gridx = gridx;
         gbc.gridy = gridy;
@@ -54,10 +54,39 @@ public class Setter {
 
         if(filled){
             gbc.fill= GridBagConstraints.BOTH;
+        }else{
+            gbc.fill = GridBagConstraints.NONE;
+        }
+        layout.setConstraints(component, gbc);
+        container.add(component);
+    }
+
+    public void addobjects(Component component, Container container, GridBagLayout layout, GridBagConstraints gbc,
+                           int gridx, int gridy, int gridwidth, int gridheight, double weightx, double weighty, boolean fillX, boolean fillY){
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+
+        gbc.gridwidth = gridwidth;
+        gbc.gridheight = gridheight;
+
+        gbc.weighty = weighty;
+        gbc.weightx = weightx;
+
+        if(fillX&fillY){
+            gbc.fill= GridBagConstraints.BOTH;
+        }else if(fillX==false&&fillY==false){
+            gbc.fill = GridBagConstraints.NONE;
         }
 
-        layout.setConstraints(componente, gbc);
-        yourcontainer.add(componente);
+        if(fillX) {
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+        }
+        if(fillY){
+            gbc.fill = GridBagConstraints.VERTICAL;
+        }
+
+        layout.setConstraints(component, gbc);
+        container.add(component);
     }
 
 

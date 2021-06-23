@@ -62,45 +62,45 @@ public class MkwRaceInputPanel extends JPanel {
         gbc.insets = new Insets(2,10,2,10);
 
         Setter s = new Setter();
-        s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1, 1,0.1,false);
+        s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1, 1,0.1,true);
 
         s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.1,1,true);
         s.addobjects(statusTA,this, layout,gbc,1,1,2 , 2,1,1,true);
 
         s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.1,0.1,false);
-        s.addobjects(trackTf,this, layout,gbc,1, 5,2,1, 1,0.1,false);
+        s.addobjects(trackTf,this, layout,gbc,1, 5,2,1, 1,0.1,true);
 
         matchLabelUpdate();
-        s.addobjects(trackMatchLabel,this, layout,gbc,1, 6,3,1,1,0.1,false);
+        s.addobjects(trackMatchLabel,this, layout,gbc,1, 6,3,1,1,0.1,true);
 
-        s.addobjects(playersLabel,this, layout,gbc,1, 7,1,1,1,0.1,false);
-        s.addobjects(playersTf,this, layout,gbc,2, 7,1,1, 1,0.1,false);
+        s.addobjects(playersLabel,this, layout,gbc,1, 7,1,1,1,0.1,true);
+        s.addobjects(playersTf,this, layout,gbc,2, 7,1,1, 1,0.1,true);
 
-        s.addobjects(startLabel,this, layout,gbc,1, 8,1,1,1,0.1,false);
-        s.addobjects(startTf,this, layout,gbc,2, 8,1,1, 1,0.1,false);
+        s.addobjects(startLabel,this, layout,gbc,1, 8,1,1,1,0.1,true);
+        s.addobjects(startTf,this, layout,gbc,2, 8,1,1, 1,0.1,true);
 
-        s.addobjects(finishLabel,this, layout,gbc,1, 9,1,1,1,0.1,false);
-        s.addobjects(finishTf,this, layout,gbc,2, 9,1,1,1,0.1,false);
+        s.addobjects(finishLabel,this, layout,gbc,1, 9,1,1,1,0.1,true);
+        s.addobjects(finishTf,this, layout,gbc,2, 9,1,1,1,0.1,true);
 
-        s.addobjects(resetBox,this, layout,gbc,1, 10,1,1,1,0.1,false);
+        s.addobjects(resetBox,this, layout,gbc,1, 10,1,1,1,0.1,true);
 
         undoButton.setEnabled(false);
-        s.addobjects(undoButton,this, layout,gbc,1, 11,1,1,1,0.1,false);
-        s.addobjects(nextButton,this, layout,gbc,2, 11,1,1,1,0.1,false);
+        s.addobjects(undoButton,this, layout,gbc,1, 11,1,1,1,0.1,true);
+        s.addobjects(nextButton,this, layout,gbc,2, 11,1,1,1,0.1,true);
 
         submitButton.setEnabled(false);
-        s.addobjects(backButton,this, layout,gbc,1, 12,1,1,1,0.1,false);
-        s.addobjects(submitButton,this, layout,gbc,2, 12,1,1,1,0.1,false);
+        s.addobjects(backButton,this, layout,gbc,1, 12,1,1,1,0.1,true);
+        s.addobjects(submitButton,this, layout,gbc,2, 12,1,1,1,0.1,true);
 
-        s.addobjects(dcLabel,this, layout,gbc,0, 13,1,1,0.1,0.1,false);
-        s.addobjects(dcButtonOn,this, layout,gbc,1,13,1 , 1, 1 , 0.1,false);
-        s.addobjects(dcButtonOff,this, layout,gbc,2,13,1 , 1, 1 , 0.1,false);
+        s.addobjects(dcLabel,this, layout,gbc,0, 13,1,1,0.1,0.1,true);
+        s.addobjects(dcButtonOn,this, layout,gbc,1,13,1 , 1, 1 , 0.1,true);
+        s.addobjects(dcButtonOff,this, layout,gbc,2,13,1 , 1, 1 , 0.1,true);
 
-        s.addobjects(rejoinLabel,this, layout,gbc,0, 14,1,1,0.1,0.1,false);
+        s.addobjects(rejoinLabel,this, layout,gbc,0, 14,1,1,0.1,0.1,true);
         rejoinButtonNo.setEnabled(false);
-        s.addobjects(rejoinButtonNo,this, layout,gbc,1, 14,1,1,1,0.1,false);
+        s.addobjects(rejoinButtonNo,this, layout,gbc,1, 14,1,1,1,0.1,true);
         rejoinButtonYes.setEnabled(false);
-        s.addobjects(rejoinButtonYes,this, layout,gbc,2, 14,1,1,1,0.1,false);
+        s.addobjects(rejoinButtonYes,this, layout,gbc,2, 14,1,1,1,0.1,true);
 
 
 
@@ -234,6 +234,7 @@ public class MkwRaceInputPanel extends JPanel {
 
                     setStatus();
                     eventDoneCheck();
+                    setPostRaceTF();
                 }else{
                     String tracktrack = "track";
                     if(InputVerifier.verifyTrack(trackS)){
@@ -265,7 +266,7 @@ public class MkwRaceInputPanel extends JPanel {
                 RaceDao.refresh();
                 event = null;
                 status = "n/a";
-                card.show(cardPane,"mkwMenu");
+                card.show(cardPane,"mainMenu");
                 setInitialButtons();
             }
         });

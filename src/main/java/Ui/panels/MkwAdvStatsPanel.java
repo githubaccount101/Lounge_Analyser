@@ -105,51 +105,51 @@ public class MkwAdvStatsPanel extends JPanel {
         s.addobjects(tierButton,this, layout,gbc,9,3,3 , 1,1,2,true);
         s.addobjects(startButton,this, layout,gbc,12,3,3 , 1,1,2,true);
 
-        s.addobjects(tierLabel,this, layout,gbc,0,4,2 , 1, 1,2,false);
+        s.addobjects(tierLabel,this, layout,gbc,0,4,2 , 1, 1,2,true);
         int i = 3;
         for(Tier t:Tier.values()){
             JCheckBox temp = new JCheckBox(t.getTier());
-            s.addobjects(temp,this, layout,gbc,i,4,1 , 1, 1,2,false);
+            s.addobjects(temp,this, layout,gbc,i,4,1 , 1, 1,2,true);
             tierBoxes.add(temp);
             i++;
         }
-        s.addobjects(allTierButton,this, layout,gbc,18,4,2 , 1, 1,2,false);
+        s.addobjects(allTierButton,this, layout,gbc,18,4,2 , 1, 1,2,true);
 
-        s.addobjects(formatLabel,this, layout,gbc,0,5,2 , 1, 1,2,false);
+        s.addobjects(formatLabel,this, layout,gbc,0,5,2 , 1, 1,2,true);
         i = 3;
         for(Format f:Format.values()){
             JCheckBox temp = new JCheckBox(f.getFormat());
             temp.setFont(new Font("Arial", Font.PLAIN, 12));
-            s.addobjects(temp,this, layout,gbc,i,5,1 , 1, 1,2,false);
+            s.addobjects(temp,this, layout,gbc,i,5,1 , 1, 1,2,true);
             formatBoxes.add(temp);
             i++;
         }
-        s.addobjects(allFormatButton,this, layout,gbc,18,5,2 , 1, 1,2,false);
+        s.addobjects(allFormatButton,this, layout,gbc,18,5,2 , 1, 1,2,true);
 
 
-        s.addobjects(startLabel,this, layout,gbc,0,6,2 , 1, 1,2,false);
+        s.addobjects(startLabel,this, layout,gbc,0,6,2 , 1, 1,2,true);
         i = 3;
         for(int n = 1; n<=12; n++){
             String name = String.valueOf(n);
             JCheckBox temp = new JCheckBox(name);
-            s.addobjects(temp,this, layout,gbc,i,6,1 , 1, .5,2,false);
+            s.addobjects(temp,this, layout,gbc,i,6,1 , 1, .5,2,true);
             startBoxes.add(temp);
             i++;
         }
-        s.addobjects(allStartButton,this, layout,gbc,18,6,2 , 1, 1,2,false);
+        s.addobjects(allStartButton,this, layout,gbc,18,6,2 , 1, 1,2,true);
 
-        s.addobjects(finishLabel,this, layout,gbc,0,7,2 , 1, .5,2,false);
+        s.addobjects(finishLabel,this, layout,gbc,0,7,2 , 1, .5,2,true);
         i = 3;
         for(int n = 1; n<=12; n++){
             String name = String.valueOf(n);
             JCheckBox temp = new JCheckBox(name);
-            s.addobjects(temp,this, layout,gbc,i,7,1 , 1, 1,12,false);
+            s.addobjects(temp,this, layout,gbc,i,7,1 , 1, 1,12,true);
             finishBoxes.add(temp);
             i++;
         }
-        s.addobjects(allFinishButton,this, layout,gbc,18,7,2 , 1, 1,2,false);
+        s.addobjects(allFinishButton,this, layout,gbc,18,7,2 , 1, 1,2,true);
 
-        s.addobjects(trackLabel,this, layout,gbc,0,8,2 , 1, 1,2,false);
+        s.addobjects(trackLabel,this, layout,gbc,0,8,2 , 1, 1,2,true);
         i = 3;
         Track[] tracks = Track.values();
         for(int n = 0;n<4;n++){
@@ -161,15 +161,15 @@ public class MkwAdvStatsPanel extends JPanel {
                 }else{
                     temp.setFont(new Font("Arial", Font.PLAIN, 12));
                 }
-                s.addobjects(temp,this, layout,gbc,i,(n+8),1 , 1, 5,12,false);
+                s.addobjects(temp,this, layout,gbc,i,(n+8),1 , 1, 5,12,true);
                 trackBoxes.add(temp);
                 i++;
             }
             i=3;
         }
-        s.addobjects(allTrackButton,this, layout,gbc,18,8,2 , 1, 1,2,false);
+        s.addobjects(allTrackButton,this, layout,gbc,18,8,2 , 1, 1,2,true);
 
-        s.addobjects(selectAllBoxesButton,this, layout,gbc,18,11,2 , 1, 1,2,false);
+        s.addobjects(selectAllBoxesButton,this, layout,gbc,18,11,2 , 1, 1,2,true);
 
         s.addobjects(scrollPane,this, layout,gbc,0,12,24 , 10, 1,10000,true);
 
@@ -204,7 +204,7 @@ public class MkwAdvStatsPanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                card.show(cardPane,"mkwMenu");
+                card.show(cardPane,"mainMenu");
                 scrollPane.setViewportView(RaceDao.getTrackTableBasic());
                 enableAllBoxesAndConstraintButtons(false);
                 toggleAllBoxes(false);

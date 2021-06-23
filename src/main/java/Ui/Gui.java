@@ -3,29 +3,34 @@ package Ui;
 import Ui.panels.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Gui implements ActionListener {
+public class Gui {
 
     JFrame frame;
     JPanel cardPane;
     CardLayout card;
 
     public Gui() {
-        frame = new JFrame("Lounge Data");
+        frame = new JFrame("Lounge Data"){
+            @Override
+            public Dimension getPreferredSize() {
+                // given some values of w & h
+                return new Dimension(640, 480);
+            }
+        };
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(720, 720);
 
         cardPane = new JPanel();
         card = new CardLayout();
         cardPane.setLayout(card);
 
-        JPanel mainMenu = new SelectGamePanel(card, cardPane);
-        JPanel mkwMenu = new MkwMenuPanel(card, cardPane);
-        JPanel mk8dxMenu = new Mk8dxMenuPanel(card, cardPane);
+        GridBagLayout layout = new GridBagLayout();
+
+        JPanel mainMenu = new MainMenu(card, cardPane);
+        JPanel settings = new SettingsPanel(card, cardPane);
+
 
         Mk8dxRaceInputPanel mk8dxRaceInput= new Mk8dxRaceInputPanel(card, cardPane );
         Mk8dxEnterTfPanel mk8dxTf= new Mk8dxEnterTfPanel(card, cardPane, mk8dxRaceInput);
@@ -39,9 +44,9 @@ public class Gui implements ActionListener {
         MkwAdvStatsPanel mkwAdvStats = new MkwAdvStatsPanel(card, cardPane);
         Mk8dxAdvStatsPanel mk8dxAdvStats = new Mk8dxAdvStatsPanel(card, cardPane);
 
-        cardPane.add(mainMenu, "selectGame");
-        cardPane.add(mkwMenu, "mkwMenu");
-        cardPane.add(mk8dxMenu, "mk8dxMenu");
+        cardPane.add(mainMenu, "mainMenu");
+        cardPane.add(settings, "settings");
+
         cardPane.add(mkwTf, "mkwTf");
         cardPane.add(mk8dxTf, "mk8dxTf");
         cardPane.add(mkwRaceInput,"mkwRace");
@@ -56,13 +61,13 @@ public class Gui implements ActionListener {
         centreWindow(frame);
         frame.setVisible(true);
     }
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        card.next(cardPane);
-    }
 
     public static void main(String args[]) {
-        Gui test = new Gui();
+
+        EventQueue.invokeLater(() -> {
+            Gui test = new Gui();
+        });
+
     }
 
     public static void centreWindow(Window frame) {

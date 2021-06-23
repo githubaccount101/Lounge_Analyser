@@ -13,7 +13,7 @@ public class Main {
 
         RaceDao.resetTables();
 
-        RaceDao.generateRandom(500);
+        RaceDao.generateRandom(100);
 
     }
 }

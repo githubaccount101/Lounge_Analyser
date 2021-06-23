@@ -2,10 +2,27 @@ package Ui;
 
 import mkw.*;
 import mk8dx.*;
+import mkw.Event;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.chart.renderer.xy.XYSplineRenderer;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.chart.ui.ApplicationFrame;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.chart.util.ShapeUtils;
 import shared.Format;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,6 +32,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
+
+
 
 public class RaceDao {
 
@@ -167,9 +186,6 @@ public class RaceDao {
         }
     }
 
-    public static void main(String[] args) {
-        getFormatTableBasic();
-    }
 
     private static void insertEvent(int eventId, int tier, String format,int points, boolean nodc){
         String sql = "INSERT INTO events (eventId, tier, format, points, nodc) VALUES(?,?,?,?,?)";
@@ -515,6 +531,22 @@ public class RaceDao {
         return 0;
     }
 
+    public static int getRsRows(String sql){
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int i = 0;
+            while(rs.next()){
+                i++;
+            }
+            return i;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return -1;
+    }
+
     public static JTable getTrackTableBasic(){
         String sql ="SELECT track, COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
                 "FROM (select * from races order by raceid desc limit 1)\n" +
@@ -634,4 +666,123 @@ public class RaceDao {
     }
 
 
+    public static XYSeries getSeries(String sql){
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            var series = new XYSeries("???");
+            int x = 1;
+            while(rs.next()){
+                int points = rs.getInt("points");
+                series.add(x,points);
+                x++;
+            }
+            return series;
+
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static XYSeriesCollection getDataset(XYSeries series){
+        var dataset = new XYSeriesCollection();
+        dataset.addSeries(series);
+        return dataset;
+    }
+
+    public static JFreeChart getChart(XYSeriesCollection dataset){
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Applicable Events",
+                "",
+                "Score",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                false,
+                false
+        );
+        chart.removeLegend();
+
+        XYPlot plot = chart.getXYPlot();
+
+        var renderer = new XYSplineRenderer();
+
+        renderer.setSeriesPaint(0, Color.BLACK);
+        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+
+        plot.setRenderer(renderer);
+        plot.setBackgroundPaint(Color.lightGray);
+
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(Color.BLACK);
+
+        plot.setDomainGridlinesVisible(true);
+        plot.setDomainGridlinePaint(Color.BLACK);
+
+        chart.setTitle(new TextTitle("",
+                        new Font("Comic Sans", java.awt.Font.BOLD, 16)
+                )
+        );
+        return chart;
+    }
+
+    public static ChartPanel getChartPanel( JFreeChart chart){
+        ChartPanel chartPanel=  new ChartPanel(chart){
+            @Override
+            public Dimension getPreferredSize() {
+                // given some values of w & h
+                return new Dimension(450, 200);
+            }
+        };
+        return chartPanel;
+    }
+
+
+
+    public static void main(String[] args) {
+
+    }
+
+    @Deprecated
+    public static ChartPanel getChartPanel(String sql){
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            var series = new XYSeries("???");
+            int x = 1;
+            while(rs.next()){
+                int points = rs.getInt("points");
+                System.out.println(points);
+                series.add(x,points);
+                x++;
+            }
+
+            var dataset = new XYSeriesCollection();
+            dataset.addSeries(series);
+
+            JFreeChart chart = ChartFactory.createXYLineChart(
+                    "Applicable Events",
+                    "events",
+                    "y",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true,
+                    false,
+                    false
+            );
+
+            chart.removeLegend();
+
+            ChartPanel chartPanel=  new ChartPanel(chart);
+            return chartPanel;
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }
