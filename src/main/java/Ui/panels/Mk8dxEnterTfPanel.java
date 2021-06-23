@@ -15,11 +15,11 @@ public class Mk8dxEnterTfPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
     JButton startButton = new JButton("Start");
     JButton backButton = new JButton("Back");
-    JLabel titleLabel = new JLabel("Entering Data for MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
+    JLabel titleLabel = new JLabel("Entering MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
     JLabel tierLabel = new JLabel("Enter Tier:");
     JLabel formatLabel = new JLabel("Enter Format");
-    JTextField tierTf = new JTextField();
-    JTextField formatTf = new JTextField();
+    JTextField tierTf = new JTextField("f");
+    JTextField formatTf = new JTextField("2");
 
     EventD event;
 
@@ -30,17 +30,23 @@ public class Mk8dxEnterTfPanel extends JPanel {
         gbc.insets = new Insets(40,5,40,5);
 
         Setter s = new Setter();
-        s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1,1,1);
 
-        s.addobjects(tierLabel,this, layout,gbc,0, 2,1,1,0.25,0);
-        tierTf.setText("f");
-        s.addobjects(tierTf,this, layout,gbc,1, 2,1,1, 0.75,0);
-        formatTf.setText("1");
-        s.addobjects(formatLabel,this, layout,gbc,0, 3,1,1,0.25,0);
-        s.addobjects(formatTf,this, layout,gbc,1, 3,1,1,0.75,0);
+        tierLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(tierLabel,this, layout,gbc,0,2,1 , 1,1,1);
+        tierTf.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(tierTf,this, layout,gbc,1,2,1 , 1,1,1);
 
-        s.addobjects(startButton,this, layout,gbc,1,4,1, 1);
-        s.addobjects(backButton,this, layout,gbc,0, 4,1,1);
+        formatLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(formatLabel,this, layout,gbc,0,3,1 , 1,1,1);
+        formatTf.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(formatTf,this, layout,gbc,1,3,1 , 1,1,1);
+
+        startButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(startButton,this, layout,gbc,1,4,1 , 1,1,1);
+        backButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(backButton,this, layout,gbc,0,4,1, 1,1,1);
 
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -85,6 +91,7 @@ public class Mk8dxEnterTfPanel extends JPanel {
     }
 
     public void initialize(){
-        titleLabel.setText("Entering Data for MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
+        titleLabel.setText("Entering MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
+        tierTf.setText(RaceDao.getDefaultMk8dxTier());
     }
 }

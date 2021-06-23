@@ -1,5 +1,7 @@
 package Ui.panels;
 
+import Ui.RaceDao;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,27 +13,29 @@ public class MainMenu extends JPanel {
 
     JLabel titleLabel = new JLabel("LOUNGE");
 
-    JButton storeMkwButton = new JButton("Enter MKW Event");
-    JButton storeMk8dxButton = new JButton("Enter MK8DX Event");
-    JButton mkwSummaryButton = new JButton("Go to MKW Summary");
-    JButton mk8dxSummaryButton = new JButton(" Go to MK8DX Summary");
-    JButton mkwAdvButton = new JButton("Go to MKW Advanced");
-    JButton mk8dxAdvButton = new JButton(" Go to MK8DX Advanced");
+    JButton storeMkwButton = new JButton("MKW Event");
+    JButton storeMk8dxButton = new JButton("MK8DX Event");
+    JButton mkwSummaryButton = new JButton("MKW Summary");
+    JButton mk8dxSummaryButton = new JButton("MK8DX Summary");
+    JButton mkwAdvButton = new JButton("MKW Advanced");
+    JButton mk8dxAdvButton = new JButton("MK8DX Advanced");
     JButton settingsButton = new JButton("Settings");
 
 
     public MainMenu(CardLayout card, JPanel cardPane, MkwEnterTfPanel mkwEnterTfPanel, Mk8dxEnterTfPanel mk8dxEnterTfPanel,
                     MkwSummaryPanel mkwSummaryPanel, Mk8dxSummaryPanel mk8dxSummaryPanel,
-                    MkwAdvStatsPanel mkwAdvStatsPanel, Mk8dxAdvStatsPanel mk8dxAdvStatsPanel) {
+                    MkwAdvStatsPanel mkwAdvStatsPanel, Mk8dxAdvStatsPanel mk8dxAdvStatsPanel, SettingsPanel settingsPanel) {
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
+        initialize();
 
         gbc.insets = new Insets(10,10,10,10);
 
         Setter s = new Setter();
 
-        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 40));
+        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 35));
+
         s.addobjects(titleLabel,this, layout,gbc,0,0,1 , 1,1,1);
         s.addobjects(settingsButton,this, layout,gbc,1,0,1 , 1,1,1, false);
 
@@ -100,7 +104,20 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"settings");
+                settingsPanel.initialize();
             }
+
         });
     }
+
+    public void initialize(){
+        if(RaceDao.isRandom()){
+            storeMkwButton.setEnabled(false);
+            storeMk8dxButton.setEnabled(false);
+        }else{
+            storeMkwButton.setEnabled(true);
+            storeMk8dxButton.setEnabled(true);
+        }
+    }
+
 }

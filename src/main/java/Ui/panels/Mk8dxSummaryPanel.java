@@ -193,7 +193,7 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     public void limitCheck(){
         String input = eventTF.getText();
-        if(InputVerifier.verifyLastX(input)){
+        if(InputVerifier.verifyLastXD(input)){
             formatBoxes.forEach(x->x.setEnabled(true));
             tierBoxes.forEach(x->x.setEnabled(true));
             allTierButton.setEnabled(true);
@@ -350,7 +350,7 @@ public class Mk8dxSummaryPanel extends JPanel {
             lastXResultLabel.setText("Last "+eventsPlayed+" events, average Score: "+avg);
             return;
         }
-        if(InputVerifier.verifyLastX(input)){
+        if(InputVerifier.verifyLastXD(input)){
             int lastX= Integer.parseInt(input);
             double avg = RaceDao.getAvgPtsLastXDx(lastX);
             lastXResultLabel.setText("Last "+lastX+" events, average Score: "+avg);
@@ -374,7 +374,7 @@ public class Mk8dxSummaryPanel extends JPanel {
         enterXLabel2.setText("Events ("+ eventsStored+" events stored)");
         setLastXResultLabel();
         String input = eventTF.getText();
-        if(InputVerifier.verifyLastX(input)){
+        if(InputVerifier.verifyLastXD(input)){
             updateDatasetSeries();
         }
         if(Integer.parseInt(input)==0){

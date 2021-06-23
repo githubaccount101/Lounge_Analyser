@@ -594,7 +594,7 @@ public class Mk8dxAdvStatsPanel extends JPanel {
             lastXResultLabel.setText("Last "+eventsPlayed+" events, average Score: "+avg);
             return;
         }
-        if(InputVerifier.verifyLastX(input)){
+        if(InputVerifier.verifyLastXD(input)){
             int lastX= Integer.parseInt(input);
             double avg = RaceDao.getAvgPtsLastXDx(lastX);
             lastXResultLabel.setText("Last "+lastX+" events, average Score: "+avg);
@@ -605,7 +605,7 @@ public class Mk8dxAdvStatsPanel extends JPanel {
 
     public void limitCheck(){
         String input = enterXTF.getText();
-        if(InputVerifier.verifyLastX(input)){
+        if(InputVerifier.verifyLastXD(input)){
             otherButtons.forEach(x->x.setEnabled(true));
             quickButtons.forEach(x->x.setEnabled(true));
             enableAllBoxesAndConstraintButtons(false);

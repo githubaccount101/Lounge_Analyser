@@ -50,6 +50,9 @@ public class RaceDao {
     public static void setUp(){
         createDb();
         createTables();
+        if(defautTiersAreEmpty()){
+            insertDefaultTiers();
+        }
     }
 
     private static String getDirectory(){
@@ -108,7 +111,7 @@ public class RaceDao {
         String sql5 = "CREATE TABLE IF NOT EXISTS events (eventid int, tier int, format varchar(10),points int, nodc boolean)";
         String sql7 = "CREATE TABLE IF NOT EXISTS eventsD (eventid int,tier varchar(10), format varchar(10),points int, nodc boolean)";
         String sql9 = "CREATE TABLE IF NOT EXISTS gps (gpid REAL,tier int, format varchar(10),points int, nodc boolean, fullgp boolean)";
-
+        String sql11 = "CREATE TABLE IF NOT EXISTS defaultTiers (mkw int, mk8dx varchar(10), randomized boolean)";
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
 
@@ -117,6 +120,7 @@ public class RaceDao {
             stmt.execute(sql5);
             stmt.execute(sql7);
             stmt.execute(sql9);
+            stmt.execute(sql11);
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -144,6 +148,132 @@ public class RaceDao {
             System.out.println(e.getMessage());
         }
     }
+
+    private static boolean defautTiersAreEmpty(){
+
+        String sql = "Select Count(mkw) FROM defaultTiers";
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int rows = 0;
+
+            while (rs.next()){
+                rows = rs.getInt(1);
+            }
+            if(rows == 0){
+               return true;
+            }
+            System.out.println("the one needed row is already here");
+            return false;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    private  static  void insertDefaultTiers(){
+        String sql = "INSERT INTO defaultTiers (mkw,mk8dx,randomized) VALUES (?,?,?)";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, 1);
+            pstmt.setString(2,"f");
+            pstmt.setBoolean(3,false);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateDefaultTierMkw(int tier){
+        String sql = "UPDATE defaultTiers SET mkw = ? ";
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, tier);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void updateDefaultTierMk8dx(String tier){
+        String sql = "UPDATE defaultTiers SET mk8dx = ? ";
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, tier);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static int getDefaultMkwTier(){
+        String sql = "SELECT mkw       \n" +
+                "  FROM defaultTiers";
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            int tier = rs.getInt("mkw");
+            return tier;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return 8;
+        }
+    }
+
+    public static String getDefaultMk8dxTier(){
+        String sql = "SELECT mk8dx       \n" +
+                "  FROM defaultTiers";
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            String tier = rs.getString("mk8dx");
+            return tier;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return "";
+        }
+    }
+
+    public static boolean isRandom(){
+        String sql = "SELECT randomized       \n" +
+                "  FROM defaultTiers";
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+            boolean random = rs.getBoolean("randomized");
+            return random;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public static void updateRandom(Boolean onOff){
+        String sql = "UPDATE defaultTiers SET randomized = ?";
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            if(onOff){
+                pstmt.setBoolean(1, true);
+            }else{
+                pstmt.setBoolean(1, false);
+            }
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 
     private static void insert(int raceid, int eventid, double gpid, int tier, String format, String track, int start, int finish, int players, int points, boolean satout) {
         String sql = "INSERT INTO races(raceid, eventid, gpid, tier, format, track, start, finish, players, points, satout) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
@@ -430,7 +560,7 @@ public class RaceDao {
 
     public static int getRacesDStored(){
         String sql = "Select Count(raceid) FROM racesD";
-        String sql2 ="SELECT * FROM races WHERE raceid = (SELECT MAX(raceid) FROM racesD)";
+        String sql2 ="SELECT * FROM racesD WHERE raceid = (SELECT MAX(raceid) FROM racesD)";
         try (Connection conn = connect();
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(sql)){
@@ -464,6 +594,11 @@ public class RaceDao {
             events.add(e);
         }
         recentEvents.clear();
+        for(EventD e: recentEventsD){
+            eventsD.add(e);
+        }
+        recentEvents.clear();
+        recentEventsD.clear();
     }
 
     public static void addD(EventD event) {
@@ -697,7 +832,7 @@ public class RaceDao {
     public static JFreeChart getChart(XYSeriesCollection dataset){
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Applicable Events",
-                "Events",
+                "Event Recency",
                 "Score",
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -710,6 +845,7 @@ public class RaceDao {
         XYPlot plot = chart.getXYPlot();
         plot.getDomainAxis().setInverted(true);
         plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         var renderer = new XYSplineRenderer();
 

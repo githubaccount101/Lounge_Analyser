@@ -15,11 +15,11 @@ public class MkwEnterTfPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
     JButton buttonStart = new JButton("Start");
     JButton buttonBack = new JButton("Back");
-    JLabel titleLabel = new JLabel("Entering Data for MDW Event ["+ (RaceDao.getEventsStored()+1)+"]");
+    JLabel titleLabel = new JLabel("Entering MKW Event ["+ (RaceDao.getEventsStored()+1)+"]");
     JLabel tierLabel = new JLabel("Enter Tier:");
     JLabel formatLabel = new JLabel("Enter Format");
     JTextField tierTf = new JTextField("1");
-    JTextField formatTf = new JTextField("1");
+    JTextField formatTf = new JTextField("2");
 
     mkw.Event event;
 
@@ -30,15 +30,23 @@ public class MkwEnterTfPanel extends JPanel {
         gbc.insets = new Insets(40,5,40,5);
 
         Setter s = new Setter();
-        s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1,1,1);
 
-        s.addobjects(tierLabel,this, layout,gbc,0, 2,1,1,0.25,0);
-        s.addobjects(tierTf,this, layout,gbc,1, 2,1,1, 0.75,0);
-        s.addobjects(formatLabel,this, layout,gbc,0, 3,1,1,0.25,0);
-        s.addobjects(formatTf,this, layout,gbc,1, 3,1,1,0.75,0);
+        tierLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(tierLabel,this, layout,gbc,0,2,1 , 1,1,1);
+        tierTf.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(tierTf,this, layout,gbc,1,2,1 , 1,1,1);
 
-        s.addobjects(buttonStart,this, layout,gbc,1,4,1, 1);
-        s.addobjects(buttonBack,this, layout,gbc,0, 4,1,1);
+        formatLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(formatLabel,this, layout,gbc,0,3,1 , 1,1,1);
+        formatTf.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(formatTf,this, layout,gbc,1,3,1 , 1,1,1);
+
+        buttonStart.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(buttonStart,this, layout,gbc,1,4,1 , 1,1,1);
+        buttonBack.setFont(new Font("Arial", Font.PLAIN, 18));
+        s.addobjects(buttonBack,this, layout,gbc,0,4,1, 1,1,1);
 
         buttonStart.addActionListener(new ActionListener() {
             @Override
@@ -83,6 +91,7 @@ public class MkwEnterTfPanel extends JPanel {
     }
 
     public void initialize(){
-        titleLabel.setText("Entering Data for MKW Event ["+ (RaceDao.getEventsStored()+1)+"]");
+        titleLabel.setText("Entering MKW Event ["+ (RaceDao.getEventsStored()+1)+"]");
+        tierTf.setText(String.valueOf(RaceDao.getDefaultMkwTier()));
     }
 }

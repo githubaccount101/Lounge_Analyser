@@ -20,15 +20,15 @@ public class Mk8dxRaceInputPanel extends JPanel {
     JTextArea statusTA = new JTextArea();
 
     JLabel trackLabel = new JLabel("Track:");
-    JLabel startLabel = new JLabel("Start Position(1-12)");
-    JLabel finishLabel = new JLabel("Finish Position(1-12)");
+    JLabel startLabel = new JLabel("Start Position(1-12):");
+    JLabel finishLabel = new JLabel("Finish Position(1-12):");
     JLabel rejoinLabel = new JLabel("Rejoined?");
     JLabel trackMatchLabel = new JLabel("No Track Found");
     JLabel dcLabel = new JLabel("If DC:");
 
     JTextField trackTf = new JTextField(TrackD.randomTrackD().getAbbreviation());
-    JTextField startTf = new JTextField("5");
-    JTextField finishTf = new JTextField("5");
+    JTextField startTf = new JTextField("12");
+    JTextField finishTf = new JTextField("12");
 
     JButton nextButton = new JButton("Next Race");
     JButton backButton = new JButton("Back");
@@ -43,7 +43,6 @@ public class Mk8dxRaceInputPanel extends JPanel {
 
     static EventD event = null;
     static String status = "n/a";
-
 
     public Mk8dxRaceInputPanel(CardLayout card, JPanel cardPane){
 

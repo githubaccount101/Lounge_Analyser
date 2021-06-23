@@ -3,6 +3,7 @@ package Ui;
 import Ui.panels.*;
 
 import java.awt.*;
+import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -13,6 +14,8 @@ public class Gui {
     CardLayout card;
 
     public Gui() {
+        RaceDao.setUp();
+
         frame = new JFrame("Lounge Data"){
             @Override
             public Dimension getPreferredSize() {
@@ -40,8 +43,10 @@ public class Gui {
         MkwAdvStatsPanel mkwAdvStats = new MkwAdvStatsPanel(card, cardPane);
         Mk8dxAdvStatsPanel mk8dxAdvStats = new Mk8dxAdvStatsPanel(card, cardPane);
 
-        JPanel mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats);
-        JPanel settings = new SettingsPanel(card, cardPane,frame);
+        SettingsPanel settings = new SettingsPanel(card, cardPane,frame);
+
+        JPanel mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats,settings );
+
 
         cardPane.add(mainMenu, "mainMenu");
         cardPane.add(settings, "settings");
@@ -66,7 +71,6 @@ public class Gui {
         EventQueue.invokeLater(() -> {
             Gui test = new Gui();
         });
-
     }
 
     public static void centreWindow(Window frame) {
@@ -75,4 +79,6 @@ public class Gui {
         int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(x, y);
     }
+
+
 }

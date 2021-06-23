@@ -24,9 +24,9 @@ public class MkwRaceInputPanel extends JPanel {
     JTextArea statusTA = new JTextArea();
 
     JLabel trackLabel = new JLabel("Track:");
-    JLabel playersLabel = new JLabel("Players on Results(10-12)");
-    JLabel startLabel = new JLabel("Start Position(1-12)");
-    JLabel finishLabel = new JLabel("Finish Position(1-Players)");
+    JLabel playersLabel = new JLabel("Players on Results(10-12):");
+    JLabel startLabel = new JLabel("Start Position(1-12):");
+    JLabel finishLabel = new JLabel("Finish Position(1-Players):");
     JLabel rejoinLabel = new JLabel("Rejoined?");
     JLabel trackMatchLabel = new JLabel("No Track Found");
     JLabel dcLabel = new JLabel("If DC:");
@@ -242,17 +242,18 @@ public class MkwRaceInputPanel extends JPanel {
                         tracktrack = "";
                     }
                     String playerplayer = "players";
+                    String finishfinish = "finish";
                     if(InputVerifier.verifyPlayers(playerS)){
                         playerplayer = "";
+                        if(InputVerifier.verifyFinish(finishS, Integer.parseInt(playersTf.getText()))){
+                            finishfinish = "";
+                        }
                     }
                     String startstart = "start";
                     if(InputVerifier.verifySF(startS)){
                         startstart = "";
                     }
-                    String finishfinish = "finish";
-                    if(InputVerifier.verifySF(finishS)){
-                        finishfinish = "";
-                    }
+
                     String statement = "invalid: "+tracktrack+" "+playerplayer+" "+startstart+" "+finishfinish;
                     InputVerifier.InputErrorBox(statement);
                 }
