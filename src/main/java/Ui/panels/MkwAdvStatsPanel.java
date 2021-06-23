@@ -929,4 +929,15 @@ public class MkwAdvStatsPanel extends JPanel {
                         "ORDER BY avg(points) desc");
         return bob.toString();
     }
+
+
+    public void initialize(){
+        enableAllBoxesAndConstraintButtons(false);
+        toggleAllBoxes(false);
+        otherButtons.forEach(x->x.setEnabled(true));
+        enterXTF.setText(String.valueOf(RaceDao.getEventsStored()));
+        enterXLabel2.setText("Events ("+ RaceDao.getEventsStored()+" events stored)");
+        setLastXResultLabel();
+        scrollPane.setViewportView(RaceDao.getTrackTableBasic());
+    }
 }

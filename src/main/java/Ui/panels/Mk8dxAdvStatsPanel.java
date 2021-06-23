@@ -19,8 +19,8 @@ public class Mk8dxAdvStatsPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
 
     JLabel enterXLabel= new JLabel("Limit to Last");
-    JTextField enterXTF = new JTextField(String.valueOf(RaceDao.getEventsStored()));
-    JLabel enterXLabel2= new JLabel("Events ("+ RaceDao.getEventsStored()+" events stored)");
+    JTextField enterXTF = new JTextField(String.valueOf(RaceDao.getEventsDStored()));
+    JLabel enterXLabel2= new JLabel("Events ("+ RaceDao.getEventsDStored()+" events stored)");
     JLabel lastXResultLabel  = new JLabel("");
     JButton backButton = new JButton("Back");
 
@@ -143,13 +143,13 @@ public class Mk8dxAdvStatsPanel extends JPanel {
         for(int n = 1; n<=12; n++){
             String name = String.valueOf(n);
             JCheckBox temp = new JCheckBox(name);
-            s.addobjects(temp,this, layout,gbc,i,7,1 , 1, 1,12,false);
+            s.addobjects(temp,this, layout,gbc,i,7,1 , 1, 1,12,true);
             finishBoxes.add(temp);
             i++;
         }
-        s.addobjects(allFinishButton,this, layout,gbc,18,7,2 , 1, 1,2,false);
+        s.addobjects(allFinishButton,this, layout,gbc,18,7,2 , 1, 1,2,true);
 
-        s.addobjects(trackLabel,this, layout,gbc,0,8,2 , 1, 1,2,false);
+        s.addobjects(trackLabel,this, layout,gbc,0,8,2 , 1, 1,2,true);
         i = 3;
         TrackD[] tracks = TrackD.values();
         for(int n = 0;n<4;n++){
@@ -161,15 +161,15 @@ public class Mk8dxAdvStatsPanel extends JPanel {
                 }else{
                     temp.setFont(new Font("Arial", Font.PLAIN, 12));
                 }
-                s.addobjects(temp,this, layout,gbc,i,(n+8),1 , 1, 5,12,false);
+                s.addobjects(temp,this, layout,gbc,i,(n+8),1 , 1, 5,12,true);
                 trackBoxes.add(temp);
                 i++;
             }
             i=3;
         }
-        s.addobjects(allTrackButton,this, layout,gbc,18,8,2 , 1, 1,2,false);
+        s.addobjects(allTrackButton,this, layout,gbc,18,8,2 , 1, 1,2,true);
 
-        s.addobjects(selectAllBoxesButton,this, layout,gbc,18,11,2 , 1, 1,2,false);
+        s.addobjects(selectAllBoxesButton,this, layout,gbc,18,11,2 , 1, 1,2,true);
 
         s.addobjects(scrollPane,this, layout,gbc,0,12,24 , 10, 1,10000,true);
 
@@ -924,5 +924,15 @@ public class Mk8dxAdvStatsPanel extends JPanel {
                         "HAVING COUNT(start) >0\n" +
                         "ORDER BY avg(points) desc");
         return bob.toString();
+    }
+
+    public void initialize(){
+        enableAllBoxesAndConstraintButtons(false);
+        toggleAllBoxes(false);
+        otherButtons.forEach(x->x.setEnabled(true));
+        enterXTF.setText(String.valueOf(RaceDao.getEventsDStored()));
+        enterXLabel2.setText("Events ("+ RaceDao.getEventsDStored()+" events stored)");
+        setLastXResultLabel();
+        scrollPane.setViewportView(RaceDao.getTrackTableBasic());
     }
 }

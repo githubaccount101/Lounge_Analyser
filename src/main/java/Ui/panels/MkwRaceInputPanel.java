@@ -3,6 +3,7 @@ package Ui.panels;
 import Ui.RaceDao;
 
 import Ui.Ui;
+import mk8dx.TrackD;
 import mkw.*;
 import mkw.Event;
 
@@ -30,10 +31,10 @@ public class MkwRaceInputPanel extends JPanel {
     JLabel trackMatchLabel = new JLabel("No Track Found");
     JLabel dcLabel = new JLabel("If DC:");
 
-    JTextField trackTf = new JTextField("lc");
+    JTextField trackTf = new JTextField(Track.randomTrack().getAbbreviation());
     JTextField playersTf = new JTextField("12");
-    JTextField startTf = new JTextField("5");
-    JTextField finishTf = new JTextField("5");
+    JTextField startTf = new JTextField("12");
+    JTextField finishTf = new JTextField("12");
 
 
     JButton nextButton = new JButton("Next Race");
@@ -337,6 +338,7 @@ public class MkwRaceInputPanel extends JPanel {
         trackTf.setText("");
         if(event.currentGpIsUnplayed()){
             startTf.setText("");
+            playersTf.setText("12");
         }else{
             startTf.setText(finishTf.getText());
         }
@@ -426,5 +428,9 @@ public class MkwRaceInputPanel extends JPanel {
         submitButton.setEnabled(false);
         rejoinButtonNo.setEnabled(false);
         rejoinButtonYes.setEnabled(false);
+    }
+
+    public void setTrackTf(){
+        trackTf.setText(Track.randomTrack().getAbbreviation());
     }
 }

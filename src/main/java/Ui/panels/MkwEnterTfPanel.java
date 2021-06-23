@@ -15,7 +15,7 @@ public class MkwEnterTfPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
     JButton buttonStart = new JButton("Start");
     JButton buttonBack = new JButton("Back");
-    JLabel titleLabel = new JLabel("Entering Data for MkW Event ["+ RaceDao.getEventsStored()+"]");
+    JLabel titleLabel = new JLabel("Entering Data for MDW Event ["+ (RaceDao.getEventsStored()+1)+"]");
     JLabel tierLabel = new JLabel("Enter Tier:");
     JLabel formatLabel = new JLabel("Enter Format");
     JTextField tierTf = new JTextField("1");
@@ -56,6 +56,7 @@ public class MkwEnterTfPanel extends JPanel {
                     int racesPlayed = RaceDao.getRacesStored();
                     Race.setRaceCount(racesPlayed);
 
+                    panel.setTrackTf();
                     panel.setEvent(event);
                     panel.setTitle();
                     panel.setStatus();
@@ -79,5 +80,9 @@ public class MkwEnterTfPanel extends JPanel {
                 card.show(cardPane,"mainMenu");
             }
         });
+    }
+
+    public void initialize(){
+        titleLabel.setText("Entering Data for MKW Event ["+ (RaceDao.getEventsStored()+1)+"]");
     }
 }

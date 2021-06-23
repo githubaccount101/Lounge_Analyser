@@ -13,6 +13,7 @@ import Ui.RaceDao;
 import mk8dx.TierD;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import shared.Format;
 
@@ -27,7 +28,7 @@ public class Mk8dxSummaryPanel extends JPanel {
     JButton buttonBack = new JButton("Back");
 
     JLabel enterXLabel= new JLabel("Limit to Last");
-    JTextField eventTF = new JTextField("50");
+    JTextField eventTF = new JTextField(String.valueOf(getInitialInteger()));
     JLabel enterXLabel2= new JLabel("Events ("+ RaceDao.getEventsStored()+" events stored)");
 
     JLabel lastXResultLabel  = new JLabel("");
@@ -62,7 +63,7 @@ public class Mk8dxSummaryPanel extends JPanel {
         s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1,1,2,true);
         s.addobjects(runButton,this, layout,gbc,2,0,1 , 1,1,2,true);
         s.addobjects(dcBox,this, layout,gbc,3,0,3 , 1,1,2,true);
-        dcBox.setSelected(true);
+        dcBox.setSelected(false);
         s.addobjects(buttonBack,this, layout,gbc,11,0,2 , 1,1,2,true);
 
         s.addobjects(enterXLabel,this, layout,gbc,0,1,2 , 1,1,2,true);
@@ -216,7 +217,7 @@ public class Mk8dxSummaryPanel extends JPanel {
     public void updateDatasetSeries(){
         dataset.removeAllSeries();
         dataset.addSeries(RaceDao.getSeries(getSql()));
-        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Events");
+        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Event(s) Found");
     }
 
     public ArrayList<TierD> tierCheck(){
@@ -358,5 +359,37 @@ public class Mk8dxSummaryPanel extends JPanel {
         lastXResultLabel.setText("Invalid number, or not an Integer");
     }
 
+    public void clearEntriesProtocol(){
+        eventTF.setText("");
+        enterXLabel2.setText("Events ("+ RaceDao.getEventsDStored()+" events stored)");
 
+    }
+
+    public void initialize(){
+        int eventsStored = RaceDao.getEventsDStored();
+        if(eventsStored == 0){
+            runButton.setEnabled(false);
+        }
+        eventTF.setText(String.valueOf(getInitialInteger()));
+        enterXLabel2.setText("Events ("+ eventsStored+" events stored)");
+        setLastXResultLabel();
+        String input = eventTF.getText();
+        if(InputVerifier.verifyLastX(input)){
+            updateDatasetSeries();
+        }
+        if(Integer.parseInt(input)==0){
+            dataset.removeAllSeries();
+            dataset.addSeries(new XYSeries(""));
+            chart.setTitle(0+" Matching Event(s) Found");
+        }
+    }
+
+    public int getInitialInteger(){
+        int number = 20;
+        int eventsStored = RaceDao.getEventsDStored();
+        if(20>eventsStored){
+            number = eventsStored;
+        }
+        return number;
+    }
 }

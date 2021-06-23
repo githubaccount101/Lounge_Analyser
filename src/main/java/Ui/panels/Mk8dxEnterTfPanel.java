@@ -15,7 +15,7 @@ public class Mk8dxEnterTfPanel extends JPanel {
     GridBagConstraints gbc = new GridBagConstraints();
     JButton startButton = new JButton("Start");
     JButton backButton = new JButton("Back");
-    JLabel titleLabel = new JLabel("Entering Data for MK8DX Event ["+ RaceDao.getEventsDStored()+"]");
+    JLabel titleLabel = new JLabel("Entering Data for MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
     JLabel tierLabel = new JLabel("Enter Tier:");
     JLabel formatLabel = new JLabel("Enter Format");
     JTextField tierTf = new JTextField();
@@ -58,6 +58,7 @@ public class Mk8dxEnterTfPanel extends JPanel {
                     int racesPlayed = RaceDao.getRacesDStored();
                     RaceD.setRaceCount(racesPlayed);
 
+                    panel.setTrackTf();
                     panel.setEvent(event);
                     panel.setTitle();
                     panel.setStatus();
@@ -81,5 +82,9 @@ public class Mk8dxEnterTfPanel extends JPanel {
                 card.show(cardPane,"mainMenu");
             }
         });
+    }
+
+    public void initialize(){
+        titleLabel.setText("Entering Data for MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
     }
 }

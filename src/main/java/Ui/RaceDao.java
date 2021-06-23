@@ -6,6 +6,7 @@ import mkw.Event;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
@@ -696,7 +697,7 @@ public class RaceDao {
     public static JFreeChart getChart(XYSeriesCollection dataset){
         JFreeChart chart = ChartFactory.createXYLineChart(
                 "Applicable Events",
-                "",
+                "Events",
                 "Score",
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -707,6 +708,8 @@ public class RaceDao {
         chart.removeLegend();
 
         XYPlot plot = chart.getXYPlot();
+        plot.getDomainAxis().setInverted(true);
+        plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         var renderer = new XYSplineRenderer();
 

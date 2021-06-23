@@ -17,7 +17,7 @@ public class Gui {
             @Override
             public Dimension getPreferredSize() {
                 // given some values of w & h
-                return new Dimension(640, 480);
+                return new Dimension(420, 480);
             }
         };
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,10 +27,6 @@ public class Gui {
         cardPane.setLayout(card);
 
         GridBagLayout layout = new GridBagLayout();
-
-        JPanel mainMenu = new MainMenu(card, cardPane);
-        JPanel settings = new SettingsPanel(card, cardPane);
-
 
         Mk8dxRaceInputPanel mk8dxRaceInput= new Mk8dxRaceInputPanel(card, cardPane );
         Mk8dxEnterTfPanel mk8dxTf= new Mk8dxEnterTfPanel(card, cardPane, mk8dxRaceInput);
@@ -43,6 +39,9 @@ public class Gui {
 
         MkwAdvStatsPanel mkwAdvStats = new MkwAdvStatsPanel(card, cardPane);
         Mk8dxAdvStatsPanel mk8dxAdvStats = new Mk8dxAdvStatsPanel(card, cardPane);
+
+        JPanel mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats);
+        JPanel settings = new SettingsPanel(card, cardPane,frame);
 
         cardPane.add(mainMenu, "mainMenu");
         cardPane.add(settings, "settings");

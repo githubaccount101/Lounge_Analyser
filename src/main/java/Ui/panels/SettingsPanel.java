@@ -14,7 +14,7 @@ public class SettingsPanel extends JPanel {
     JButton resetButton = new JButton("Clear All Entries");
     JLabel titleLabel = new JLabel("Settings");
 
-    public SettingsPanel(CardLayout card, JPanel cardPane) {
+    public SettingsPanel(CardLayout card, JPanel cardPane,  JFrame frame) {
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
@@ -36,12 +36,17 @@ public class SettingsPanel extends JPanel {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure???",
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure?",
                         "Confirm", JOptionPane.YES_NO_OPTION);
 
                 if(a==0){
                     System.out.println("Clearing everything");
                     RaceDao.resetTables();
+
+
+
+
+
                 }
                 if(a>0){
                     System.out.println("no");

@@ -26,7 +26,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
     JLabel trackMatchLabel = new JLabel("No Track Found");
     JLabel dcLabel = new JLabel("If DC:");
 
-    JTextField trackTf = new JTextField("mks");
+    JTextField trackTf = new JTextField(TrackD.randomTrackD().getAbbreviation());
     JTextField startTf = new JTextField("5");
     JTextField finishTf = new JTextField("5");
 
@@ -338,4 +338,9 @@ public class Mk8dxRaceInputPanel extends JPanel {
         rejoinButtonNo.setEnabled(false);
         rejoinButtonYes.setEnabled(false);
     }
+
+    public void setTrackTf(){
+        trackTf.setText(TrackD.randomTrackD().getAbbreviation());
+    }
 }
+

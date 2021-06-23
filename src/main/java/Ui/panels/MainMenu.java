@@ -9,7 +9,7 @@ public class MainMenu extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    JLabel titleLabel = new JLabel("Lounge Data");
+    JLabel titleLabel = new JLabel("LOUNGE");
 
     JButton storeMkwButton = new JButton("Enter MKW Event");
     JButton storeMk8dxButton = new JButton("Enter MK8DX Event");
@@ -20,34 +20,39 @@ public class MainMenu extends JPanel {
     JButton settingsButton = new JButton("Settings");
 
 
-    public MainMenu(CardLayout card, JPanel cardPane) {
+    public MainMenu(CardLayout card, JPanel cardPane, MkwEnterTfPanel mkwEnterTfPanel, Mk8dxEnterTfPanel mk8dxEnterTfPanel,
+                    MkwSummaryPanel mkwSummaryPanel, Mk8dxSummaryPanel mk8dxSummaryPanel,
+                    MkwAdvStatsPanel mkwAdvStatsPanel, Mk8dxAdvStatsPanel mk8dxAdvStatsPanel) {
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
-        gbc.insets = new Insets(5,5,5,5);
+
+        gbc.insets = new Insets(10,10,10,10);
 
         Setter s = new Setter();
 
-        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 50));
-        s.addobjects(titleLabel,this, layout,gbc,1,0,23 , 1,1,1,true,true);
-
-        s.addobjects(storeMkwButton,this, layout,gbc,0,2,2 , 1,1,1,true,true);
-        s.addobjects(storeMk8dxButton,this, layout,gbc,3,2,2 , 1,1,1,true,true);
+        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 40));
+        s.addobjects(titleLabel,this, layout,gbc,0,0,1 , 1,1,1);
+        s.addobjects(settingsButton,this, layout,gbc,1,0,1 , 1,1,1, false);
 
 
-        s.addobjects(mkwSummaryButton,this, layout,gbc,0,3,2 , 1,1,1,true,true);
-        s.addobjects(mk8dxSummaryButton,this, layout,gbc,3,3,2 , 1,1,1,true,true);
-        s.addobjects(settingsButton,this, layout,gbc,2,3,1 , 1,1,1,false,false);
+
+        s.addobjects(storeMkwButton,this, layout,gbc,0,2,1 , 1,1,1);
+        s.addobjects(storeMk8dxButton,this, layout,gbc,1,2,1 , 1,1,1);
 
 
-        s.addobjects(mkwAdvButton,this, layout,gbc,0,4,2 , 1,1,1,true,true);
-        s.addobjects(mk8dxAdvButton,this, layout,gbc,3,4,2 , 1,1,1,true,true);
+        s.addobjects(mkwSummaryButton,this, layout,gbc,0,3,1 , 1,1,1);
+        s.addobjects(mk8dxSummaryButton,this, layout,gbc,1,3,1 , 1,1,1);
+
+        s.addobjects(mkwAdvButton,this, layout,gbc,0,4,1 , 1,1,1);
+        s.addobjects(mk8dxAdvButton,this, layout,gbc,1,4,1, 1,1,1);
 
 
         storeMkwButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"mkwTf");
+                mkwEnterTfPanel.initialize();
             }
         });
 
@@ -55,6 +60,7 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"mk8dxTf");
+                mk8dxEnterTfPanel.initialize();
             }
         });
 
@@ -62,6 +68,7 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"mkwStats");
+                mkwSummaryPanel.initialize();
             }
         });
 
@@ -69,6 +76,7 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"mk8dxStats");
+                mk8dxSummaryPanel.initialize();
             }
         });
 
@@ -76,13 +84,15 @@ public class MainMenu extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"mkwAdvStats");
+                mkwAdvStatsPanel.initialize();
             }
         });
 
         mk8dxAdvButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                card.show(cardPane,"mkwAdvStats");
+                card.show(cardPane,"mk8dxAdvStats");
+                mk8dxAdvStatsPanel.initialize();
             }
         });
 
