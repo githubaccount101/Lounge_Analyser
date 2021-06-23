@@ -275,7 +275,7 @@ public class RaceDao {
 
 
 
-    private static void insert(int raceid, int eventid, double gpid, int tier, String format, String track, int start, int finish, int players, int points, boolean satout) {
+    public static void insert(int raceid, int eventid, double gpid, int tier, String format, String track, int start, int finish, int players, int points, boolean satout) {
         String sql = "INSERT INTO races(raceid, eventid, gpid, tier, format, track, start, finish, players, points, satout) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = connect();
@@ -297,7 +297,7 @@ public class RaceDao {
         }
     }
 
-    private static void insertD(int raceid, int eventid, String tier, String format, String track, int start, int finish, int points, boolean satout) {
+    public static void insertD(int raceid, int eventid, String tier, String format, String track, int start, int finish, int points, boolean satout) {
         String sql = "INSERT INTO racesD(raceid, eventid, tier, format, track, start, finish, points, satout) VALUES(?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = connect();
@@ -318,7 +318,7 @@ public class RaceDao {
     }
 
 
-    private static void insertEvent(int eventId, int tier, String format,int points, boolean nodc){
+    public static void insertEvent(int eventId, int tier, String format,int points, boolean nodc){
         String sql = "INSERT INTO events (eventId, tier, format, points, nodc) VALUES(?,?,?,?,?)";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -333,7 +333,7 @@ public class RaceDao {
         }
     }
 
-    private static void insertEventD(int eventId, String tier, String format,int points, boolean nodc){
+    public static void insertEventD(int eventId, String tier, String format,int points, boolean nodc){
         String sql = "INSERT INTO eventsD (eventId, tier, format,points, nodc) VALUES(?,?,?,?,?)";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -348,7 +348,7 @@ public class RaceDao {
         }
     }
 
-    private static void insertGp(double gpId, int tier, String format,int points, boolean nodc, boolean fullGp){
+    public static void insertGp(double gpId, int tier, String format,int points, boolean nodc, boolean fullGp){
         String sql = "INSERT INTO gps (gpid, tier, format,points, nodc , fullgp) VALUES(?,?,?,?,?,?)";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

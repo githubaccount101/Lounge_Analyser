@@ -43,9 +43,11 @@ public class Gui {
         MkwAdvStatsPanel mkwAdvStats = new MkwAdvStatsPanel(card, cardPane);
         Mk8dxAdvStatsPanel mk8dxAdvStats = new Mk8dxAdvStatsPanel(card, cardPane);
 
-        SettingsPanel settings = new SettingsPanel(card, cardPane,frame);
+        SettingsPanel settings = new SettingsPanel(card, cardPane);
 
-        JPanel mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats,settings );
+        MainMenu mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats,settings );
+
+        settings.setMainMenu(mainMenu);
 
 
         cardPane.add(mainMenu, "mainMenu");

@@ -1,5 +1,6 @@
 package Ui.panels;
 
+import Ui.Gui;
 import Ui.RaceDao;
 
 import javax.management.StringValueExp;
@@ -7,6 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SettingsPanel extends JPanel {
 
@@ -14,46 +18,71 @@ public class SettingsPanel extends JPanel {
 
     JLabel titleLabel = new JLabel("Settings");
 
-    JLabel mkwTierLabel = new JLabel("Enter MKW tier");
+    JLabel mkwTierLabel = new JLabel("Set new default MKW tier:");
     JTextField mkwTierTf = new JTextField("");
     JButton mkwTierButton = new JButton("Set");
 
     JLabel currentMkwTierLabel = new JLabel();
 
-    JLabel mk8dxTierLabel = new JLabel("Enter MK8DX tier");
+    JLabel mk8dxTierLabel = new JLabel("Set new default MK8DX tier:");
     JTextField mk8dxTierTf = new JTextField("");
     JButton mkw8dxTierButton = new JButton("Set");
 
     JLabel currentMk8dxTierLabel = new JLabel();
 
+    JLabel randomLabel = new JLabel("Generate random events:");
+    JTextField randomTf = new JTextField("");
+    JButton randomButton = new JButton("Generate");
+
+    JLabel randomWarningLabel = new JLabel("(limit 1000)");
+    JProgressBar randomBar = new JProgressBar();
+
     JButton resetButton = new JButton("Clear All Events");
 
     JButton buttonBack = new JButton("Back");
 
-    public SettingsPanel(CardLayout card, JPanel cardPane,  JFrame frame) {
+    ArrayList<JButton> allButtons = new ArrayList<>();
+
+    MainMenu mainMenu;
+
+    public SettingsPanel(CardLayout card, JPanel cardPane) {
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
         gbc.insets = new Insets(10,10,10,10);
 
         Setter s = new Setter();
+
+        gbc.anchor = GridBagConstraints.LINE_START;
+
+        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 25));
         s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1,1,1,true);
 
-        s.addobjects(mkwTierLabel,this, layout,gbc,0, 1,1,1);
-        s.addobjects(mkwTierTf,this, layout,gbc,1, 1,1,1);
-        s.addobjects(mkwTierButton,this, layout,gbc,2, 1,1,1);
+        s.addobjects(mkwTierLabel,this, layout,gbc,0, 1,1,1,1,1, true);
+        s.addobjects(mkwTierTf,this, layout,gbc,1, 1,1,1,100,1, true);
+        s.addobjects(mkwTierButton,this, layout,gbc,2, 1,1,1,1,1, true);
 
-        s.addobjects(currentMkwTierLabel,this, layout,gbc,0, 2,1,1);
+        s.addobjects(currentMkwTierLabel,this, layout,gbc,0, 2,1,1,1,1, true);
 
-        s.addobjects(mk8dxTierLabel,this, layout,gbc,0, 3,1,1);
-        s.addobjects(mk8dxTierTf,this, layout,gbc,1, 3,1,1);
-        s.addobjects(mkw8dxTierButton,this, layout,gbc,2, 3,1,1);
+        s.addobjects(mk8dxTierLabel,this, layout,gbc,0, 3,1,1,1,1, true);
+        s.addobjects(mk8dxTierTf,this, layout,gbc,1, 3,1,1,100,1, true);
+        s.addobjects(mkw8dxTierButton,this, layout,gbc,2, 3,1,1,1,1, true);
 
-        s.addobjects(currentMk8dxTierLabel,this, layout,gbc,0, 4,1,1);
+        s.addobjects(currentMk8dxTierLabel,this, layout,gbc,0, 4,1,1,1,1, true);
 
-        s.addobjects(resetButton,this, layout,gbc,0, 5,3,1, 1, 1,true);
+        s.addobjects(randomLabel,this, layout,gbc,0, 5,1,1,1,1, true);
+        s.addobjects(randomTf,this, layout,gbc,1, 5,1,1,100,1, true);
+        s.addobjects(randomButton,this, layout,gbc,2, 5,1,1,1,1, true);
 
-        s.addobjects(buttonBack,this, layout,gbc,0,6,3, 1, 1 ,1, true);
+        s.addobjects(randomWarningLabel,this, layout,gbc,0, 6,1,1,1,1, true);
+        s.addobjects(randomBar,this, layout,gbc,1, 6,2,1,1,1, true);
+        randomBar.setVisible(false);
+
+        s.addobjects(resetButton,this, layout,gbc,0, 7,3,1, 1, 1,true);
+
+        s.addobjects(buttonBack,this, layout,gbc,0,8,3, 1, 1 ,1, true);
+
+        fillAllButtons();
 
         mkwTierButton.addActionListener(new ActionListener() {
             @Override
@@ -85,21 +114,57 @@ public class SettingsPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 card.show(cardPane,"mainMenu");
+                mainMenu.initialize();
             }
         });
 
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure?",
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure? This will also re-enable event storage",
                         "Confirm", JOptionPane.YES_NO_OPTION);
                 if(a==0){
                     System.out.println("Clearing everything");
                     RaceDao.resetTables();
+                    RaceDao.updateRandom(false);
                 }
                 if(a>0){
                     System.out.println("no");
                 }
+                initialize();
+            }
+        });
+
+        randomButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if(InputVerifier.verifyRandom(randomTf.getText())){
+                    int a = JOptionPane.showConfirmDialog(null, "This will clear all existing entries and disable" + "\n"+
+                                    "new entries until all events are cleared again."  + "\n"+
+                                    "Until the specified number of random events are" + "\n"+
+                                    "generated,you will be unable to leave settings,"+ "\n"+
+                                    "Generating more random events will take more time;"+ "\n"+
+                                    "up to several minute for 1000. The program will be disabled"+ "\n"+
+                                    "the all the events have been generated. You can do this before"+ "\n"+
+                                    "you start storing you own events to get a feel for the other"+ "\n"+
+                                    "program functions ( summmaries and advanced for either game) .",
+                            "Confirm", JOptionPane.YES_NO_OPTION);
+                    if(a==0){
+                        try{
+                            inception();
+                        }catch(Exception s){
+                            System.out.println(s.getMessage());
+                        }
+
+                    }
+                    if(a>0){
+                        System.out.println("no");
+                    }
+                }else{
+                    InputVerifier.InputErrorBox("Invalid Number");
+                }
+                initialize();
             }
         });
     }
@@ -107,5 +172,62 @@ public class SettingsPanel extends JPanel {
     public void initialize(){
         currentMkwTierLabel.setText("(Current Default is "+String.valueOf(RaceDao.getDefaultMkwTier())+")");
         currentMk8dxTierLabel.setText("(Current Default is "+RaceDao.getDefaultMk8dxTier()+")");
+        if(RaceDao.isRandom()){
+            randomWarningLabel.setText("(limit 1000) - Random Mode is On");
+        }else{
+            randomWarningLabel.setText("(limit 1000) - Random Mode is Off");
+        }
     }
+
+    public void fillAllButtons(){
+        allButtons.add(mkwTierButton);
+        allButtons.add(mkw8dxTierButton);
+        allButtons.add(randomButton);
+        allButtons.add(resetButton);
+        allButtons.add(buttonBack);
+    }
+
+    public void enableAllButtons(boolean onOff){
+        allButtons.forEach(x->x.setEnabled(onOff));
+    }
+
+    public void setMainMenu(MainMenu mainMenu){
+        this.mainMenu = mainMenu;
+    }
+
+    private void inception(){
+        new BarUpdate(randomBar,Integer.valueOf(randomTf.getText()),randomWarningLabel, allButtons, randomWarningLabel).execute();
+    }
+
+    @Deprecated
+    public void processInBackground(){
+        SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                System.out.println("randomizing");
+                RaceDao.updateRandom(true);
+                RaceDao.resetTables();
+                enableAllButtons(false);
+                randomBar.setVisible(true);
+                RaceDao.generateRandom(Integer.parseInt(randomTf.getText()));
+                randomTf.setText("");
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                System.out.println("now im done...");
+                enableAllButtons(true);
+                randomBar.setVisible(false);
+                initialize();
+                JOptionPane.showMessageDialog(null, "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println("did it work?");
+            }
+
+
+        };
+        worker.execute();
+    }
+
+
 }

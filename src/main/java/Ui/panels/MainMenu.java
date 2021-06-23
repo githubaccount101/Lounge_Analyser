@@ -13,13 +13,16 @@ public class MainMenu extends JPanel {
 
     JLabel titleLabel = new JLabel("LOUNGE");
 
-    JButton storeMkwButton = new JButton("MKW Event");
-    JButton storeMk8dxButton = new JButton("MK8DX Event");
-    JButton mkwSummaryButton = new JButton("MKW Summary");
-    JButton mk8dxSummaryButton = new JButton("MK8DX Summary");
-    JButton mkwAdvButton = new JButton("MKW Advanced");
-    JButton mk8dxAdvButton = new JButton("MK8DX Advanced");
+    JButton storeMkwButton = new JButton("New MKW Event");
+    JButton storeMk8dxButton = new JButton("New MK8DX Event");
+    JButton mkwSummaryButton = new JButton("MKW Event Analysis");
+    JButton mk8dxSummaryButton = new JButton("MK8DX Event Analysis");
+    JButton mkwAdvButton = new JButton("MKW Race Analysis");
+    JButton mk8dxAdvButton = new JButton("MK8DX Race Analysis");
     JButton settingsButton = new JButton("Settings");
+
+    JTextArea randomStatus = new JTextArea("Program has randomly generated events,"+"\n"+
+            "clear all events in settings to enable event storage");
 
 
     public MainMenu(CardLayout card, JPanel cardPane, MkwEnterTfPanel mkwEnterTfPanel, Mk8dxEnterTfPanel mk8dxEnterTfPanel,
@@ -30,16 +33,21 @@ public class MainMenu extends JPanel {
         setLayout(layout);
         initialize();
 
-        gbc.insets = new Insets(10,10,10,10);
+        gbc.insets = new Insets(10,10,2,10);
 
         Setter s = new Setter();
 
-        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 35));
 
-        s.addobjects(titleLabel,this, layout,gbc,0,0,1 , 1,1,1);
-        s.addobjects(settingsButton,this, layout,gbc,1,0,1 , 1,1,1, false);
+        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 40));
+        titleLabel.setForeground(Color.DARK_GRAY);
 
+        s.addobjects(titleLabel,this, layout,gbc,0,0,1 , 1,1,1, false, true);
+        s.addobjects(settingsButton,this, layout,gbc,1,0,1 , 1,1,1, false, false);
 
+        gbc.insets = new Insets(10,10,10,10);
+
+        randomStatus.setEditable(false);
+        s.addobjects(randomStatus,this, layout,gbc,0,1,2 , 1,.000001,1, false, false);
 
         s.addobjects(storeMkwButton,this, layout,gbc,0,2,1 , 1,1,1);
         s.addobjects(storeMk8dxButton,this, layout,gbc,1,2,1 , 1,1,1);
@@ -114,9 +122,11 @@ public class MainMenu extends JPanel {
         if(RaceDao.isRandom()){
             storeMkwButton.setEnabled(false);
             storeMk8dxButton.setEnabled(false);
+            randomStatus.setVisible(true);
         }else{
             storeMkwButton.setEnabled(true);
             storeMk8dxButton.setEnabled(true);
+            randomStatus.setVisible(false);
         }
     }
 

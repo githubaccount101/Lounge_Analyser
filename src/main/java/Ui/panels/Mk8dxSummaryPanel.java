@@ -33,10 +33,10 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     JLabel lastXResultLabel  = new JLabel("");
 
-    JLabel tierLabel = new JLabel("choose tier(s)");
+    JLabel tierLabel = new JLabel("Include tier(s)");
     JButton allTierButton = new JButton("All Tiers");
 
-    JLabel formatLabel = new JLabel("choose format(s)");
+    JLabel formatLabel = new JLabel("Include format(s)");
     JButton allFormatButton = new JButton("All Formats");
 
     XYSeriesCollection dataset = new XYSeriesCollection();

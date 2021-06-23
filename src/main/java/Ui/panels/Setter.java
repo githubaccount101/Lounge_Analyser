@@ -13,12 +13,7 @@ public class Setter {
         gbc.gridwidth = gridwidth;
         gbc.gridheight = gridheight;
 
-        if(gridheight>1){
-            gbc.fill = GridBagConstraints.VERTICAL;
-        }
-        if(gridwidth>1){
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-        }
+        gbc.fill = GridBagConstraints.NONE;
 
         layout.setConstraints(componente, gbc);
         yourcontainer.add(componente);

@@ -41,19 +41,19 @@ public class Mk8dxAdvStatsPanel extends JPanel {
     JButton trackButton = new JButton("track");
     JButton startButton = new JButton("Start Position");
 
-    JLabel tierLabel = new JLabel("choose tier(s)");
+    JLabel tierLabel = new JLabel("Include tier(s)");
     JButton allTierButton = new JButton("All Tiers");
 
-    JLabel formatLabel = new JLabel("choose format(s)");
+    JLabel formatLabel = new JLabel("Include format(s)");
     JButton allFormatButton = new JButton("All Formats");
 
-    JLabel startLabel = new JLabel("choose start(s)");
+    JLabel startLabel = new JLabel("Include start(s)");
     JButton allStartButton = new JButton("All Start");
 
-    JLabel finishLabel = new JLabel("choose finish(s)");
+    JLabel finishLabel = new JLabel("Include finish(s)");
     JButton allFinishButton = new JButton("All Finish");
 
-    JLabel trackLabel = new JLabel("choose track(s)");
+    JLabel trackLabel = new JLabel("Include track(s)");
     JButton allTrackButton = new JButton("All tracks");
 
     JButton selectAllBoxesButton = new JButton("Select All");
@@ -98,6 +98,7 @@ public class Mk8dxAdvStatsPanel extends JPanel {
         s.addobjects(runButton,this, layout,gbc,3,2,3 , 1,1,2,true);
         s.addobjects(resetButton,this, layout,gbc,6,2 , 3,1,1,2,true);
         s.addobjects(testButton,this, layout,gbc,9,2 , 3,1,1,2,true);
+        testButton.setVisible(false);
 
         s.addobjects(selectLabel,this, layout,gbc,0,3,2 , 1,1,2,false);
         s.addobjects(trackButton,this, layout,gbc,3,3,3 , 1,1,2,true);

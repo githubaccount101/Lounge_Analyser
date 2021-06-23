@@ -150,4 +150,9 @@ public class InputVerifier {
         }
     }
 
+    public static boolean verifyRandom(String input){
+        boolean properInt = input.matches("^([1-9][0-9]{0,2}|1000)$");
+        return properInt;
+    }
+
 }
