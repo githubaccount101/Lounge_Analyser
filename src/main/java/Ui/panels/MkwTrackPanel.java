@@ -336,7 +336,8 @@ public class MkwTrackPanel extends JPanel {
             startBoxes.forEach(x->x.setEnabled(true));
             allTierButton.setEnabled(true);
             allFormatButton.setEnabled(true);
-            toggleAllBoxes(true);
+            allStartButton.setEnabled(true);
+
             runButton.setEnabled(true);
         }else{
             formatBoxes.forEach(x->x.setEnabled(false));
@@ -344,7 +345,8 @@ public class MkwTrackPanel extends JPanel {
             startBoxes.forEach(x->x.setEnabled(false));
             allTierButton.setEnabled(false);
             allFormatButton.setEnabled(false);
-            toggleAllBoxes(false);
+            allStartButton.setEnabled(false);
+
             runButton.setEnabled(false);
         }
     }
@@ -567,7 +569,8 @@ public class MkwTrackPanel extends JPanel {
                 startBoxes.forEach(x->x.setEnabled(true));
                 allTierButton.setEnabled(true);
                 allFormatButton.setEnabled(true);
-                toggleAllBoxes(true);
+                allStartButton.setEnabled(true);
+
                 runButton.setEnabled(true);
             }else{
                 formatBoxes.forEach(x->x.setEnabled(false));
@@ -575,7 +578,8 @@ public class MkwTrackPanel extends JPanel {
                 startBoxes.forEach(x->x.setEnabled(false));
                 allTierButton.setEnabled(false);
                 allFormatButton.setEnabled(false);
-                toggleAllBoxes(false);
+                allStartButton.setEnabled(false);
+
                 runButton.setEnabled(false);
             }
         }else{
@@ -585,7 +589,8 @@ public class MkwTrackPanel extends JPanel {
             startBoxes.forEach(x->x.setEnabled(false));
             allTierButton.setEnabled(false);
             allFormatButton.setEnabled(false);
-            toggleAllBoxes(false);
+            allStartButton.setEnabled(false);
+
             runButton.setEnabled(false);
         }
     }

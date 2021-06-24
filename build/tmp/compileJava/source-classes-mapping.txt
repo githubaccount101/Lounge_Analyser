@@ -106,11 +106,16 @@ Ui/panels/Mk8dxSummaryPanel.java
  Ui.panels.Mk8dxSummaryPanel$7
  Ui.panels.Mk8dxSummaryPanel$8
  Ui.panels.Mk8dxSummaryPanel$8$1
+ Ui.panels.Mk8dxSummaryPanel$9
 mk8dx/TrackD.java
  mk8dx.TrackD
 Ui/panels/MkwRaceInputPanel.java
  Ui.panels.MkwRaceInputPanel
  Ui.panels.MkwRaceInputPanel$1
+ Ui.panels.MkwRaceInputPanel$10
+ Ui.panels.MkwRaceInputPanel$11
+ Ui.panels.MkwRaceInputPanel$12
+ Ui.panels.MkwRaceInputPanel$13
  Ui.panels.MkwRaceInputPanel$2
  Ui.panels.MkwRaceInputPanel$3
  Ui.panels.MkwRaceInputPanel$4
@@ -132,6 +137,8 @@ mk8dx/EventD.java
 Ui/panels/Mk8dxRaceInputPanel.java
  Ui.panels.Mk8dxRaceInputPanel
  Ui.panels.Mk8dxRaceInputPanel$1
+ Ui.panels.Mk8dxRaceInputPanel$10
+ Ui.panels.Mk8dxRaceInputPanel$11
  Ui.panels.Mk8dxRaceInputPanel$2
  Ui.panels.Mk8dxRaceInputPanel$3
  Ui.panels.Mk8dxRaceInputPanel$4
@@ -139,6 +146,7 @@ Ui/panels/Mk8dxRaceInputPanel.java
  Ui.panels.Mk8dxRaceInputPanel$6
  Ui.panels.Mk8dxRaceInputPanel$7
  Ui.panels.Mk8dxRaceInputPanel$8
+ Ui.panels.Mk8dxRaceInputPanel$9
 Ui/panels/MkwEnterTfPanel.java
  Ui.panels.MkwEnterTfPanel
  Ui.panels.MkwEnterTfPanel$1
@@ -197,3 +205,4 @@ Ui/panels/MkwSummaryPanel.java
  Ui.panels.MkwSummaryPanel$7
  Ui.panels.MkwSummaryPanel$8
  Ui.panels.MkwSummaryPanel$8$1
+ Ui.panels.MkwSummaryPanel$9

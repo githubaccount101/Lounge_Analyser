@@ -13,6 +13,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class MkwRaceInputPanel extends JPanel {
@@ -220,45 +222,48 @@ public class MkwRaceInputPanel extends JPanel {
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String startS = startTf.getText();
-                String playerS = playersTf.getText();
-                String finishS = finishTf.getText();
-                String trackS = trackTf.getText();
+                nextRace();
+            }
+        });
 
-                if(InputVerifier.verifyTrack(trackS)&&InputVerifier.verifyPlayers(playerS)&&
-                            InputVerifier.verifySF(startS)&&InputVerifier.verifyFinish(finishS,Integer.parseInt(playerS))){
-                    roomReset();
-                    Track track = InputVerifier.getTrack(trackS);
-                    int players = Integer.parseInt(playerS);
-                    int start = Integer.parseInt(startS);
-                    int finish = Integer.parseInt(finishS);
-                    event.playRace(track, start, finish, players);
-
-                    setStatus();
-                    eventDoneCheck();
-                    setPostRaceTF();
-                }else{
-                    String tracktrack = "track";
-                    if(InputVerifier.verifyTrack(trackS)){
-                        tracktrack = "";
-                    }
-                    String playerplayer = "players";
-                    String finishfinish = "finish";
-                    if(InputVerifier.verifyPlayers(playerS)){
-                        playerplayer = "";
-                        if(InputVerifier.verifyFinish(finishS, Integer.parseInt(playersTf.getText()))){
-                            finishfinish = "";
-                        }
-                    }
-                    String startstart = "start";
-                    if(InputVerifier.verifySF(startS)){
-                        startstart = "";
-                    }
-
-                    String statement = "invalid: "+tracktrack+" "+playerplayer+" "+startstart+" "+finishfinish;
-                    InputVerifier.InputErrorBox(statement);
+        trackTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
                 }
             }
+
+        });
+
+        startTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
+                }
+            }
+
+        });
+
+        finishTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
+                }
+            }
+
+        });
+
+       playersTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
+                }
+            }
+
         });
 
         submitButton.addActionListener(new ActionListener() {
@@ -446,5 +451,46 @@ public class MkwRaceInputPanel extends JPanel {
 
     public void setTrackTf(){
         trackTf.setText(Track.randomTrack().getAbbreviation());
+    }
+
+    public void nextRace(){
+        String startS = startTf.getText();
+        String playerS = playersTf.getText();
+        String finishS = finishTf.getText();
+        String trackS = trackTf.getText();
+
+        if(InputVerifier.verifyTrack(trackS)&&InputVerifier.verifyPlayers(playerS)&&
+                InputVerifier.verifySF(startS)&&InputVerifier.verifyFinish(finishS,Integer.parseInt(playerS))){
+            roomReset();
+            Track track = InputVerifier.getTrack(trackS);
+            int players = Integer.parseInt(playerS);
+            int start = Integer.parseInt(startS);
+            int finish = Integer.parseInt(finishS);
+            event.playRace(track, start, finish, players);
+
+            setStatus();
+            eventDoneCheck();
+            setPostRaceTF();
+        }else{
+            String tracktrack = "track";
+            if(InputVerifier.verifyTrack(trackS)){
+                tracktrack = "";
+            }
+            String playerplayer = "players";
+            String finishfinish = "finish";
+            if(InputVerifier.verifyPlayers(playerS)){
+                playerplayer = "";
+                if(InputVerifier.verifyFinish(finishS, Integer.parseInt(playersTf.getText()))){
+                    finishfinish = "";
+                }
+            }
+            String startstart = "start";
+            if(InputVerifier.verifySF(startS)){
+                startstart = "";
+            }
+
+            String statement = "invalid: "+tracktrack+" "+playerplayer+" "+startstart+" "+finishfinish;
+            InputVerifier.InputErrorBox(statement);
+        }
     }
 }

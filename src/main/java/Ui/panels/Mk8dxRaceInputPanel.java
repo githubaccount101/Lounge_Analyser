@@ -9,6 +9,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class Mk8dxRaceInputPanel extends JPanel {
@@ -175,37 +177,38 @@ public class Mk8dxRaceInputPanel extends JPanel {
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String startS = startTf.getText();
-                String finishS = finishTf.getText();
-                String trackS = trackTf.getText();
+                nextRace();
+            }
+        });
 
-                if(InputVerifier.verifySF(startS)&&InputVerifier.verifySF(finishS)&&InputVerifier.verifyTrackD(trackS)){
-                    roomReset();
-                    TrackD track = InputVerifier.getTrackD(trackS);
-                    int start = Integer.parseInt(startS);
-                    int finish = Integer.parseInt(finishS);
-                    event.playRace(track, start, finish, 12);
-
-                    setStatus();
-                    eventDoneCheck();
-                    setPostRaceTF();
-                }else{
-                    String tracktrack = "track";
-                    if(InputVerifier.verifyTrackD(trackS)){
-                        tracktrack = "";
-                    }
-                    String startstart = "start";
-                    if(InputVerifier.verifySF(startS)){
-                        startstart = "";
-                    }
-                    String finishfinish = "finish";
-                    if(InputVerifier.verifySF(finishS)){
-                        startstart = "";
-                    }
-                    String statement = "invalid: "+tracktrack+" "+startstart+" "+finishfinish;
-                    InputVerifier.InputErrorBox(statement);
+        trackTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
                 }
             }
+
+        });
+
+        startTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
+                }
+            }
+
+        });
+
+        finishTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    nextRace();
+                }
+            }
+
         });
 
         submitButton.addActionListener(new ActionListener() {
@@ -354,6 +357,39 @@ public class Mk8dxRaceInputPanel extends JPanel {
 
     public void setTrackTf(){
         trackTf.setText(TrackD.randomTrackD().getAbbreviation());
+    }
+
+    public void nextRace(){
+        String startS = startTf.getText();
+        String finishS = finishTf.getText();
+        String trackS = trackTf.getText();
+
+        if(InputVerifier.verifySF(startS)&&InputVerifier.verifySF(finishS)&&InputVerifier.verifyTrackD(trackS)){
+            roomReset();
+            TrackD track = InputVerifier.getTrackD(trackS);
+            int start = Integer.parseInt(startS);
+            int finish = Integer.parseInt(finishS);
+            event.playRace(track, start, finish, 12);
+
+            setStatus();
+            eventDoneCheck();
+            setPostRaceTF();
+        }else{
+            String tracktrack = "track";
+            if(InputVerifier.verifyTrackD(trackS)){
+                tracktrack = "";
+            }
+            String startstart = "start";
+            if(InputVerifier.verifySF(startS)){
+                startstart = "";
+            }
+            String finishfinish = "finish";
+            if(InputVerifier.verifySF(finishS)){
+                startstart = "";
+            }
+            String statement = "invalid: "+tracktrack+" "+startstart+" "+finishfinish;
+            InputVerifier.InputErrorBox(statement);
+        }
     }
 }
 
