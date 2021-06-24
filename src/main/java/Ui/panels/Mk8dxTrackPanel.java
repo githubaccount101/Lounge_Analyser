@@ -1,5 +1,13 @@
 package Ui.panels;
 
+import Ui.RaceDao;
+import mkw.Tier;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import shared.Format;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -9,29 +17,22 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import Ui.RaceDao;
-import mk8dx.TierD;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import shared.Format;
-
-
-public class Mk8dxSummaryPanel extends JPanel {
+public class Mk8dxTrackPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    JLabel titleLabel = new JLabel("MK8DX Summary");
-    JButton runButton = new JButton("Run");
-    JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
+    JLabel titleLabel = new JLabel("MKW Track Analysis");
     JButton buttonBack = new JButton("Back");
 
     JLabel enterXLabel= new JLabel("Limit to Last");
     JTextField eventTF = new JTextField(String.valueOf(getInitialInteger()));
     JLabel enterXLabel2= new JLabel("Events ("+ RaceDao.getEventsStored()+" events stored)");
+    JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
 
     JLabel lastXResultLabel  = new JLabel("");
+
+    JLabel trackLabel = new JLabel("Track:");
+    JButton runButton = new JButton("Run");
 
     JLabel tierLabel = new JLabel("Include tier(s)");
     JButton allTierButton = new JButton("All Tiers");
@@ -50,7 +51,7 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     ArrayList< ArrayList<JCheckBox>> allBoxes = new ArrayList<>();
 
-    public Mk8dxSummaryPanel(CardLayout card, JPanel cardPane) {
+    public Mk8dxTrackPanel(CardLayout card, JPanel cardPane) {
 
         GridBagLayout layout = new GridBagLayout();
         allBoxes.add(tierBoxes); allBoxes.add(formatBoxes);
@@ -62,6 +63,7 @@ public class Mk8dxSummaryPanel extends JPanel {
 
         s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1,1,2,true);
         s.addobjects(runButton,this, layout,gbc,2,0,1 , 1,1,2,true);
+
         s.addobjects(dcBox,this, layout,gbc,3,0,3 , 1,1,2,true);
         dcBox.setSelected(false);
         s.addobjects(buttonBack,this, layout,gbc,11,0,2 , 1,1,2,true);
@@ -75,7 +77,7 @@ public class Mk8dxSummaryPanel extends JPanel {
 
         s.addobjects(tierLabel,this, layout,gbc,0,4,2 , 1, 1,2,true);
         int i = 2;
-        for(TierD t:TierD.values()){
+        for(Tier t:Tier.values()){
             JCheckBox temp = new JCheckBox(t.getTier());
             s.addobjects(temp,this, layout,gbc,i,4,1 , 1, 1,2,true);
             tierBoxes.add(temp);
@@ -96,7 +98,7 @@ public class Mk8dxSummaryPanel extends JPanel {
         toggleAllBoxes(true);
         chart.setTitle("Last "+eventTF.getText()+" Matching Events");
         updateDatasetSeries();
-        s.addobjects(chartPanel,this, layout,gbc,0,6,14 , 14, 100,100000,true);
+        s.addobjects(chartPanel,this, layout,gbc,0,6,14 , 5, 1,100000,true);
 
         buttonBack.addActionListener(new ActionListener() {
             @Override
@@ -193,7 +195,7 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     public void limitCheck(){
         String input = eventTF.getText();
-        if(InputVerifier.verifyLastXD(input)){
+        if(InputVerifier.verifyLastX(input)){
             formatBoxes.forEach(x->x.setEnabled(true));
             tierBoxes.forEach(x->x.setEnabled(true));
             allTierButton.setEnabled(true);
@@ -217,14 +219,13 @@ public class Mk8dxSummaryPanel extends JPanel {
     public void updateDatasetSeries(){
         dataset.removeAllSeries();
         dataset.addSeries(RaceDao.getSeries(getSql()));
-
         chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Event(s) Found");
     }
 
-    public ArrayList<TierD> tierCheck(){
-        ArrayList<TierD> selected = new ArrayList<>();
+    public ArrayList<Tier> tierCheck(){
+        ArrayList<Tier> selected = new ArrayList<>();
 
-        TierD[] tiers = TierD.values();
+        Tier[] tiers = Tier.values();
 
         int i = 0;
         for(JCheckBox box:tierBoxes){
@@ -253,18 +254,17 @@ public class Mk8dxSummaryPanel extends JPanel {
         return selected;
     }
 
-
     public String tierBuilder(){
-        ArrayList<TierD> selectedTiers = tierCheck();
-        String sql= "AND (tier like '";
+        ArrayList<Tier> selectedTiers = tierCheck();
+        String sql= "AND (tier=";
         StringBuilder bob = new StringBuilder();
         bob.append(sql);
         if(selectedTiers.size()==1){
-            bob.append(selectedTiers.get(0).getTier()+"')");
+            bob.append(selectedTiers.get(0).getTier()+")");
         }else{
-            bob.append(selectedTiers.get(0).getTier()+"'");
+            bob.append(selectedTiers.get(0).getTier());
             for(int i = 1;i<selectedTiers.size();i++){
-                bob.append(" or tier like '"+selectedTiers.get(i).getTier()+"'");
+                bob.append(" or tier="+selectedTiers.get(i).getTier());
             }
             bob.append(")");
         }
@@ -291,7 +291,7 @@ public class Mk8dxSummaryPanel extends JPanel {
     public String getSql(){
         StringBuilder bob = new StringBuilder();
         bob.append("SELECT points"+"\n")
-                .append("FROM (SELECT * FROM eventsD ORDER BY eventid DESC LIMIT "+(Integer.parseInt(eventTF.getText()))+")"+"\n");
+                .append("FROM (SELECT * FROM events ORDER BY eventid DESC LIMIT "+(Integer.parseInt(eventTF.getText()))+")"+"\n");
         if(dcBox.isSelected()){
             bob.append("Where nodc = true"+"\n");
         }else{
@@ -347,27 +347,21 @@ public class Mk8dxSummaryPanel extends JPanel {
         String input = eventTF.getText();
         if(input.equals("All")||input.equals("all")||input.equals("ALL")){
             int eventsPlayed = RaceDao.getEventsStored();
-            double avg = RaceDao.getAvgPtsLastXDx(eventsPlayed);
+            double avg = RaceDao.getAvgPtsLastX(eventsPlayed);
             lastXResultLabel.setText("Last "+eventsPlayed+" events, average Score: "+avg);
             return;
         }
-        if(InputVerifier.verifyLastXD(input)){
+        if(InputVerifier.verifyLastX(input)){
             int lastX= Integer.parseInt(input);
-            double avg = RaceDao.getAvgPtsLastXDx(lastX);
+            double avg = RaceDao.getAvgPtsLastX(lastX);
             lastXResultLabel.setText("Last "+lastX+" events, average Score: "+avg);
             return;
         }
         lastXResultLabel.setText("Invalid number, or not an Integer");
     }
 
-    public void clearEntriesProtocol(){
-        eventTF.setText("");
-        enterXLabel2.setText("Events ("+ RaceDao.getEventsDStored()+" events stored)");
-
-    }
-
     public void initialize(){
-        int eventsStored = RaceDao.getEventsDStored();
+        int eventsStored = RaceDao.getEventsStored();
         if(eventsStored == 0){
             runButton.setEnabled(false);
         }
@@ -375,7 +369,7 @@ public class Mk8dxSummaryPanel extends JPanel {
         enterXLabel2.setText("Events ("+ eventsStored+" events stored)");
         setLastXResultLabel();
         String input = eventTF.getText();
-        if(InputVerifier.verifyLastXD(input)){
+        if(InputVerifier.verifyLastX(input)){
             updateDatasetSeries();
         }
         if(Integer.parseInt(input)==0){
@@ -387,10 +381,12 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     public int getInitialInteger(){
         int number = 20;
-        int eventsStored = RaceDao.getEventsDStored();
+        int eventsStored = RaceDao.getEventsStored();
         if(20>eventsStored){
             number = eventsStored;
         }
         return number;
     }
+
+
 }

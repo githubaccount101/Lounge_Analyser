@@ -1,5 +1,14 @@
 package Ui.panels;
 
+import Ui.RaceDao;
+import mkw.Tier;
+import mkw.Track;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+import shared.Format;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -9,29 +18,25 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import Ui.RaceDao;
-import mk8dx.TierD;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import shared.Format;
-
-
-public class Mk8dxSummaryPanel extends JPanel {
+public class MkwTrackPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    JLabel titleLabel = new JLabel("MK8DX Summary");
-    JButton runButton = new JButton("Run");
-    JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
+    JLabel titleLabel = new JLabel("MKW Track Analysis");
     JButton buttonBack = new JButton("Back");
 
     JLabel enterXLabel= new JLabel("Limit to Last");
     JTextField eventTF = new JTextField(String.valueOf(getInitialInteger()));
-    JLabel enterXLabel2= new JLabel("Events ("+ RaceDao.getEventsStored()+" events stored)");
+    JLabel enterXLabel2= new JLabel("("+ RaceDao.getEventsStored()+" events stored)");
+    JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
 
     JLabel lastXResultLabel  = new JLabel("");
+
+    JLabel trackLabel = new JLabel("Track:");
+    JTextField trackTf = new JTextField(Track.randomTrack().getAbbreviation());
+    JButton runButton = new JButton("Run");
+
+    JLabel trackMatchLabel = new JLabel("No Track Found");
 
     JLabel tierLabel = new JLabel("Include tier(s)");
     JButton allTierButton = new JButton("All Tiers");
@@ -39,21 +44,25 @@ public class Mk8dxSummaryPanel extends JPanel {
     JLabel formatLabel = new JLabel("Include format(s)");
     JButton allFormatButton = new JButton("All Formats");
 
+    JLabel startLabel = new JLabel("Include Start(s)");
+    JButton allStartButton = new JButton("All Starts");
+
     XYSeriesCollection dataset = new XYSeriesCollection();
-    JFreeChart chart = RaceDao.getChart(dataset);
+    JFreeChart chart = RaceDao.getChart4Tracks(dataset);
     ChartPanel chartPanel = RaceDao.getChartPanel(chart);
 
     JButton testButton2 = new JButton("test!!!!");
 
     ArrayList<JCheckBox> tierBoxes = new ArrayList<>();
     ArrayList<JCheckBox> formatBoxes = new ArrayList<>();
+    ArrayList<JCheckBox> startBoxes = new ArrayList<>();
 
     ArrayList< ArrayList<JCheckBox>> allBoxes = new ArrayList<>();
 
-    public Mk8dxSummaryPanel(CardLayout card, JPanel cardPane) {
+    public MkwTrackPanel(CardLayout card, JPanel cardPane) {
 
         GridBagLayout layout = new GridBagLayout();
-        allBoxes.add(tierBoxes); allBoxes.add(formatBoxes);
+        allBoxes.add(tierBoxes); allBoxes.add(formatBoxes);allBoxes.add(startBoxes);
 
         setLayout(layout);
         gbc.insets = new Insets(3,3,3,3);
@@ -61,42 +70,64 @@ public class Mk8dxSummaryPanel extends JPanel {
         Setter s = new Setter();
 
         s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1,1,2,true);
-        s.addobjects(runButton,this, layout,gbc,2,0,1 , 1,1,2,true);
+        s.addobjects(runButton,this, layout,gbc,2, 0,1,1, 1,2,true);
         s.addobjects(dcBox,this, layout,gbc,3,0,3 , 1,1,2,true);
         dcBox.setSelected(false);
-        s.addobjects(buttonBack,this, layout,gbc,11,0,2 , 1,1,2,true);
+        s.addobjects(enterXLabel2,this, layout,gbc,6,0,3 , 1,1,2,true);
+        s.addobjects(buttonBack,this, layout,gbc,16,0,2 , 1,1,2,true);
 
         s.addobjects(enterXLabel,this, layout,gbc,0,1,2 , 1,1,2,true);
         s.addobjects(eventTF,this, layout,gbc,2,1,1 , 1,1,2,true);
-        s.addobjects(enterXLabel2,this, layout,gbc,3,1,2 , 1,1,2,true);
-
-        s.addobjects(lastXResultLabel,this, layout,gbc,2,3,5 , 1,1,2,true);
+        s.addobjects(lastXResultLabel,this, layout,gbc,3,1,3 , 1,1,2,true);
         setLastXResultLabel();
 
-        s.addobjects(tierLabel,this, layout,gbc,0,4,2 , 1, 1,2,true);
+        s.addobjects(trackLabel,this, layout,gbc,6, 1,1,1,1,2,true);
+        s.addobjects(trackTf,this, layout,gbc,7, 1,3,1, 0.000001,2,true);
+        matchLabelUpdate();
+        s.addobjects(trackMatchLabel,this, layout,gbc,10, 1,5,1,1,0.1,true);
+
+        s.addobjects(tierLabel,this, layout,gbc,0,5,4 , 1, 1,2,true);
         int i = 2;
-        for(TierD t:TierD.values()){
+        for(Tier t:Tier.values()){
             JCheckBox temp = new JCheckBox(t.getTier());
-            s.addobjects(temp,this, layout,gbc,i,4,1 , 1, 1,2,true);
+            s.addobjects(temp,this, layout,gbc,i,5,1 , 1, 1,2,true);
             tierBoxes.add(temp);
             i++;
         }
-        s.addobjects(allTierButton,this, layout,gbc,11,4,2 , 1, 1,2,true);
+        s.addobjects(allTierButton,this, layout,gbc,16,5,2 , 1, 1,2,true);
 
-        s.addobjects(formatLabel,this, layout,gbc,0,5,2 , 1, 1,2,true);
+        s.addobjects(formatLabel,this, layout,gbc,0,6,2 , 1, 1,2,true);
         i = 2;
         for(Format f:Format.values()){
             JCheckBox temp = new JCheckBox(f.getFormat());
-            s.addobjects(temp,this, layout,gbc,i,5,1 , 1, 1,2,true);
+            s.addobjects(temp,this, layout,gbc,i,6 , 1, 1,2,2,true);
             formatBoxes.add(temp);
             i++;
         }
-        s.addobjects(allFormatButton,this, layout,gbc,11,5,2 , 1, 1,2,true);
+        s.addobjects(allFormatButton,this, layout,gbc,16,6,2 , 1, 1,2,true);
+
+        s.addobjects(startLabel,this, layout,gbc,0,7,2 , 1, 1,2,true);
+        i = 2;
+        for(int n = 1; n<=12; n++){
+            String name = String.valueOf(n);
+            JCheckBox temp = new JCheckBox(name);
+            s.addobjects(temp,this, layout,gbc,i,7,1 , 1, 1,2,true);
+            startBoxes.add(temp);
+            i++;
+        }
+        s.addobjects(allStartButton,this, layout,gbc,16,7,2 , 1, 1,2,true);
 
         toggleAllBoxes(true);
         chart.setTitle("Last "+eventTF.getText()+" Matching Events");
         updateDatasetSeries();
-        s.addobjects(chartPanel,this, layout,gbc,0,6,14 , 14, 100,100000,true);
+        s.addobjects(chartPanel,this, layout,gbc,0,8,18 , 5, 1,100000,true);
+
+        dcBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(getSql());
+            }
+        });
 
         buttonBack.addActionListener(new ActionListener() {
             @Override
@@ -156,6 +187,22 @@ public class Mk8dxSummaryPanel extends JPanel {
             }
         });
 
+        allStartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(isAllSelected(startBoxes)){
+                    toggleBoxes(startBoxes,false);
+                }else{
+                    toggleBoxes(startBoxes,true);
+                }
+                if(atLeastOneBoxOfEachIsSelected()){
+                    runButton.setEnabled(true);
+                }else{
+                    runButton.setEnabled(false);
+                }
+            }
+        });
+
         eventTF.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -171,6 +218,21 @@ public class Mk8dxSummaryPanel extends JPanel {
             public void changedUpdate(DocumentEvent e) {
                 limitCheck();
                 setLastXResultLabel();
+            }
+        });
+
+        trackTf.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                matchLabelUpdate();
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                matchLabelUpdate();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                matchLabelUpdate();
             }
         });
 
@@ -193,9 +255,10 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     public void limitCheck(){
         String input = eventTF.getText();
-        if(InputVerifier.verifyLastXD(input)){
+        if(InputVerifier.verifyLastX(input)){
             formatBoxes.forEach(x->x.setEnabled(true));
             tierBoxes.forEach(x->x.setEnabled(true));
+            startBoxes.forEach(x->x.setEnabled(true));
             allTierButton.setEnabled(true);
             allFormatButton.setEnabled(true);
             toggleAllBoxes(true);
@@ -203,6 +266,7 @@ public class Mk8dxSummaryPanel extends JPanel {
         }else{
             formatBoxes.forEach(x->x.setEnabled(false));
             tierBoxes.forEach(x->x.setEnabled(false));
+            startBoxes.forEach(x->x.setEnabled(false));
             allTierButton.setEnabled(false);
             allFormatButton.setEnabled(false);
             toggleAllBoxes(false);
@@ -216,15 +280,15 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     public void updateDatasetSeries(){
         dataset.removeAllSeries();
-        dataset.addSeries(RaceDao.getSeries(getSql()));
-
-        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Event(s) Found");
+        dataset.addSeries(RaceDao.getSeries4Track(getSql()));
+        dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
+        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Races Found");
     }
 
-    public ArrayList<TierD> tierCheck(){
-        ArrayList<TierD> selected = new ArrayList<>();
+    public ArrayList<Tier> tierCheck(){
+        ArrayList<Tier> selected = new ArrayList<>();
 
-        TierD[] tiers = TierD.values();
+        Tier[] tiers = Tier.values();
 
         int i = 0;
         for(JCheckBox box:tierBoxes){
@@ -253,18 +317,32 @@ public class Mk8dxSummaryPanel extends JPanel {
         return selected;
     }
 
+    public ArrayList<Integer> startCheck(){
+
+        ArrayList<Integer> selected = new ArrayList<>();
+
+        int i = 1;
+        for(JCheckBox box:startBoxes){
+            if(box.isSelected()==true){
+                selected.add(i);
+            }
+            i++;
+        }
+
+        return selected;
+    }
 
     public String tierBuilder(){
-        ArrayList<TierD> selectedTiers = tierCheck();
-        String sql= "AND (tier like '";
+        ArrayList<Tier> selectedTiers = tierCheck();
+        String sql= "AND (tier=";
         StringBuilder bob = new StringBuilder();
         bob.append(sql);
         if(selectedTiers.size()==1){
-            bob.append(selectedTiers.get(0).getTier()+"')");
+            bob.append(selectedTiers.get(0).getTier()+")");
         }else{
-            bob.append(selectedTiers.get(0).getTier()+"'");
+            bob.append(selectedTiers.get(0).getTier());
             for(int i = 1;i<selectedTiers.size();i++){
-                bob.append(" or tier like '"+selectedTiers.get(i).getTier()+"'");
+                bob.append(" or tier="+selectedTiers.get(i).getTier());
             }
             bob.append(")");
         }
@@ -288,19 +366,33 @@ public class Mk8dxSummaryPanel extends JPanel {
         return bob.toString();
     }
 
+    public String startBuilder(){
+        ArrayList<Integer> SelectedStarts = startCheck();
+        String sql= "AND (start=";
+        StringBuilder bob = new StringBuilder();
+        bob.append(sql);
+        if(SelectedStarts.size()==1){
+            bob.append(SelectedStarts.get(0)+")");
+        }else{
+            bob.append(SelectedStarts.get(0));
+            for(int i = 1;i<SelectedStarts.size();i++){
+                bob.append(" or start="+SelectedStarts.get(i));
+            }
+            bob.append(")");
+        }
+        return bob.toString();
+    }
+
     public String getSql(){
         StringBuilder bob = new StringBuilder();
-        bob.append("SELECT points"+"\n")
-                .append("FROM (SELECT * FROM eventsD ORDER BY eventid DESC LIMIT "+(Integer.parseInt(eventTF.getText()))+")"+"\n");
-        if(dcBox.isSelected()){
-            bob.append("Where nodc = true"+"\n");
-        }else{
-            bob.append("Where (nodc = true or nodc = false)"+"\n");
-        }
+        String track = Track.fromString(trackTf.getText()).get().getSearchName();
+        bob.append("SELECT finish"+"\n")
+                .append("FROM (SELECT * FROM races ORDER BY raceid DESC LIMIT "+(Integer.parseInt(eventTF.getText())*12)+")"+"\n");
+        bob.append("Where track = '"+track+"'"+"\n");
         bob.append(tierBuilder()+"\n")
                 .append(formatBuilder()+"\n")
-                .append(tierBuilder()+"\n")
-                .append("order by eventid");
+                .append(startBuilder()+"\n")
+                .append("order by raceid");
         return bob.toString();
     }
 
@@ -341,41 +433,36 @@ public class Mk8dxSummaryPanel extends JPanel {
     public void toggleAllBoxes(Boolean onOff){
         toggleBoxes(formatBoxes,onOff);
         toggleBoxes(tierBoxes,onOff);
+        toggleBoxes(startBoxes,onOff);
     }
 
     public void setLastXResultLabel(){
         String input = eventTF.getText();
         if(input.equals("All")||input.equals("all")||input.equals("ALL")){
             int eventsPlayed = RaceDao.getEventsStored();
-            double avg = RaceDao.getAvgPtsLastXDx(eventsPlayed);
-            lastXResultLabel.setText("Last "+eventsPlayed+" events, average Score: "+avg);
+            double avg = RaceDao.getAvgPtsLastX(eventsPlayed);
+            lastXResultLabel.setText("events, average Score: "+avg);
             return;
         }
-        if(InputVerifier.verifyLastXD(input)){
+        if(InputVerifier.verifyLastX(input)){
             int lastX= Integer.parseInt(input);
-            double avg = RaceDao.getAvgPtsLastXDx(lastX);
-            lastXResultLabel.setText("Last "+lastX+" events, average Score: "+avg);
+            double avg = RaceDao.getAvgPtsLastX(lastX);
+            lastXResultLabel.setText( "events, average Score: "+avg);
             return;
         }
-        lastXResultLabel.setText("Invalid number, or not an Integer");
-    }
-
-    public void clearEntriesProtocol(){
-        eventTF.setText("");
-        enterXLabel2.setText("Events ("+ RaceDao.getEventsDStored()+" events stored)");
-
+        lastXResultLabel.setText("events, Invalid number");
     }
 
     public void initialize(){
-        int eventsStored = RaceDao.getEventsDStored();
+        int eventsStored = RaceDao.getEventsStored();
         if(eventsStored == 0){
             runButton.setEnabled(false);
         }
         eventTF.setText(String.valueOf(getInitialInteger()));
-        enterXLabel2.setText("Events ("+ eventsStored+" events stored)");
+        enterXLabel2.setText("("+ eventsStored+" events stored)");
         setLastXResultLabel();
         String input = eventTF.getText();
-        if(InputVerifier.verifyLastXD(input)){
+        if(InputVerifier.verifyLastX(input)){
             updateDatasetSeries();
         }
         if(Integer.parseInt(input)==0){
@@ -386,11 +473,47 @@ public class Mk8dxSummaryPanel extends JPanel {
     }
 
     public int getInitialInteger(){
-        int number = 20;
-        int eventsStored = RaceDao.getEventsDStored();
-        if(20>eventsStored){
+        int number = 100;
+        int eventsStored = RaceDao.getEventsStored();
+        if(100>eventsStored){
             number = eventsStored;
         }
         return number;
     }
+
+    public void matchLabelUpdate(){
+        String input = trackTf.getText();
+        if(InputVerifier.verifyTrack(input)){
+            trackMatchLabel.setText(Track.fromString(input).get().getFullName());
+            String input2 = eventTF.getText();
+            if(InputVerifier.verifyLastX(input2)){
+                formatBoxes.forEach(x->x.setEnabled(true));
+                tierBoxes.forEach(x->x.setEnabled(true));
+                startBoxes.forEach(x->x.setEnabled(true));
+                allTierButton.setEnabled(true);
+                allFormatButton.setEnabled(true);
+                toggleAllBoxes(true);
+                runButton.setEnabled(true);
+            }else{
+                formatBoxes.forEach(x->x.setEnabled(false));
+                tierBoxes.forEach(x->x.setEnabled(false));
+                startBoxes.forEach(x->x.setEnabled(false));
+                allTierButton.setEnabled(false);
+                allFormatButton.setEnabled(false);
+                toggleAllBoxes(false);
+                runButton.setEnabled(false);
+            }
+        }else{
+            trackMatchLabel.setText("No Track Found");
+            formatBoxes.forEach(x->x.setEnabled(false));
+            tierBoxes.forEach(x->x.setEnabled(false));
+            startBoxes.forEach(x->x.setEnabled(false));
+            allTierButton.setEnabled(false);
+            allFormatButton.setEnabled(false);
+            toggleAllBoxes(false);
+            runButton.setEnabled(false);
+        }
+    }
+
+
 }

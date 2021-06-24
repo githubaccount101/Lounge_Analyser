@@ -34,7 +34,6 @@ public class BarUpdate extends SwingWorker<Void, Integer> {
     protected void process(List<Integer> chunks) {
         int i = chunks.get(chunks.size()-1);
         randomBar.setValue(i); // The last value in this array is all we care about.
-        System.out.println(i);
         label.setText("Generated " + i + " of " + max);
     }
 
@@ -43,6 +42,7 @@ public class BarUpdate extends SwingWorker<Void, Integer> {
 
         RaceDao.updateRandom(true);
         randomBar.setVisible(true);
+        randomBar.setMaximum(max);
         allButtons.forEach(x->x.setEnabled(false));
 
         int[] p12 = {15,12, 10, 8, 7, 6, 5, 4, 3, 2, 1, 0};
@@ -111,6 +111,7 @@ public class BarUpdate extends SwingWorker<Void, Integer> {
             randomWarningLabel.setText("(limit 1000) - Random Mode is On");
             allButtons.forEach(x->x.setEnabled(true));
             label.setText("(limit 1000) - Random Mode is On");
+            randomBar.setMaximum(1000);
             JOptionPane.showMessageDialog(null, "Success", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

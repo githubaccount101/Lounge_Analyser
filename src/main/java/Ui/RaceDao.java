@@ -801,7 +801,6 @@ public class RaceDao {
         return table;
     }
 
-
     public static XYSeries getSeries(String sql){
         try (Connection conn = connect();
              Statement stmt  = conn.createStatement();
@@ -823,9 +822,102 @@ public class RaceDao {
         }
     }
 
+    public static XYSeries getSeries4Track(String sql){
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            var series = new XYSeries("Finish Position");
+            int x = 1;
+            while(rs.next()){
+                int points = rs.getInt("finish");
+                series.add(x,points);
+                x++;
+            }
+            return series;
+
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static XYSeries getSeriesMovingAverage(String sql){
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            var series = new XYSeries("Moving Average");
+
+            ArrayList<Integer> host = new ArrayList<>();
+            while(rs.next()){
+                int points = rs.getInt("finish");
+                host.add(points);
+            }
+            ArrayList<Double> movingAvg = movingAvgTransformation(host);
+            int x = 1;
+            for(Double d:movingAvg){
+                series.add(x,d);
+                x++;
+            }
+
+            return series;
+
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static ArrayList<Double> movingAvgTransformation(ArrayList<Integer> original){
+        int divisor = original.size()/10+1;
+        ArrayList<Double> neo = new ArrayList<>();
+        int i = 0;
+
+        System.out.println("--------------");
+        System.out.println("divisor is: "+divisor);
+        System.out.println("transforming");
+        System.out.println("--------------");
+        for(int a:original){
+            boolean smallEnough = (i+divisor)<original.size();
+            double newElement;
+
+            if(smallEnough){
+                int tempDivisor =divisor+1;
+                int weightDivisor = 0;
+
+                int sum = original.get(i)*tempDivisor;
+                weightDivisor +=tempDivisor;
+
+                for(int n = 1;n<=divisor;n++){
+                    tempDivisor--;
+                    sum+=original.get(i+n)*(tempDivisor);
+                    weightDivisor +=tempDivisor;
+
+                }
+                newElement = (1.0*(sum))/((1.0)*(weightDivisor));
+                System.out.println(original.get(i)+" is now "+newElement);
+            }else{
+                newElement = (double)original.get(i);
+                System.out.println(original.get(i)+" is now "+newElement);
+            }
+            neo.add(newElement);
+            i++;
+        }
+        return neo;
+    }
+
     public static XYSeriesCollection getDataset(XYSeries series){
         var dataset = new XYSeriesCollection();
         dataset.addSeries(series);
+        return dataset;
+    }
+
+    public static XYSeriesCollection getDataset4Track(XYSeries series, XYSeries mA){
+        var dataset = new XYSeriesCollection();
+        dataset.addSeries(series);
+        dataset.addSeries(mA);
         return dataset;
     }
 
@@ -851,6 +943,49 @@ public class RaceDao {
 
         renderer.setSeriesPaint(0, Color.BLACK);
         renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+
+        plot.setRenderer(renderer);
+        plot.setBackgroundPaint(Color.lightGray);
+
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(Color.BLACK);
+
+        plot.setDomainGridlinesVisible(true);
+        plot.setDomainGridlinePaint(Color.BLACK);
+
+        chart.setTitle(new TextTitle("",
+                        new Font("Comic Sans", java.awt.Font.BOLD, 16)
+                )
+        );
+        return chart;
+    }
+
+    public static JFreeChart getChart4Tracks(XYSeriesCollection dataset){
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Applicable Events",
+                "Race Recency",
+                "Finish Position",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+        chart.removeLegend();
+
+        XYPlot plot = chart.getXYPlot();
+        plot.getDomainAxis().setInverted(true);
+        plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        plot.getRangeAxis().setInverted(true);
+        plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+        var renderer = new XYSplineRenderer();
+
+        renderer.setSeriesPaint(0, Color.BLACK);
+        renderer.setSeriesStroke(0, new BasicStroke(1.0f));
+
+        renderer.setSeriesPaint(1, Color.BLUE);
+        renderer.setSeriesStroke(1, new BasicStroke(1.5f));
 
         plot.setRenderer(renderer);
         plot.setBackgroundPaint(Color.lightGray);

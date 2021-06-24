@@ -37,6 +37,9 @@ public class Gui {
         MkwRaceInputPanel mkwRaceInput= new MkwRaceInputPanel(card, cardPane);
         MkwEnterTfPanel mkwTf = new MkwEnterTfPanel(card, cardPane, mkwRaceInput);
 
+        MkwTrackPanel mkwTrackPanel = new MkwTrackPanel(card, cardPane);
+        Mk8dxTrackPanel mk8dxTrackPanel = new Mk8dxTrackPanel(card, cardPane);
+
         MkwSummaryPanel mkwStats = new MkwSummaryPanel(card, cardPane);
         Mk8dxSummaryPanel mk8dxStats = new Mk8dxSummaryPanel(card, cardPane);
 
@@ -45,7 +48,7 @@ public class Gui {
 
         SettingsPanel settings = new SettingsPanel(card, cardPane);
 
-        MainMenu mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats,settings );
+        MainMenu mainMenu = new MainMenu(card, cardPane, mkwTf, mk8dxTf, mkwStats, mk8dxStats, mkwAdvStats, mk8dxAdvStats,settings , mkwTrackPanel, mk8dxTrackPanel);
 
         settings.setMainMenu(mainMenu);
 
@@ -55,6 +58,9 @@ public class Gui {
 
         cardPane.add(mkwTf, "mkwTf");
         cardPane.add(mk8dxTf, "mk8dxTf");
+
+        cardPane.add(mkwTrackPanel,"mkwTrack");
+        cardPane.add(mk8dxTrackPanel, "mk8dxTrack");
         cardPane.add(mkwRaceInput,"mkwRace");
         cardPane.add(mk8dxRaceInput, "mk8dxRace");
         cardPane.add(mkwStats, "mkwStats");

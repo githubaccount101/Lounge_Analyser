@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import Ui.RaceDao;
+import mkw.Race;
 import mkw.Tier;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;

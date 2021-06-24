@@ -75,14 +75,19 @@ public class SettingsPanel extends JPanel {
         s.addobjects(randomButton,this, layout,gbc,2, 5,1,1,1,1, true);
 
         s.addobjects(randomWarningLabel,this, layout,gbc,0, 6,1,1,1,1, true);
-        s.addobjects(randomBar,this, layout,gbc,1, 6,2,1,1,1, true);
+
+        s.addobjects(randomBar,this, layout,gbc,0, 7,3,1,1, 1,true);
         randomBar.setVisible(false);
 
-        s.addobjects(resetButton,this, layout,gbc,0, 7,3,1, 1, 1,true);
+        s.addobjects(resetButton,this, layout,gbc,0, 8,3,1, 2, 1,true);
 
-        s.addobjects(buttonBack,this, layout,gbc,0,8,3, 1, 1 ,1, true);
+        s.addobjects(buttonBack,this, layout,gbc,0,9,3, 1, 2 ,1, true);
 
         fillAllButtons();
+
+        resetButton.setOpaque(false);
+        resetButton.setContentAreaFilled(false);
+
 
         mkwTierButton.addActionListener(new ActionListener() {
             @Override
@@ -140,15 +145,13 @@ public class SettingsPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 if(InputVerifier.verifyRandom(randomTf.getText())){
-                    int a = JOptionPane.showConfirmDialog(null, "This will clear all existing entries and disable" + "\n"+
-                                    "new entries until all events are cleared again."  + "\n"+
-                                    "Until the specified number of random events are" + "\n"+
-                                    "generated,you will be unable to leave settings,"+ "\n"+
-                                    "Generating more random events will take more time;"+ "\n"+
-                                    "up to several minute for 1000. The program will be disabled"+ "\n"+
+                    int a = JOptionPane.showConfirmDialog(null, "This will clear all existing events and disable" + "\n"+
+                                    "the input of new events until all events are cleared again."  + "\n"+
+                                    "Generating more random events will take more time,"+ "\n"+
+                                    "up to several minutes for 1000. The program will be disabled"+ "\n"+
                                     "the all the events have been generated. You can do this before"+ "\n"+
-                                    "you start storing you own events to get a feel for the other"+ "\n"+
-                                    "program functions ( summmaries and advanced for either game) .",
+                                    "you start storing your own events to get a feel for the other"+ "\n"+
+                                    "program functions (event and race analysis for either game) .",
                             "Confirm", JOptionPane.YES_NO_OPTION);
                     if(a==0){
                         try{
