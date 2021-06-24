@@ -19,8 +19,8 @@ public class MainMenu extends JPanel {
     JButton mk8dxTrackButton = new JButton("MK8DX Track Analysis");
     JButton mkwSummaryButton = new JButton("MKW Event Analysis");
     JButton mk8dxSummaryButton = new JButton("MK8DX Event Analysis");
-    JButton mkwAdvButton = new JButton("MKW Race Analysis");
-    JButton mk8dxAdvButton = new JButton("MK8DX Race Analysis");
+    JButton mkwAdvButton = new JButton("MKW Advanced");
+    JButton mk8dxAdvButton = new JButton("MK8DX Advanced");
     JButton settingsButton = new JButton("Settings");
 
     JTextArea randomStatus = new JTextArea("Program has randomly generated events,"+"\n"+
@@ -41,7 +41,7 @@ public class MainMenu extends JPanel {
         Setter s = new Setter();
 
 
-        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 40));
+        titleLabel.setFont(new Font("Comic Sans", Font.BOLD, 42));
         titleLabel.setForeground(Color.DARK_GRAY);
 
         s.addobjects(titleLabel,this, layout,gbc,0,0,1 , 1,1,0.5 ,false, true);

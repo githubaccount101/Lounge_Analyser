@@ -806,7 +806,7 @@ public class RaceDao {
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(sql)){
 
-            var series = new XYSeries("???");
+            var series = new XYSeries("Total Event Score");
             int x = 1;
             while(rs.next()){
                 int points = rs.getInt("points");
@@ -827,7 +827,7 @@ public class RaceDao {
              Statement stmt  = conn.createStatement();
              ResultSet rs    = stmt.executeQuery(sql)){
 
-            var series = new XYSeries("Finish Position");
+            var series = new XYSeries("Race Finish Position");
             int x = 1;
             while(rs.next()){
                 int points = rs.getInt("finish");
@@ -852,7 +852,7 @@ public class RaceDao {
 
             ArrayList<Integer> host = new ArrayList<>();
             while(rs.next()){
-                int points = rs.getInt("finish");
+                int points = rs.getInt(1);
                 host.add(points);
             }
             ArrayList<Double> movingAvg = movingAvgTransformation(host);
@@ -869,6 +869,8 @@ public class RaceDao {
             return null;
         }
     }
+
+
 
     public static ArrayList<Double> movingAvgTransformation(ArrayList<Integer> original){
         int divisor = original.size()/5+1;
@@ -897,7 +899,7 @@ public class RaceDao {
 
                 }
                 newElement = (1.0*(sum))/((1.0)*(weightDivisor));
-                System.out.println(original.get(i)+" is now "+newElement);
+
             }else if(original.size()-i-1>0){
                 int tempDivisor = original.size()-i-1;
                 int weightDivisor = 0;
@@ -911,10 +913,10 @@ public class RaceDao {
                     weightDivisor +=tempDivisor;
                 }
                 newElement = (1.0*(sum))/((1.0)*(weightDivisor));
-                System.out.println(original.get(i)+" is now "+newElement);
+
             }else{
                 newElement = 1.0*original.get(i);
-                System.out.println(original.get(i)+" is now "+newElement);
+
             }
             neo.add(newElement);
             i++;
@@ -942,11 +944,10 @@ public class RaceDao {
                 "Score",
                 dataset,
                 PlotOrientation.VERTICAL,
-                true,
+                false,
                 false,
                 false
         );
-        chart.removeLegend();
 
         XYPlot plot = chart.getXYPlot();
         plot.getDomainAxis().setInverted(true);
@@ -955,8 +956,18 @@ public class RaceDao {
 
         var renderer = new XYSplineRenderer();
 
+        renderer.setSeriesShapesVisible(1, false);
+
         renderer.setSeriesPaint(0, Color.BLACK);
-        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+        renderer.setSeriesStroke(0, new BasicStroke(0.3f));
+
+        renderer.setSeriesPaint(1, Color.BLUE);
+        renderer.setSeriesStroke(1, new BasicStroke(3.0f));
+
+        Rectangle rect = new Rectangle();
+        Dimension dd = new Dimension();
+        dd.setSize(6, 6); rect.setSize(dd);
+        renderer.setSeriesShape(0, rect);
 
         plot.setRenderer(renderer);
         plot.setBackgroundPaint(Color.lightGray);
@@ -966,6 +977,14 @@ public class RaceDao {
 
         plot.setDomainGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.BLACK);
+
+        plot.getRenderer().setSeriesStroke(
+                0,
+                new BasicStroke(
+                        1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                        1.0f, new float[] {6.0f, 6.0f}, 0.0f
+                )
+        );
 
         chart.setTitle(new TextTitle("",
                         new Font("Comic Sans", java.awt.Font.BOLD, 16)
@@ -981,25 +1000,32 @@ public class RaceDao {
                 "Finish Position",
                 dataset,
                 PlotOrientation.VERTICAL,
-                true,
-                true,
+                false,
+                false,
                 false
         );
-        chart.removeLegend();
 
         XYPlot plot = chart.getXYPlot();
         plot.getDomainAxis().setInverted(true);
         plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         plot.getRangeAxis().setInverted(true);
         plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        plot.getRangeAxis().setRange(-2, 14);
 
         var renderer = new XYSplineRenderer();
 
+        renderer.setSeriesShapesVisible(1, false);
+
         renderer.setSeriesPaint(0, Color.BLACK);
-        renderer.setSeriesStroke(0, new BasicStroke(1.0f));
+        renderer.setSeriesStroke(0, new BasicStroke(0.3f));
 
         renderer.setSeriesPaint(1, Color.BLUE);
-        renderer.setSeriesStroke(1, new BasicStroke(1.5f));
+        renderer.setSeriesStroke(1, new BasicStroke(3.0f));
+
+        Rectangle rect = new Rectangle();
+        Dimension dd = new Dimension();
+        dd.setSize(6, 6); rect.setSize(dd);
+        renderer.setSeriesShape(0, rect);
 
         plot.setRenderer(renderer);
         plot.setBackgroundPaint(Color.lightGray);
@@ -1009,6 +1035,14 @@ public class RaceDao {
 
         plot.setDomainGridlinesVisible(true);
         plot.setDomainGridlinePaint(Color.BLACK);
+
+        plot.getRenderer().setSeriesStroke(
+                0,
+                new BasicStroke(
+                        1f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                        1.0f, new float[] {6.0f, 6.0f}, 0.0f
+                )
+        );
 
         chart.setTitle(new TextTitle("",
                         new Font("Comic Sans", java.awt.Font.BOLD, 16)
@@ -1027,7 +1061,6 @@ public class RaceDao {
         };
         return chartPanel;
     }
-
 
 
     public static void main(String[] args) {

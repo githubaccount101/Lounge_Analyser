@@ -5,6 +5,7 @@ import mkw.Tier;
 import mkw.Track;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.json.JSONUtils;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import shared.Format;
@@ -15,6 +16,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -25,7 +28,7 @@ public class MkwTrackPanel extends JPanel {
     JLabel titleLabel = new JLabel("MKW Track Analysis");
     JButton buttonBack = new JButton("Back");
 
-    JLabel enterXLabel= new JLabel("Limit to Last");
+    JLabel enterXLabel= new JLabel("Search in last");
     JTextField eventTF = new JTextField(String.valueOf(getInitialInteger()));
     JLabel enterXLabel2= new JLabel("("+ RaceDao.getEventsStored()+" events stored)");
     JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
@@ -51,7 +54,8 @@ public class MkwTrackPanel extends JPanel {
     JFreeChart chart = RaceDao.getChart4Tracks(dataset);
     ChartPanel chartPanel = RaceDao.getChartPanel(chart);
 
-    JButton testButton2 = new JButton("test!!!!");
+    JCheckBox box0 = new JCheckBox("Show Finish Position Line");
+    JCheckBox box1 = new JCheckBox("Show Moving Average Line");
 
     ArrayList<JCheckBox> tierBoxes = new ArrayList<>();
     ArrayList<JCheckBox> formatBoxes = new ArrayList<>();
@@ -71,9 +75,7 @@ public class MkwTrackPanel extends JPanel {
 
         s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1,1,2,true);
         s.addobjects(runButton,this, layout,gbc,2, 0,1,1, 1,2,true);
-        s.addobjects(dcBox,this, layout,gbc,3,0,3 , 1,1,2,true);
-        dcBox.setSelected(false);
-        s.addobjects(enterXLabel2,this, layout,gbc,6,0,3 , 1,1,2,true);
+        s.addobjects(enterXLabel2,this, layout,gbc,3,0,3 , 1,1,2,true);
         s.addobjects(buttonBack,this, layout,gbc,16,0,2 , 1,1,2,true);
 
         s.addobjects(enterXLabel,this, layout,gbc,0,1,2 , 1,1,2,true);
@@ -120,12 +122,76 @@ public class MkwTrackPanel extends JPanel {
         toggleAllBoxes(true);
         chart.setTitle("Last "+eventTF.getText()+" Matching Events");
         updateDatasetSeries();
-        s.addobjects(chartPanel,this, layout,gbc,0,8,18 , 5, 1,100000,true);
+        s.addobjects(chartPanel,this, layout,gbc,0,8,18 , 7, 1,100000,true);
+
+        s.addobjects(box0,this, layout,gbc,4,16,4 , 1, 1,2,true);
+        s.addobjects(box1,this, layout,gbc,8,16,4 , 1, 1,2,true);
+        box0.setSelected(true);
+        box1.setSelected(true);
 
         dcBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(getSql());
+                dataset.removeAllSeries();
+                dataset.addSeries(new XYSeries(""));
+                dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
+            }
+        });
+
+        box1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("finishbox is "+box0.isSelected()+" MAbox is "+ box1.isSelected());
+                if(box0.isSelected()){
+                    if(box1.isSelected()){
+                        //blue on black on
+                        updateDatasetSeries();
+                    }else{
+                       //blue off black on
+                        updateDatasetSeries();
+                        dataset.removeSeries(1);
+                    }
+                }else{
+                    if(box1.isSelected()){
+                        //blue on black off
+                        dataset.removeAllSeries();
+                        dataset.addSeries(new XYSeries(""));
+                        dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
+                    }else{
+                        //both off
+                        dataset.removeAllSeries();
+                    }
+
+                }
+            }
+        });
+
+        box0.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("finishbox is "+box0.isSelected()+" MAbox is "+ box1.isSelected());
+                if(box1.isSelected()){
+                    //blue selected black selected
+                    if(box0.isSelected()){
+                        updateDatasetSeries();
+                    }else{
+                        //blue selected black unselected
+                        dataset.removeAllSeries();
+                        dataset.addSeries(new XYSeries(""));
+                        dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
+                    }
+                }else{
+                    if(box0.isSelected()){
+                        //blue off black on
+                        updateDatasetSeries();
+                        dataset.removeSeries(1);
+                    }else{
+                        //both off
+                        dataset.removeAllSeries();
+                    }
+
+                }
             }
         });
 
@@ -148,12 +214,6 @@ public class MkwTrackPanel extends JPanel {
             }
         });
 
-        testButton2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(getSql());
-            }
-        });
 
         allTierButton.addActionListener(new ActionListener() {
             @Override
@@ -251,6 +311,21 @@ public class MkwTrackPanel extends JPanel {
                 });
             }
         }));
+
+        trackTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String input = eventTF.getText();
+                    if(InputVerifier.verifyLastX(input)){
+                        updateDatasetSeries();
+                    }else{
+                        InputVerifier.InputErrorBox("invalid number of events");
+                    }
+                }
+            }
+
+        });
     }
 
     public void limitCheck(){
@@ -475,7 +550,7 @@ public class MkwTrackPanel extends JPanel {
     public int getInitialInteger(){
         int number = 100;
         int eventsStored = RaceDao.getEventsStored();
-        if(100>eventsStored){
+        if(number>eventsStored){
             number = eventsStored;
         }
         return number;

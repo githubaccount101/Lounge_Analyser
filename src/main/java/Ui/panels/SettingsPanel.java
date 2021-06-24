@@ -147,11 +147,12 @@ public class SettingsPanel extends JPanel {
                 if(InputVerifier.verifyRandom(randomTf.getText())){
                     int a = JOptionPane.showConfirmDialog(null, "This will clear all existing events and disable" + "\n"+
                                     "the input of new events until all events are cleared again."  + "\n"+
+                                    "An equal of random event will be generated for both games."+ "\n"+
                                     "Generating more random events will take more time,"+ "\n"+
                                     "up to several minutes for 1000. The program will be disabled"+ "\n"+
                                     "the all the events have been generated. You can do this before"+ "\n"+
-                                    "you start storing your own events to get a feel for the other"+ "\n"+
-                                    "program functions (event and race analysis for either game) .",
+                                    "you start storing your own events to get a feel for the program's"+ "\n"+
+                                    "analysis functions for either game...",
                             "Confirm", JOptionPane.YES_NO_OPTION);
                     if(a==0){
                         try{

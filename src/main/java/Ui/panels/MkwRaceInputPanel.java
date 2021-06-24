@@ -13,6 +13,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class MkwRaceInputPanel extends JPanel {
 
@@ -68,7 +69,7 @@ public class MkwRaceInputPanel extends JPanel {
         s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.1,1,true);
         s.addobjects(statusTA,this, layout,gbc,1,1,2 , 2,1,1,true);
 
-        s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.1,0.1,false);
+        s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.1,0.1,true);
         s.addobjects(trackTf,this, layout,gbc,1, 5,2,1, 1,0.1,true);
 
         matchLabelUpdate();
@@ -339,11 +340,23 @@ public class MkwRaceInputPanel extends JPanel {
         trackTf.setText("");
         if(event.currentGpIsUnplayed()){
             startTf.setText("");
-            playersTf.setText("12");
         }else{
             startTf.setText(finishTf.getText());
         }
         finishTf.setText("");
+    }
+
+    private void setPostRaceTFRandom(){
+        Random random = new Random();
+        trackTf.setText(Track.randomTrack().getAbbreviation());
+        if(event.currentGpIsUnplayed()){
+            int pls = random.nextInt(12)+1;
+            startTf.setText(String.valueOf(pls));
+        }else{
+            startTf.setText(finishTf.getText());
+        }
+        int pls = random.nextInt(12)+1;
+        finishTf.setText(String.valueOf(pls));
     }
 
     public void roomReset(){

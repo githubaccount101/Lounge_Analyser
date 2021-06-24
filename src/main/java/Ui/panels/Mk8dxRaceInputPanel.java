@@ -9,6 +9,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class Mk8dxRaceInputPanel extends JPanel {
 
@@ -290,6 +291,19 @@ public class Mk8dxRaceInputPanel extends JPanel {
             startTf.setText(finishTf.getText());
         }
         finishTf.setText("");
+    }
+
+    private void setPostRaceTFRandom(){
+        Random random = new Random();
+        trackTf.setText(TrackD.randomTrackD().getAbbreviation());
+        if(event.currentGpIsUnplayed()){
+            int pls = random.nextInt(12)+1;
+            startTf.setText(String.valueOf(pls));
+        }else{
+            startTf.setText(finishTf.getText());
+        }
+        int pls = random.nextInt(12)+1;
+        finishTf.setText(String.valueOf(pls));
     }
 
     public void roomReset(){

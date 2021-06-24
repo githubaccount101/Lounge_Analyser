@@ -43,7 +43,8 @@ public class MkwSummaryPanel extends JPanel {
     JFreeChart chart = RaceDao.getChart(dataset);
     ChartPanel chartPanel = RaceDao.getChartPanel(chart);
 
-    JButton testButton2 = new JButton("test!!!!");
+    JCheckBox box0 = new JCheckBox("Show Event Score Line");
+    JCheckBox box1 = new JCheckBox("Show Moving Average Line");
 
     ArrayList<JCheckBox> tierBoxes = new ArrayList<>();
     ArrayList<JCheckBox> formatBoxes = new ArrayList<>();
@@ -97,7 +98,12 @@ public class MkwSummaryPanel extends JPanel {
         toggleAllBoxes(true);
         chart.setTitle("Last "+eventTF.getText()+" Matching Events");
         updateDatasetSeries();
-        s.addobjects(chartPanel,this, layout,gbc,0,6,14 , 5, 1,100000,true);
+        s.addobjects(chartPanel,this, layout,gbc,0,6,14 , 7, 1,100000,true);
+
+        s.addobjects(box0,this, layout,gbc,4,14,2 , 1, 1,2,true);
+        s.addobjects(box1,this, layout,gbc,6,14,2 , 1, 1,2,true);
+        box0.setSelected(true);
+        box1.setSelected(true);
 
         buttonBack.addActionListener(new ActionListener() {
             @Override
@@ -118,12 +124,62 @@ public class MkwSummaryPanel extends JPanel {
             }
         });
 
-        testButton2.addActionListener(new ActionListener() {
+        box1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(getSql());
+                System.out.println("finishbox is "+box0.isSelected()+" MAbox is "+ box1.isSelected());
+                if(box0.isSelected()){
+                    if(box1.isSelected()){
+                        //blue on black on
+                        updateDatasetSeries();
+                    }else{
+                        //blue off black on
+                        updateDatasetSeries();
+                        dataset.removeSeries(1);
+                    }
+                }else{
+                    if(box1.isSelected()){
+                        //blue on black off
+                        dataset.removeAllSeries();
+                        dataset.addSeries(new XYSeries(""));
+                        dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
+                    }else{
+                        //both off
+                        dataset.removeAllSeries();
+                    }
+
+                }
             }
         });
+
+        box0.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("finishbox is "+box0.isSelected()+" MAbox is "+ box1.isSelected());
+                if(box1.isSelected()){
+                    //blue selected black selected
+                    if(box0.isSelected()){
+                        updateDatasetSeries();
+                    }else{
+                        //blue selected black unselected
+                        dataset.removeAllSeries();
+                        dataset.addSeries(new XYSeries(""));
+                        dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
+                    }
+                }else{
+                    if(box0.isSelected()){
+                        //blue off black on
+                        updateDatasetSeries();
+                        dataset.removeSeries(1);
+                    }else{
+                        //both off
+                        dataset.removeAllSeries();
+                    }
+
+                }
+            }
+        });
+
 
         allTierButton.addActionListener(new ActionListener() {
             @Override
@@ -218,6 +274,7 @@ public class MkwSummaryPanel extends JPanel {
     public void updateDatasetSeries(){
         dataset.removeAllSeries();
         dataset.addSeries(RaceDao.getSeries(getSql()));
+        dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
         chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Event(s) Found");
     }
 
@@ -379,9 +436,9 @@ public class MkwSummaryPanel extends JPanel {
     }
 
     public int getInitialInteger(){
-        int number = 20;
+        int number = 50;
         int eventsStored = RaceDao.getEventsStored();
-        if(20>eventsStored){
+        if(50>eventsStored){
             number = eventsStored;
         }
         return number;
