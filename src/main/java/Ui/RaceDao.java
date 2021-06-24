@@ -871,7 +871,7 @@ public class RaceDao {
     }
 
     public static ArrayList<Double> movingAvgTransformation(ArrayList<Integer> original){
-        int divisor = original.size()/10+1;
+        int divisor = original.size()/5+1;
         ArrayList<Double> neo = new ArrayList<>();
         int i = 0;
 
@@ -890,16 +890,30 @@ public class RaceDao {
                 int sum = original.get(i)*tempDivisor;
                 weightDivisor +=tempDivisor;
 
-                for(int n = 1;n<=divisor;n++){
+                for(int n = 0;n<divisor;n++){
                     tempDivisor--;
-                    sum+=original.get(i+n)*(tempDivisor);
+                    sum+=original.get(i+n+1)*(tempDivisor);
                     weightDivisor +=tempDivisor;
 
                 }
                 newElement = (1.0*(sum))/((1.0)*(weightDivisor));
                 System.out.println(original.get(i)+" is now "+newElement);
+            }else if(original.size()-i-1>0){
+                int tempDivisor = original.size()-i-1;
+                int weightDivisor = 0;
+
+                int sum = original.get(i)*tempDivisor;
+                weightDivisor +=tempDivisor;
+
+                for(int n = 0;n<tempDivisor;n++){
+                    tempDivisor--;
+                    sum+=original.get(i+n+1)*(tempDivisor);
+                    weightDivisor +=tempDivisor;
+                }
+                newElement = (1.0*(sum))/((1.0)*(weightDivisor));
+                System.out.println(original.get(i)+" is now "+newElement);
             }else{
-                newElement = (double)original.get(i);
+                newElement = 1.0*original.get(i);
                 System.out.println(original.get(i)+" is now "+newElement);
             }
             neo.add(newElement);
