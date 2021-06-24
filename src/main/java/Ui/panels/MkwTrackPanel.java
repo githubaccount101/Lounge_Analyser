@@ -357,7 +357,7 @@ public class MkwTrackPanel extends JPanel {
         dataset.removeAllSeries();
         dataset.addSeries(RaceDao.getSeries4Track(getSql()));
         dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
-        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Races Found");
+        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Race(s) Found");
     }
 
     public ArrayList<Tier> tierCheck(){
