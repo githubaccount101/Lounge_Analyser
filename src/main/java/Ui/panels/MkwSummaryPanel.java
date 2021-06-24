@@ -111,7 +111,7 @@ public class MkwSummaryPanel extends JPanel {
         buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mainMenu");
             }
         });

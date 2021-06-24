@@ -69,7 +69,7 @@ public class MainMenu extends JPanel {
         storeMkwButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mkwTf");
                 mkwEnterTfPanel.initialize();
             }
@@ -78,7 +78,7 @@ public class MainMenu extends JPanel {
         storeMk8dxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mk8dxTf");
                 mk8dxEnterTfPanel.initialize();
             }
@@ -141,7 +141,7 @@ public class MainMenu extends JPanel {
         settingsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"settings");
                 settingsPanel.initialize();
             }

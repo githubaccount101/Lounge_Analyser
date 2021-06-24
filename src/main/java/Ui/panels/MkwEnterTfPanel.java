@@ -70,7 +70,7 @@ public class MkwEnterTfPanel extends JPanel {
             @Override
 
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mainMenu");
             }
         });
@@ -120,7 +120,7 @@ public class MkwEnterTfPanel extends JPanel {
             panel.setStatus();
             panel.setInitialButtons();
             card.show(cardPane,"mkwRace");
-            Gui.frame.setSize(420,480);
+            Gui.frame.setSize(450,480);
         }else{
             if(InputVerifier.VerifyTier(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
                 InputVerifier.InputErrorBox("Invalid Tier and Format");

@@ -59,19 +59,19 @@ public class Mk8dxRaceInputPanel extends JPanel {
         Setter s = new Setter();
         s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1, 1,0.1,true);
 
-        s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.1,1,true);
+        s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.00001,1,true);
         s.addobjects(statusTA,this, layout,gbc,1,1,2 , 2,1,1,true);
 
-        s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.1,0.1,true);
+        s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.000001,0.1,true);
         s.addobjects(trackTf,this, layout,gbc,1, 5,2,1, 1,0.1,true);
 
         matchLabelUpdate();
         s.addobjects(trackMatchLabel,this, layout,gbc,1, 6,3,1,1,0.1,true);
 
-        s.addobjects(startLabel,this, layout,gbc,1, 7,1,1,1,0.1,true);
+        s.addobjects(startLabel,this, layout,gbc,1, 7,1,1,.00001,0.1,true);
         s.addobjects(startTf,this, layout,gbc,2, 7,1,1, 1,0.1,true);
 
-        s.addobjects(finishLabel,this, layout,gbc,1, 8,1,1,1,0.1,true);
+        s.addobjects(finishLabel,this, layout,gbc,1, 8,1,1,.00001,0.1,true);
         s.addobjects(finishTf,this, layout,gbc,2, 8,1,1,1,0.1,true);
 
         s.addobjects(resetBox,this, layout,gbc,1, 9,1,1,1,0.1,true);
@@ -84,10 +84,10 @@ public class Mk8dxRaceInputPanel extends JPanel {
         s.addobjects(backButton,this, layout,gbc,1, 11,1,1,1,0.1,true);
         s.addobjects(submitButton,this, layout,gbc,2, 11,1,1,1,0.1,true);
 
-        s.addobjects(dcLabel,this, layout,gbc,0, 12,1,1,0.1,0.1,true);
+        s.addobjects(dcLabel,this, layout,gbc,0, 12,1,1,0.00001,0.1,true);
         s.addobjects(dcButtonOn,this, layout,gbc,1,12,2 , 1, 1 , 0.1,true);
 
-        s.addobjects(rejoinLabel,this, layout,gbc,0, 13,1,1,0.1,0.1,true);
+        s.addobjects(rejoinLabel,this, layout,gbc,0, 13,1,1,0.0000001,0.1,true);
         rejoinButtonNo.setEnabled(true);
         s.addobjects(rejoinButtonNo,this, layout,gbc,1, 13,1,1,1,0.1,true);
         rejoinButtonYes.setEnabled(true);
@@ -100,7 +100,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 event = null;
                 status = "n/a";
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mk8dxTf");
             }
         });
@@ -221,7 +221,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
                 RaceDao.refresh();
                 event = null;
                 status = "n/a";
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mainMenu");
                 setInitialButtons();
             }

@@ -68,22 +68,22 @@ public class MkwRaceInputPanel extends JPanel {
         Setter s = new Setter();
         s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1, 1,0.1,true);
 
-        s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.1,1,true);
+        s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.0000001,1,true);
         s.addobjects(statusTA,this, layout,gbc,1,1,2 , 2,1,1,true);
 
-        s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.1,0.1,true);
+        s.addobjects(trackLabel,this, layout,gbc,0, 5,1,1,0.000000001,0.1,true);
         s.addobjects(trackTf,this, layout,gbc,1, 5,2,1, 1,0.1,true);
 
         matchLabelUpdate();
         s.addobjects(trackMatchLabel,this, layout,gbc,1, 6,3,1,1,0.1,true);
 
-        s.addobjects(playersLabel,this, layout,gbc,1, 7,1,1,1,0.1,true);
+        s.addobjects(playersLabel,this, layout,gbc,1, 7,1,1,.00000001,0.1,true);
         s.addobjects(playersTf,this, layout,gbc,2, 7,1,1, 1,0.1,true);
 
-        s.addobjects(startLabel,this, layout,gbc,1, 8,1,1,1,0.1,true);
+        s.addobjects(startLabel,this, layout,gbc,1, 8,1,1,.000000001,0.1,true);
         s.addobjects(startTf,this, layout,gbc,2, 8,1,1, 1,0.1,true);
 
-        s.addobjects(finishLabel,this, layout,gbc,1, 9,1,1,1,0.1,true);
+        s.addobjects(finishLabel,this, layout,gbc,1, 9,1,1,.0000001,0.1,true);
         s.addobjects(finishTf,this, layout,gbc,2, 9,1,1,1,0.1,true);
 
         s.addobjects(resetBox,this, layout,gbc,1, 10,1,1,1,0.1,true);
@@ -96,11 +96,11 @@ public class MkwRaceInputPanel extends JPanel {
         s.addobjects(backButton,this, layout,gbc,1, 12,1,1,1,0.1,true);
         s.addobjects(submitButton,this, layout,gbc,2, 12,1,1,1,0.1,true);
 
-        s.addobjects(dcLabel,this, layout,gbc,0, 13,1,1,0.1,0.1,true);
+        s.addobjects(dcLabel,this, layout,gbc,0, 13,1,1,0.0000000001,0.1,true);
         s.addobjects(dcButtonOn,this, layout,gbc,1,13,1 , 1, 1 , 0.1,true);
         s.addobjects(dcButtonOff,this, layout,gbc,2,13,1 , 1, 1 , 0.1,true);
 
-        s.addobjects(rejoinLabel,this, layout,gbc,0, 14,1,1,0.1,0.1,true);
+        s.addobjects(rejoinLabel,this, layout,gbc,0, 14,1,1,0.0000001,0.1,true);
         rejoinButtonNo.setEnabled(false);
         s.addobjects(rejoinButtonNo,this, layout,gbc,1, 14,1,1,1,0.1,true);
         rejoinButtonYes.setEnabled(false);
@@ -113,7 +113,7 @@ public class MkwRaceInputPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 event = null;
                 status = "n/a";
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mkwTf");
             }
         });
@@ -276,7 +276,7 @@ public class MkwRaceInputPanel extends JPanel {
                 event = null;
                 status = "n/a";
                 card.show(cardPane,"mainMenu");
-                Gui.frame.setSize(420,480);
+                Gui.frame.setSize(450,480);
                 setInitialButtons();
             }
         });

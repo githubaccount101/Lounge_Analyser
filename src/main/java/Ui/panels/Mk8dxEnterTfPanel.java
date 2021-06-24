@@ -8,6 +8,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Scanner;
 
+import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.*;
 import shared.Format;
@@ -68,6 +69,7 @@ public class Mk8dxEnterTfPanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Gui.frame.setSize(450,480);
                 card.show(cardPane,"mainMenu");
             }
         });
@@ -117,6 +119,7 @@ public class Mk8dxEnterTfPanel extends JPanel {
             panel.setStatus();
             panel.setInitialButtons();
             card.show(cardPane,"mk8dxRace");
+            Gui.frame.setSize(450,480);
         }else{
             if(InputVerifier.VerifyTierD(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
                 InputVerifier.InputErrorBox("Invalid Tier and Format");

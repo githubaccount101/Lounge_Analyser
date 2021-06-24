@@ -1,6 +1,7 @@
 
 package mk8dx;
 
+import mkw.Race;
 import shared.Format;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -310,10 +311,40 @@ public class EventD {
 
 
     public String preRaceString(){
-        return "Entering Data For: GP " + getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()
+        StringBuilder bob = new StringBuilder();
+        bob.append("Entering Data For: GP " + getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()
                 + "(Race " + (getRacesPlayed() + 1) + " overall)"+
                 "\n" + "Races played: " + racesPlayed
-                + ", points: " + racePoints + ", dc points: " + dcPoints+", Total Points: "+totalPoints;
+                + ", points: " + racePoints + ", dc points: " + dcPoints+", Total Points: "+totalPoints+"\n");
+
+        if(racesPlayed>0){
+            RaceD r = getMostRecentlyCompletedRace();
+            if(r.isPlaceholder()){
+                bob.append("\n"+"~~Last Race~~" +"\n"+
+                        "Satout because of DC");
+            }else{
+                bob.append("\n"+"~~Last Race~~" +"\n"+
+                        "Track: " + r.getTrack().getAbbreviation()+ ", players: " + r.getPlayers()+", start: " +
+                        r.getStart() + ", finish: " + r.getFinish() +", points: " + r.getPoints());
+            }
+
+        }
+        return bob.toString();
+    }
+
+    public RaceD getMostRecentlyCompletedRace(){
+
+        if(this.isEventDone()){
+            return getMostRecentCompletedGp().getMostRecentRace();
+        }else if(this.gpPlayed==0){
+            return currentGp.getMostRecentRace();
+        }else{
+            if(currentGpIsUnplayed()){
+                return getMostRecentCompletedGp().getMostRecentRace();
+            }else{
+                return currentGp.getMostRecentRace();
+            }
+        }
     }
 
     public void preRaceStatus() {
