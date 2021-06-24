@@ -1,5 +1,6 @@
 package Ui.panels;
 
+import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.*;
 
@@ -99,6 +100,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 event = null;
                 status = "n/a";
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mk8dxTf");
             }
         });
@@ -219,6 +221,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
                 RaceDao.refresh();
                 event = null;
                 status = "n/a";
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mainMenu");
                 setInitialButtons();
             }

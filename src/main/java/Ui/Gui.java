@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class Gui {
 
-    JFrame frame;
+    public static JFrame frame;
     JPanel cardPane;
     CardLayout card;
 

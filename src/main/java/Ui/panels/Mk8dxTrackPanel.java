@@ -1,5 +1,6 @@
 package Ui.panels;
 
+import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.TierD;
 import mk8dx.TrackD;
@@ -197,6 +198,7 @@ public class Mk8dxTrackPanel extends JPanel {
         buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mainMenu");
             }
         });

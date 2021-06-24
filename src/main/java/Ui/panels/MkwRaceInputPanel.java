@@ -2,7 +2,7 @@ package Ui.panels;
 
 import Ui.RaceDao;
 
-import Ui.Ui;
+import Ui.Gui;
 import mk8dx.TrackD;
 import mkw.*;
 import mkw.Event;
@@ -113,6 +113,7 @@ public class MkwRaceInputPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 event = null;
                 status = "n/a";
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mkwTf");
             }
         });
@@ -275,6 +276,7 @@ public class MkwRaceInputPanel extends JPanel {
                 event = null;
                 status = "n/a";
                 card.show(cardPane,"mainMenu");
+                Gui.frame.setSize(420,480);
                 setInitialButtons();
             }
         });

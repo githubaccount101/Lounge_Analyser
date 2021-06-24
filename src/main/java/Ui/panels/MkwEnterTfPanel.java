@@ -1,5 +1,6 @@
 package Ui.panels;
 
+import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.RaceD;
 import mkw.*;
@@ -69,6 +70,7 @@ public class MkwEnterTfPanel extends JPanel {
                     panel.setTitle();
                     panel.setStatus();
                     card.show(cardPane,"mkwRace");
+                    Gui.frame.setSize(420,480);
                 }else{
                     if(InputVerifier.VerifyTier(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
                         InputVerifier.InputErrorBox("Invalid Tier and Format");
@@ -84,7 +86,9 @@ public class MkwEnterTfPanel extends JPanel {
 
         buttonBack.addActionListener(new ActionListener() {
             @Override
+
             public void actionPerformed(ActionEvent e) {
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mainMenu");
             }
         });

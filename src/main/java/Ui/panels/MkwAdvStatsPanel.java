@@ -1,5 +1,6 @@
 package Ui.panels;
 
+import Ui.Gui;
 import Ui.RaceDao;
 import mkw.*;
 import shared.Format;
@@ -205,6 +206,7 @@ public class MkwAdvStatsPanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mainMenu");
                 scrollPane.setViewportView(RaceDao.getTrackTableBasic());
                 enableAllBoxesAndConstraintButtons(false);

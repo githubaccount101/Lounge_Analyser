@@ -122,6 +122,7 @@ public class SettingsPanel extends JPanel {
         buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mainMenu");
                 mainMenu.initialize();
             }
