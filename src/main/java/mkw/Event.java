@@ -1,11 +1,8 @@
 
 package mkw;
 
-import mk8dx.GpD;
-import mk8dx.RaceD;
 import shared.Format;
 import java.util.ArrayList;
-import java.util.Scanner;
 import Ui.Ui;
 
 public class Event {

@@ -1,8 +1,6 @@
 
 package mkw;
 
-import java.util.HashMap;
-
 public class Race {
 
     private int raceId;

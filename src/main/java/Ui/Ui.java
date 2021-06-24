@@ -3,16 +3,14 @@ package Ui;
 
 import mkw.Race;
 import shared.Format;
-import java.util.Optional;
 import java.util.Scanner;
 import mk8dx.*;
 import mkw.Event;
 import mkw.Tier;
 import mkw.Track;
 
-
+@Deprecated
 public class Ui {
-
 
     private Scanner scanner;
 

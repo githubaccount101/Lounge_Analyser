@@ -1,7 +1,6 @@
 
 package mk8dx;
-
-import mkw.Race;
+;
 import shared.Format;
 
 public class RaceD {
