@@ -55,7 +55,7 @@ public enum TrackD {
     DNBC("3DS NEO BOWSER CITY","dNBC","3DS NEO BOWSER CITY","NBC","NEO BOWSER CITY","NEOBOWSERCITY"),
     DRIR("GBA RIBBON ROAD","dRiR","GBA RIBBON ROAD","RIBBON ROAD", "RIBBON"),
     DSBS("SUPER BELL SUBWAY", "dSBS","SUPER BELL SUBWAY","SBS", "SUBWAY"),
-    DBB("BIB BLUE","dBB","BIB BLUE","BB");
+    DBB("BIG BLUE","dBB","BIG BLUE","BB");
 
     private String[] aliases;
     public static final List<TrackD> ALL = List.copyOf(Arrays.asList(values()));

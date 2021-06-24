@@ -21,15 +21,17 @@ public class BarUpdate extends SwingWorker<Void, Integer> {
     ArrayList<JButton> allButtons;
     JLabel randomWarningLabel;
     JLabel dbLabel;
+    JTextField randomTf;
 
-
-    public BarUpdate(JProgressBar randomBar, int max, JLabel label,  ArrayList<JButton> allButtons, JLabel randomWarningLabel, JLabel dbLabel) {
+    public BarUpdate(JProgressBar randomBar, int max, JLabel label,  ArrayList<JButton> allButtons,
+                     JLabel randomWarningLabel, JLabel dbLabel, JTextField randomTf) {
         this.randomBar = randomBar;
         this.max = max;
         this.label = label;
         this.allButtons= allButtons;
         this.randomWarningLabel = randomWarningLabel;
         this.dbLabel = dbLabel;
+        this.randomTf = randomTf;
     }
 
     @Override
@@ -110,6 +112,7 @@ public class BarUpdate extends SwingWorker<Void, Integer> {
         try {
             get();
             randomBar.setVisible(false);
+            randomTf.setText("");
             randomWarningLabel.setText("(limit 1000) - Random Mode is On");
             allButtons.forEach(x->x.setEnabled(true));
             dbLabel.setText(RaceDao.getEventsStored()+" MKW events stored, "+RaceDao.getEventsDStored()+" MK8DX events stored");

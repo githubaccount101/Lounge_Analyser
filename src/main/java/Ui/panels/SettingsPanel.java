@@ -100,6 +100,7 @@ public class SettingsPanel extends JPanel {
                     RaceDao.updateDefaultTierMkw(Integer.parseInt(mkwTierTf.getText()));
                     initialize();
                     InputVerifier.InputErrorBox("Default Tier set to "+mkwTierTf.getText());
+                    mkwTierTf.setText("");
                 }else{
                     InputVerifier.InputErrorBox("Invalid tier");
                 }
@@ -113,6 +114,7 @@ public class SettingsPanel extends JPanel {
                     RaceDao.updateDefaultTierMk8dx(mk8dxTierTf.getText());
                     initialize();
                     InputVerifier.InputErrorBox("Default Tier set to "+mk8dxTierTf.getText());
+                    mk8dxTierTf.setText("");
                 }else{
                     InputVerifier.InputErrorBox("Invalid tier");
                 }
@@ -153,8 +155,8 @@ public class SettingsPanel extends JPanel {
                     int a = JOptionPane.showConfirmDialog(null, "This will clear all existing events and disable" + "\n"+
                                     "the input of new events until all events are cleared again."  + "\n"+
                                     "An equal of random event will be generated for both games."+ "\n"+
-                                    "Generating more random events will take more time,"+ "\n"+
-                                    "up to several minutes for 1000. The program will be disabled"+ "\n"+
+                                    "Generating more random events will take more time, up to several"+ "\n"+
+                                    "minutes for 1000. The program will be disabled until"+ "\n"+
                                     "the all the events have been generated. You can do this before"+ "\n"+
                                     "you start storing your own events to get a feel for the program's"+ "\n"+
                                     "analysis functions for either game...",
@@ -206,7 +208,8 @@ public class SettingsPanel extends JPanel {
     }
 
     private void inception(){
-        new BarUpdate(randomBar,Integer.valueOf(randomTf.getText()),randomWarningLabel, allButtons, randomWarningLabel, dbLabel).execute();
+        new BarUpdate(randomBar,Integer.valueOf(randomTf.getText()),randomWarningLabel, allButtons,
+                randomWarningLabel, dbLabel,randomTf).execute();
     }
 
     @Deprecated

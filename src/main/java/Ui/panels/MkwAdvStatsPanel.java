@@ -2,6 +2,8 @@ package Ui.panels;
 
 import Ui.Gui;
 import Ui.RaceDao;
+import mk8dx.TierD;
+import mk8dx.TrackD;
 import mkw.*;
 import shared.Format;
 
@@ -109,7 +111,7 @@ public class MkwAdvStatsPanel extends JPanel {
 
         s.addobjects(tierLabel,this, layout,gbc,0,4,2 , 1, 1,2,true);
         int i = 3;
-        for(Tier t:Tier.values()){
+        for(Tier t:Tier.ALL){
             JCheckBox temp = new JCheckBox(t.getTier());
             s.addobjects(temp,this, layout,gbc,i,4,1 , 1, 1,2,true);
             tierBoxes.add(temp);
@@ -119,7 +121,7 @@ public class MkwAdvStatsPanel extends JPanel {
 
         s.addobjects(formatLabel,this, layout,gbc,0,5,2 , 1, 1,2,true);
         i = 3;
-        for(Format f:Format.values()){
+        for(Format f:Format.ALL){
             JCheckBox temp = new JCheckBox(f.getFormat());
             temp.setFont(new Font("Arial", Font.PLAIN, 12));
             s.addobjects(temp,this, layout,gbc,i,5,1 , 1, 1,2,true);
@@ -153,10 +155,9 @@ public class MkwAdvStatsPanel extends JPanel {
 
         s.addobjects(trackLabel,this, layout,gbc,0,8,2 , 1, 1,2,true);
         i = 3;
-        Track[] tracks = Track.values();
         for(int n = 0;n<4;n++){
             for(int x =0; x<=7;x++){
-                String name = tracks[n+x*4].getAbbreviation();
+                String name = Track.ALL.get(n+x*4).getAbbreviation();
                 JCheckBox temp = new JCheckBox(name);
                 if(name.length()>3){
                     temp.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -702,13 +703,12 @@ public class MkwAdvStatsPanel extends JPanel {
 
     public ArrayList<Track> trackCheck(){
         ArrayList<Track> selected = new ArrayList<>();
-        Track[] tracks = Track.values();
         Track[] tracksReordered = new Track[32];
 
         int i = 0;
         for(int n = 0;n<4;n++){
             for(int x =0; x<=7;x++){
-                tracksReordered[i] = tracks[n+x*4];
+                tracksReordered[i] = Track.ALL.get(n+x*4);
                 i++;
             }
         }
@@ -725,32 +725,25 @@ public class MkwAdvStatsPanel extends JPanel {
     public ArrayList<Tier> tierCheck(){
         ArrayList<Tier> selected = new ArrayList<>();
 
-        Tier[] tiers = Tier.values();
-
         int i = 0;
         for(JCheckBox box:tierBoxes){
             if(box.isSelected()){
-                selected.add(tiers[i]);
+                selected.add(Tier.ALL.get(i));
             }
             i++;
         }
-
         return selected;
     }
 
     public ArrayList<Format> formatCheck(){
         ArrayList<Format> selected = new ArrayList<>();
-
-        Format[] formats = Format.values();
-
         int i = 0;
         for(JCheckBox box:formatBoxes){
             if(box.isSelected()){
-                selected.add(formats[i]);
+                selected.add(Format.ALL.get(i));
             }
             i++;
         }
-
         return selected;
     }
 

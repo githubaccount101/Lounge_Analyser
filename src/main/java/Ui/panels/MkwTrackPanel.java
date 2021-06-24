@@ -91,7 +91,7 @@ public class MkwTrackPanel extends JPanel {
 
         s.addobjects(tierLabel,this, layout,gbc,0,5,4 , 1, 1,2,true);
         int i = 2;
-        for(Tier t:Tier.values()){
+        for(Tier t:Tier.ALL){
             JCheckBox temp = new JCheckBox(t.getTier());
             s.addobjects(temp,this, layout,gbc,i,5,1 , 1, 1,2,true);
             tierBoxes.add(temp);
@@ -101,7 +101,7 @@ public class MkwTrackPanel extends JPanel {
 
         s.addobjects(formatLabel,this, layout,gbc,0,6,2 , 1, 1,2,true);
         i = 2;
-        for(Format f:Format.values()){
+        for(Format f:Format.ALL){
             JCheckBox temp = new JCheckBox(f.getFormat());
             s.addobjects(temp,this, layout,gbc,i,6 , 1, 1,2,2,true);
             formatBoxes.add(temp);
@@ -361,38 +361,31 @@ public class MkwTrackPanel extends JPanel {
         dataset.removeAllSeries();
         dataset.addSeries(RaceDao.getSeries4Track(getSql()));
         dataset.addSeries(RaceDao.getSeriesMovingAverage(getSql()));
-        chart.setTitle(RaceDao.getRsRows(getSql())+" Matching Race(s) Found");
+        chart.setTitle(trackMatchLabel.getText()+": "+RaceDao.getRsRows(getSql())+" Matching Race(s) Found");
     }
 
     public ArrayList<Tier> tierCheck(){
         ArrayList<Tier> selected = new ArrayList<>();
 
-        Tier[] tiers = Tier.values();
-
         int i = 0;
         for(JCheckBox box:tierBoxes){
             if(box.isSelected()){
-                selected.add(tiers[i]);
+                selected.add(Tier.ALL.get(i));
             }
             i++;
         }
-
         return selected;
     }
 
     public ArrayList<Format> formatCheck(){
         ArrayList<Format> selected = new ArrayList<>();
-
-        Format[] formats = Format.values();
-
         int i = 0;
         for(JCheckBox box:formatBoxes){
             if(box.isSelected()){
-                selected.add(formats[i]);
+                selected.add(Format.ALL.get(i));
             }
             i++;
         }
-
         return selected;
     }
 
