@@ -25,7 +25,7 @@ public class MkwSummaryPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    JLabel titleLabel = new JLabel("MKW Summary");
+    JLabel titleLabel = new JLabel("MKW Event Analysis");
     JButton runButton = new JButton("Run");
     JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
     JButton buttonBack = new JButton("Back");

@@ -25,7 +25,7 @@ public class Mk8dxSummaryPanel extends JPanel {
 
     GridBagConstraints gbc = new GridBagConstraints();
 
-    JLabel titleLabel = new JLabel("MK8DX Summary");
+    JLabel titleLabel = new JLabel("MK8DX Event Analysis");
     JButton runButton = new JButton("Run");
     JCheckBox dcBox = new JCheckBox("Exclude Events with DC's");
     JButton buttonBack = new JButton("Back");

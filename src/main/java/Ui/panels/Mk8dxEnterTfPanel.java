@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Scanner;
 
-import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.*;
 import shared.Format;
@@ -24,7 +25,15 @@ public class Mk8dxEnterTfPanel extends JPanel {
 
     EventD event;
 
+    CardLayout card;
+    JPanel cardPane;
+    Mk8dxRaceInputPanel panel;
+
     public Mk8dxEnterTfPanel(CardLayout card, JPanel cardPane, Mk8dxRaceInputPanel panel) {
+
+        this.card = card;
+        this.cardPane = cardPane;
+        this.panel = panel;
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
@@ -52,49 +61,71 @@ public class Mk8dxEnterTfPanel extends JPanel {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                String tierInput = tierTf.getText();
-                String formatInput = formatTf.getText();
-
-                if(InputVerifier.VerifyTierD(tierInput)&&InputVerifier.verifyFormat(formatInput)){
-                    TierD tier = InputVerifier.getTierD(tierInput);
-                    Format format = InputVerifier.getFormat(formatInput);
-                    int eventsPlayed = RaceDao.getEventsDStored();
-                    event = new EventD(tier,format,eventsPlayed);
-
-                    int racesPlayed = RaceDao.getRacesDStored();
-                    RaceD.setRaceCount(racesPlayed);
-
-                    panel.setTrackTf();
-                    panel.setEvent(event);
-                    panel.setTitle();
-                    panel.setStatus();
-                    card.show(cardPane,"mk8dxRace");
-                    Gui.frame.setSize(420,480);
-                }else{
-                    if(InputVerifier.VerifyTierD(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
-                        InputVerifier.InputErrorBox("Invalid Tier and Format");
-                    }else if(InputVerifier.verifyFormat(formatInput)==false){
-                        InputVerifier.InputErrorBox("Invalid Format");
-                    }
-                    else{
-                        InputVerifier.InputErrorBox("Invalid tier");
-                    }
-                }
+                startEvent();
             }
         });
 
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(420,480);
                 card.show(cardPane,"mainMenu");
             }
+        });
+
+        tierTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    startEvent();
+                }
+            }
+
+        });
+
+        formatTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    startEvent();
+                }
+            }
+
         });
     }
 
     public void initialize(){
         titleLabel.setText("Entering MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
         tierTf.setText(RaceDao.getDefaultMk8dxTier());
+    }
+
+    public void startEvent(){
+        String tierInput = tierTf.getText();
+        String formatInput = formatTf.getText();
+
+        if(InputVerifier.VerifyTierD(tierInput)&&InputVerifier.verifyFormat(formatInput)){
+            TierD tier = InputVerifier.getTierD(tierInput);
+            Format format = InputVerifier.getFormat(formatInput);
+            int eventsPlayed = RaceDao.getEventsDStored();
+            event = new EventD(tier,format,eventsPlayed);
+
+            int racesPlayed = RaceDao.getRacesDStored();
+            RaceD.setRaceCount(racesPlayed);
+
+            panel.setTrackTf();
+            panel.setEvent(event);
+            panel.setTitle();
+            panel.setStatus();
+            panel.setInitialButtons();
+            card.show(cardPane,"mk8dxRace");
+        }else{
+            if(InputVerifier.VerifyTierD(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
+                InputVerifier.InputErrorBox("Invalid Tier and Format");
+            }else if(InputVerifier.verifyFormat(formatInput)==false){
+                InputVerifier.InputErrorBox("Invalid Format");
+            }
+            else{
+                InputVerifier.InputErrorBox("Invalid tier");
+            }
+        }
     }
 }

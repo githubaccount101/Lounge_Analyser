@@ -152,6 +152,8 @@ Ui/panels/Mk8dxEnterTfPanel.java
  Ui.panels.Mk8dxEnterTfPanel
  Ui.panels.Mk8dxEnterTfPanel$1
  Ui.panels.Mk8dxEnterTfPanel$2
+ Ui.panels.Mk8dxEnterTfPanel$3
+ Ui.panels.Mk8dxEnterTfPanel$4
 Ui/panels/Mk8dxRaceInputPanel.java
  Ui.panels.Mk8dxRaceInputPanel
  Ui.panels.Mk8dxRaceInputPanel$1
@@ -169,6 +171,8 @@ Ui/panels/MkwEnterTfPanel.java
  Ui.panels.MkwEnterTfPanel
  Ui.panels.MkwEnterTfPanel$1
  Ui.panels.MkwEnterTfPanel$2
+ Ui.panels.MkwEnterTfPanel$3
+ Ui.panels.MkwEnterTfPanel$4
 Ui/Gui.java
  Ui.Gui
  Ui.Gui$1

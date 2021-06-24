@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MkwEnterTfPanel extends JPanel {
 
@@ -24,7 +26,15 @@ public class MkwEnterTfPanel extends JPanel {
 
     mkw.Event event;
 
+    CardLayout card;
+    JPanel cardPane;
+    MkwRaceInputPanel panel;
+
     public MkwEnterTfPanel(CardLayout card, JPanel cardPane, MkwRaceInputPanel panel) {
+
+        this.card = card;
+        this.cardPane = cardPane;
+        this.panel = panel;
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
@@ -52,35 +62,7 @@ public class MkwEnterTfPanel extends JPanel {
         buttonStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                String tierInput = tierTf.getText();
-                String formatInput = formatTf.getText();
-
-                if(InputVerifier.VerifyTier(tierInput)&&InputVerifier.verifyFormat(formatInput)){
-                    Tier tier = InputVerifier.getTier(tierInput);
-                    Format format = InputVerifier.getFormat(formatInput);
-                    int eventsPlayed = RaceDao.getEventsStored();
-                    event = new mkw.Event(tier,format,eventsPlayed);
-
-                    int racesPlayed = RaceDao.getRacesStored();
-                    Race.setRaceCount(racesPlayed);
-
-                    panel.setTrackTf();
-                    panel.setEvent(event);
-                    panel.setTitle();
-                    panel.setStatus();
-                    card.show(cardPane,"mkwRace");
-                    Gui.frame.setSize(420,480);
-                }else{
-                    if(InputVerifier.VerifyTier(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
-                        InputVerifier.InputErrorBox("Invalid Tier and Format");
-                    }else if(InputVerifier.verifyFormat(formatInput)==false){
-                        InputVerifier.InputErrorBox("Invalid Format");
-                    }
-                    else{
-                        InputVerifier.InputErrorBox("Invalid tier");
-                    }
-                }
+                startEvent();
             }
         });
 
@@ -92,10 +74,62 @@ public class MkwEnterTfPanel extends JPanel {
                 card.show(cardPane,"mainMenu");
             }
         });
+
+        tierTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    startEvent();
+                }
+            }
+
+        });
+
+        formatTf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    startEvent();
+                }
+            }
+
+        });
     }
 
     public void initialize(){
         titleLabel.setText("Entering MKW Event ["+ (RaceDao.getEventsStored()+1)+"]");
         tierTf.setText(String.valueOf(RaceDao.getDefaultMkwTier()));
+    }
+
+    public void startEvent(){
+        String tierInput = tierTf.getText();
+        String formatInput = formatTf.getText();
+
+        if(InputVerifier.VerifyTier(tierInput)&&InputVerifier.verifyFormat(formatInput)){
+            Tier tier = InputVerifier.getTier(tierInput);
+            Format format = InputVerifier.getFormat(formatInput);
+            int eventsPlayed = RaceDao.getEventsStored();
+            event = new mkw.Event(tier,format,eventsPlayed);
+
+            int racesPlayed = RaceDao.getRacesStored();
+            Race.setRaceCount(racesPlayed);
+
+            panel.setTrackTf();
+            panel.setEvent(event);
+            panel.setTitle();
+            panel.setStatus();
+            panel.setInitialButtons();
+            card.show(cardPane,"mkwRace");
+            Gui.frame.setSize(420,480);
+        }else{
+            if(InputVerifier.VerifyTier(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
+                InputVerifier.InputErrorBox("Invalid Tier and Format");
+            }else if(InputVerifier.verifyFormat(formatInput)==false){
+                InputVerifier.InputErrorBox("Invalid Format");
+            }
+            else{
+                InputVerifier.InputErrorBox("Invalid tier");
+            }
+        }
     }
 }

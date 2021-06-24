@@ -358,16 +358,24 @@ public class Mk8dxRaceInputPanel extends JPanel {
         rejoinButtonYes.setEnabled(false);
     }
 
+
+
     public void setTrackTf(){
         trackTf.setText(TrackD.randomTrackD().getAbbreviation());
     }
 
     public void nextRace(){
+
         String startS = startTf.getText();
         String finishS = finishTf.getText();
         String trackS = trackTf.getText();
 
         if(InputVerifier.verifySF(startS)&&InputVerifier.verifySF(finishS)&&InputVerifier.verifyTrackD(trackS)){
+            try{
+                Thread.sleep(150);
+            }catch(InterruptedException e){
+                System.out.println(e.getMessage());
+            }
             roomReset();
             TrackD track = InputVerifier.getTrackD(trackS);
             int start = Integer.parseInt(startS);

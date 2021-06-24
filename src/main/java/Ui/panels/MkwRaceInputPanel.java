@@ -463,6 +463,11 @@ public class MkwRaceInputPanel extends JPanel {
 
         if(InputVerifier.verifyTrack(trackS)&&InputVerifier.verifyPlayers(playerS)&&
                 InputVerifier.verifySF(startS)&&InputVerifier.verifyFinish(finishS,Integer.parseInt(playerS))){
+            try{
+                Thread.sleep(150);
+            }catch(InterruptedException e){
+                System.out.println(e.getMessage());
+            }
             roomReset();
             Track track = InputVerifier.getTrack(trackS);
             int players = Integer.parseInt(playerS);
