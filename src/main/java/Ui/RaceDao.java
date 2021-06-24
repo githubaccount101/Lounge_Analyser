@@ -684,7 +684,7 @@ public class RaceDao {
     }
 
     public static JTable getTrackTableBasic(){
-        String sql ="SELECT track, COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
+        String sql ="SELECT track AS \"Track\", COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
                 "FROM (select * from races order by raceid desc limit 1)\n" +
                 "Where track like 'ppop'\n" +
                 "group by track \n" +
@@ -703,7 +703,7 @@ public class RaceDao {
     }
 
     public static JTable getTierTableBasic(){
-        String sql ="SELECT tier, COUNT(tier)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
+        String sql ="SELECT tier AS \"Tier\", COUNT(tier)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
                 "FROM (select * from races order by raceid desc limit 1)\n" +
                 "Where tier = 1\n" +
                 "group by tier\n" +
@@ -722,7 +722,7 @@ public class RaceDao {
     }
 
     public static JTable getFormatTableBasic(){
-        String sql ="SELECT format, COUNT(format)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
+        String sql ="SELECT format AS \"Format\", COUNT(format)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\"" +
                 "FROM (select * from races order by raceid desc limit 1)\n" +
                 "Where track like 'ppop'\n" +
                 "group by format \n" +
@@ -742,7 +742,7 @@ public class RaceDao {
     }
 
     public static JTable getStartTableBasic(){
-        String sql = "SELECT start, COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+
+        String sql = "SELECT start AS \"Starting Position\", COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+
                 "FROM (select * from races order by raceid desc limit 1)\n" +
                 "Where track like 'ppop'\n" +
                 "group by start \n" +

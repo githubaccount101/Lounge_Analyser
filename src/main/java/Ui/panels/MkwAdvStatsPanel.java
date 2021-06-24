@@ -101,7 +101,7 @@ public class MkwAdvStatsPanel extends JPanel {
         s.addobjects(runButton,this, layout,gbc,3,2,3 , 1,1,2,true);
         s.addobjects(resetButton,this, layout,gbc,6,2 , 3,1,1,2,true);
         s.addobjects(testButton,this, layout,gbc,9,2 , 3,1,1,2,true);
-        testButton.setVisible(false);
+        testButton.setVisible(true);
 
         s.addobjects(selectLabel,this, layout,gbc,0,3,2 , 1,1,2,false);
         s.addobjects(trackButton,this, layout,gbc,3,3,3 , 1,1,2,true);
@@ -865,7 +865,7 @@ public class MkwAdvStatsPanel extends JPanel {
     public String getTrackSql(){
         String sql= "";
         StringBuilder bob = new StringBuilder();
-        bob.append("SELECT track, COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
+        bob.append("SELECT track AS \"Track\", COUNT(track)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
                 .append("FROM (select * from races order by raceid desc limit "+(Integer.parseInt(enterXTF.getText())*12)+")"+"\n")
                 .append("Where track not like 'none'"+"\n")
                 .append(tierBuilder()+"\n")
@@ -881,7 +881,7 @@ public class MkwAdvStatsPanel extends JPanel {
     public String getFormatSql(){
         String sql= "";
         StringBuilder bob = new StringBuilder();
-        bob.append("SELECT format, COUNT(format)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
+        bob.append("SELECT format AS \"Format\", COUNT(format)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
                 .append("FROM (select * from races order by raceid desc limit "+(Integer.parseInt(enterXTF.getText())*12)+")"+"\n")
                 .append("Where track not like 'none'"+"\n")
                 .append(tierBuilder()+"\n")
@@ -897,7 +897,7 @@ public class MkwAdvStatsPanel extends JPanel {
     public String getTierSql(){
         String sql= "";
         StringBuilder bob = new StringBuilder();
-        bob.append("SELECT tier, COUNT(tier)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
+        bob.append("SELECT tier AS \"Tier\", COUNT(tier)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
                 .append("FROM (select * from races order by raceid desc limit "+(Integer.parseInt(enterXTF.getText())*12)+")"+"\n")
                 .append("Where track not like 'none'"+"\n")
                 .append(formatBuilder()+"\n")
@@ -913,7 +913,7 @@ public class MkwAdvStatsPanel extends JPanel {
     public String getStartSql(){
         String sql= "";
         StringBuilder bob = new StringBuilder();
-        bob.append("SELECT start, COUNT(start)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
+        bob.append("SELECT start AS \"Starting Position\", COUNT(start)AS \"Races Found\", ROUND(avg(finish),1)AS \"AVG Finish\" , Round(avg(points),1) AS \"AVG Points\""+"\n")
                 .append("FROM (select * from races order by raceid desc limit "+(Integer.parseInt(enterXTF.getText())*12)+")"+"\n")
                 .append("Where track not like 'none'"+"\n")
                 .append(tierBuilder()+"\n")

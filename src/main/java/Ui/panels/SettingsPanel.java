@@ -133,7 +133,8 @@ public class SettingsPanel extends JPanel {
         resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int a = JOptionPane.showConfirmDialog(null, "Are you sure? This will also re-enable event storage",
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure? This cannot be undone." +"\n"+
+                                "This will also re-enable event storage if it is disabled.",
                         "Confirm", JOptionPane.YES_NO_OPTION);
                 if(a==0){
                     System.out.println("Clearing everything");
