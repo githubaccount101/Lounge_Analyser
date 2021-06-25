@@ -149,6 +149,46 @@ public class RaceDao {
         }
     }
 
+    public static void removeLastestMkwEvent(){
+        int eventid = getEventsStored();
+
+        String sql = "Delete FROM events \n" +
+                "Where eventid = "+eventid;
+        String sql2 = "Delete FROM gps\n" +
+                "Where gpid >= "+eventid;
+        String sql3 = "Delete FROM races\n" +
+                "Where eventid = "+eventid;
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute(sql);
+            stmt.execute(sql2);
+            stmt.execute(sql3);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void removeLastestMk8dxEvent(){
+        int eventid = getEventsDStored();
+
+        String sql = "Delete FROM eventsD \n" +
+                "Where eventid = "+eventid;
+        String sql3 = "Delete FROM racesD\n" +
+                "Where eventid = "+eventid;
+
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement()) {
+
+            stmt.execute(sql);
+            stmt.execute(sql3);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     private static boolean defautTiersAreEmpty(){
 
         String sql = "Select Count(mkw) FROM defaultTiers";

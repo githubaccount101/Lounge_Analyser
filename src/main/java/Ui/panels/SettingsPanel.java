@@ -26,7 +26,7 @@ public class SettingsPanel extends JPanel {
 
     JLabel currentMkwTierLabel = new JLabel();
 
-    JLabel mk8dxTierLabel = new JLabel("Set new default MK8DX tier:");
+    JLabel mk8dxTierLabel = new JLabel("Set new default 8DX tier:");
     JTextField mk8dxTierTf = new JTextField("");
     JButton mkw8dxTierButton = new JButton("Set");
 
@@ -38,6 +38,11 @@ public class SettingsPanel extends JPanel {
 
     JLabel randomWarningLabel = new JLabel("(limit 1000)");
     JProgressBar randomBar = new JProgressBar();
+
+
+    JLabel removeEventLabel = new JLabel("Delete Most Recent:");
+    JButton deleteMkwButton = new JButton("MKW Event");
+    JButton deleteMk8dxButton = new JButton("8Dx Event");
 
     JButton resetButton = new JButton("Clear All Events");
 
@@ -51,7 +56,7 @@ public class SettingsPanel extends JPanel {
 
         GridBagLayout layout = new GridBagLayout();
         setLayout(layout);
-        gbc.insets = new Insets(10,10,10,10);
+        gbc.insets = new Insets(4,4,4,4);
 
         Setter s = new Setter();
 
@@ -63,19 +68,19 @@ public class SettingsPanel extends JPanel {
         s.addobjects(dbLabel,this, layout,gbc,0,1,3 , 1,1,1,true);
 
         s.addobjects(mkwTierLabel,this, layout,gbc,0, 2,1,1,1,1, true);
-        s.addobjects(mkwTierTf,this, layout,gbc,1, 2,1,1,100,1, true);
+        s.addobjects(mkwTierTf,this, layout,gbc,1, 2,1,1,1,1, true);
         s.addobjects(mkwTierButton,this, layout,gbc,2, 2,1,1,1,1, true);
 
         s.addobjects(currentMkwTierLabel,this, layout,gbc,0, 3,1,1,1,1, true);
 
         s.addobjects(mk8dxTierLabel,this, layout,gbc,0, 4,1,1,1,1, true);
-        s.addobjects(mk8dxTierTf,this, layout,gbc,1, 4,1,1,100,1, true);
+        s.addobjects(mk8dxTierTf,this, layout,gbc,1, 4,1,1,1,1, true);
         s.addobjects(mkw8dxTierButton,this, layout,gbc,2, 4,1,1,1,1, true);
 
         s.addobjects(currentMk8dxTierLabel,this, layout,gbc,0, 5,1,1,1,1, true);
 
         s.addobjects(randomLabel,this, layout,gbc,0, 6,1,1,1,1, true);
-        s.addobjects(randomTf,this, layout,gbc,1, 6,1,1,100,1, true);
+        s.addobjects(randomTf,this, layout,gbc,1, 6,1,1,1,1, true);
         s.addobjects(randomButton,this, layout,gbc,2, 6,1,1,1,1, true);
 
         s.addobjects(randomWarningLabel,this, layout,gbc,0, 7,1,1,1,1, true);
@@ -83,14 +88,56 @@ public class SettingsPanel extends JPanel {
         s.addobjects(randomBar,this, layout,gbc,0, 8,3,1,1, 1,true);
         randomBar.setVisible(false);
 
-        s.addobjects(resetButton,this, layout,gbc,0, 9,3,1, 2, 1,true);
+        gbc.insets = new Insets(4,4,2,2);
+        s.addobjects(removeEventLabel,this, layout,gbc,0, 9,1,1, 2, 1,true);
+        gbc.insets = new Insets(2,2,2,2);
+        s.addobjects(deleteMkwButton,this, layout,gbc,1, 9,1,1, 2, 1,true);
+        gbc.insets = new Insets(2,2,2,4);
+        s.addobjects(deleteMk8dxButton,this, layout,gbc,2, 9,1,1, 2, 1,true);
 
-        s.addobjects(buttonBack,this, layout,gbc,0,10,3, 1, 2 ,1, true);
+        gbc.insets = new Insets(2,4,2,4);
+        s.addobjects(resetButton,this, layout,gbc,0, 11,3,1, 2, 1,true);
+        gbc.insets = new Insets(2,4,4,4);
+        s.addobjects(buttonBack,this, layout,gbc,0,12,3, 1, 2 ,1, true);
 
         fillAllButtons();
 
         resetButton.setOpaque(false);
         resetButton.setContentAreaFilled(false);
+
+        deleteMkwButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure? This cannot be undone.",
+                        "Confirm", JOptionPane.YES_NO_OPTION);
+                if(a==0){
+                    System.out.println("Clearing last mkw");
+                    RaceDao.removeLastestMkwEvent();
+                }
+                if(a>0){
+                    System.out.println("no");
+                }
+                sleep(150);
+                initialize();
+            }
+        });
+
+        deleteMk8dxButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int a = JOptionPane.showConfirmDialog(null, "Are you sure? This cannot be undone.",
+                        "Confirm", JOptionPane.YES_NO_OPTION);
+                if(a==0){
+                    System.out.println("Clearing last mk8dx");
+                    RaceDao.removeLastestMk8dxEvent();
+                }
+                if(a>0){
+                    System.out.println("no");
+                }
+                sleep(150);
+                initialize();
+            }
+        });
 
 
         mkwTierButton.addActionListener(new ActionListener() {
@@ -98,6 +145,7 @@ public class SettingsPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(InputVerifier.VerifyTier(mkwTierTf.getText())){
                     RaceDao.updateDefaultTierMkw(Integer.parseInt(mkwTierTf.getText()));
+                    sleep(150);
                     initialize();
                     InputVerifier.InputErrorBox("Default Tier set to "+mkwTierTf.getText());
                     mkwTierTf.setText("");
@@ -112,6 +160,7 @@ public class SettingsPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if(InputVerifier.VerifyTierD(mk8dxTierTf.getText())){
                     RaceDao.updateDefaultTierMk8dx(mk8dxTierTf.getText());
+                    sleep(150);
                     initialize();
                     InputVerifier.InputErrorBox("Default Tier set to "+mk8dxTierTf.getText());
                     mk8dxTierTf.setText("");
@@ -144,6 +193,7 @@ public class SettingsPanel extends JPanel {
                 if(a>0){
                     System.out.println("no");
                 }
+                sleep(150);
                 initialize();
             }
         });
@@ -211,6 +261,14 @@ public class SettingsPanel extends JPanel {
     private void inception(){
         new BarUpdate(randomBar,Integer.valueOf(randomTf.getText()),randomWarningLabel, allButtons,
                 randomWarningLabel, dbLabel,randomTf).execute();
+    }
+
+    public void sleep(int millis){
+        try{
+            Thread.sleep(millis);
+        }catch(InterruptedException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     @Deprecated
