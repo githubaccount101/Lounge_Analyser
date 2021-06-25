@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Mk8dxRaceInputPanel extends JPanel {
@@ -68,11 +69,11 @@ public class Mk8dxRaceInputPanel extends JPanel {
         matchLabelUpdate();
         s.addobjects(trackMatchLabel,this, layout,gbc,1, 6,3,1,1,0.1,true);
 
-        s.addobjects(startLabel,this, layout,gbc,1, 7,1,1,.00001,0.1,true);
-        s.addobjects(startTf,this, layout,gbc,2, 7,1,1, 1,0.1,true);
+        s.addobjects(finishLabel,this, layout,gbc,1, 7,1,1,.00001,0.1,true);
+        s.addobjects(finishTf,this, layout,gbc,2, 7,1,1,1,0.1,true);
 
-        s.addobjects(finishLabel,this, layout,gbc,1, 8,1,1,.00001,0.1,true);
-        s.addobjects(finishTf,this, layout,gbc,2, 8,1,1,1,0.1,true);
+        s.addobjects(startLabel,this, layout,gbc,1, 8,1,1,.00001,0.1,true);
+        s.addobjects(startTf,this, layout,gbc,2, 8,1,1, 1,0.1,true);
 
         s.addobjects(resetBox,this, layout,gbc,1, 9,1,1,1,0.1,true);
 
@@ -297,6 +298,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
             startTf.setText(finishTf.getText());
         }
         finishTf.setText("");
+        trackTf.requestFocusInWindow();
     }
 
     private void setPostRaceTFRandom(){
@@ -401,6 +403,16 @@ public class Mk8dxRaceInputPanel extends JPanel {
             String statement = "invalid: "+tracktrack+" "+startstart+" "+finishfinish;
             InputVerifier.InputErrorBox(statement);
         }
+    }
+
+    public void initialize(){
+        setTrackTf();
+        setTitle();
+        setStatus();
+        setInitialButtons();
+        startTf.setText("");
+        finishTf.setText("");
+        EventQueue.invokeLater( () -> trackTf.requestFocusInWindow() );
     }
 }
 

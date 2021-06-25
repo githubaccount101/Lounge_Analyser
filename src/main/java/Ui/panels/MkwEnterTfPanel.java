@@ -114,11 +114,8 @@ public class MkwEnterTfPanel extends JPanel {
             int racesPlayed = RaceDao.getRacesStored();
             Race.setRaceCount(racesPlayed);
 
-            panel.setTrackTf();
             panel.setEvent(event);
-            panel.setTitle();
-            panel.setStatus();
-            panel.setInitialButtons();
+            panel.initialize();
             card.show(cardPane,"mkwRace");
             Gui.frame.setSize(450,480);
         }else{

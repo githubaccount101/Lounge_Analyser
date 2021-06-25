@@ -34,10 +34,10 @@ public class MkwRaceInputPanel extends JPanel {
     JLabel trackMatchLabel = new JLabel("No Track Found");
     JLabel dcLabel = new JLabel("If DC:");
 
-    JTextField trackTf = new JTextField(Track.randomTrack().getAbbreviation());
-    JTextField playersTf = new JTextField("12");
-    JTextField startTf = new JTextField("12");
-    JTextField finishTf = new JTextField("12");
+    JTextField trackTf = new JTextField("");
+    JTextField playersTf = new JTextField("");
+    JTextField startTf = new JTextField("");
+    JTextField finishTf = new JTextField("");
 
 
     JButton nextButton = new JButton("Next Race");
@@ -54,8 +54,15 @@ public class MkwRaceInputPanel extends JPanel {
 
     static Event event = null;
     static String status = "n/a";
+    static int gpStart;
+    static int completedGps;
+    static boolean startChange = false;
 
     boolean onOff = false;
+
+
+
+
 
     public MkwRaceInputPanel(CardLayout card, JPanel cardPane){
 
@@ -77,14 +84,14 @@ public class MkwRaceInputPanel extends JPanel {
         matchLabelUpdate();
         s.addobjects(trackMatchLabel,this, layout,gbc,1, 6,3,1,1,0.1,true);
 
-        s.addobjects(playersLabel,this, layout,gbc,1, 7,1,1,.00000001,0.1,true);
-        s.addobjects(playersTf,this, layout,gbc,2, 7,1,1, 1,0.1,true);
+        s.addobjects(finishLabel,this, layout,gbc,1, 7,1,1,.0000001,0.1,true);
+        s.addobjects(finishTf,this, layout,gbc,2, 7,1,1,1,0.1,true);
 
         s.addobjects(startLabel,this, layout,gbc,1, 8,1,1,.000000001,0.1,true);
         s.addobjects(startTf,this, layout,gbc,2, 8,1,1, 1,0.1,true);
 
-        s.addobjects(finishLabel,this, layout,gbc,1, 9,1,1,.0000001,0.1,true);
-        s.addobjects(finishTf,this, layout,gbc,2, 9,1,1,1,0.1,true);
+        s.addobjects(playersLabel,this, layout,gbc,1, 9,1,1,.00000001,0.1,true);
+        s.addobjects(playersTf,this, layout,gbc,2, 9,1,1, 1,0.1,true);
 
         s.addobjects(resetBox,this, layout,gbc,1, 10,1,1,1,0.1,true);
 
@@ -217,6 +224,9 @@ public class MkwRaceInputPanel extends JPanel {
                     setStatusDc();
                 }
                 resetBox.setSelected(false);
+                startTf.setText("");
+                finishTf.setText("");
+                trackTf.setText("");
             }
         });
 
@@ -343,15 +353,6 @@ public class MkwRaceInputPanel extends JPanel {
         }
     }
 
-    private void setPostRaceTF(){
-        trackTf.setText("");
-        if(event.currentGpIsUnplayed()){
-            startTf.setText("");
-        }else{
-            startTf.setText(finishTf.getText());
-        }
-        finishTf.setText("");
-    }
 
     private void setPostRaceTFRandom(){
         Random random = new Random();
@@ -455,6 +456,48 @@ public class MkwRaceInputPanel extends JPanel {
         trackTf.setText(Track.randomTrack().getAbbreviation());
     }
 
+    private void setPostRaceTF(){
+        trackTf.setText("");
+
+        if(event.getNumberOfCompletedGps() == 0){
+            //no completed gps
+            if(event.currentGpIsUnplayed()){
+                //first gp, before first race
+                startTf.setText("");
+            } else if(event.currentGp.getRacesPlayedInGp()==1) {
+                //after the first race of the first GP
+                gpStart = Integer.parseInt(startTf.getText());
+                System.out.println("after the first race of the first GP, gpStart is now: "+gpStart);
+                startTf.setText(finishTf.getText());
+            }else if(event.currentGp.getRacesPlayedInGp()>1&&event.currentGp.getRacesPlayedInGp()<event.currentGp.getMaxRaces()){
+                //middle of first gp, after first before the max number of races in the gp are completed
+                startTf.setText(finishTf.getText());
+            }
+        }else{
+            if(event.currentGpIsUnplayed()){
+                //after at least 1 gp is played, but before the first race of a new gp is played
+                System.out.println("at the start of a new gp, the default startTf text is the gpStart value of:" +gpStart);
+                startTf.setText(String.valueOf(gpStart));
+                playersTf.setText("12");
+                System.out.println("");
+            }else if(event.currentGp.oneRaceIsPlayed()){
+                //after at least 1 gp has been  played, and one race has been played in the new gp
+                startChange = (Integer.parseInt(startTf.getText())!= gpStart);
+                if(startChange) {
+                    gpStart = Integer.parseInt(startTf.getText());
+                    System.out.println("since the start position of a new gp has been changed the new gpStart default is: "+gpStart);
+                    startTf.setText(finishTf.getText());
+                }
+            }else if(event.currentGp.getRacesPlayedInGp()>1&&event.currentGp.getRacesPlayedInGp()<event.currentGp.getMaxRaces()){
+                //after at least 1 gp has been  played, and more than 1 race has been played in the gp
+                startTf.setText(finishTf.getText());
+            }
+        }
+
+        finishTf.setText("");
+        trackTf.requestFocusInWindow();
+    }
+
     public void nextRace(){
         String startS = startTf.getText();
         String playerS = playersTf.getText();
@@ -468,16 +511,24 @@ public class MkwRaceInputPanel extends JPanel {
             }catch(InterruptedException e){
                 System.out.println(e.getMessage());
             }
+
             roomReset();
             Track track = InputVerifier.getTrack(trackS);
             int players = Integer.parseInt(playerS);
             int start = Integer.parseInt(startS);
             int finish = Integer.parseInt(finishS);
+
+            if(event.getRacesPlayed()==0){
+                gpStart = start;
+            }
+
             event.playRace(track, start, finish, players);
 
             setStatus();
             eventDoneCheck();
             setPostRaceTF();
+
+
         }else{
             String tracktrack = "track";
             if(InputVerifier.verifyTrack(trackS)){
@@ -499,5 +550,16 @@ public class MkwRaceInputPanel extends JPanel {
             String statement = "invalid: "+tracktrack+" "+playerplayer+" "+startstart+" "+finishfinish;
             InputVerifier.InputErrorBox(statement);
         }
+    }
+
+    public void initialize(){
+        setTrackTf();
+        setTitle();
+        setStatus();
+        setInitialButtons();
+        playersTf.setText("12");
+        startTf.setText("");
+        finishTf.setText("");
+        EventQueue.invokeLater( () -> trackTf.requestFocusInWindow() );
     }
 }

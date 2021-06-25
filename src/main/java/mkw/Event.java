@@ -287,6 +287,10 @@ public class Event {
         return currentGp.getIdofRaceAboutToBePlayed();
     }
 
+    public int getNumberOfCompletedGps(){
+        return completedGps.size();
+    }
+
     public boolean isEventDone(){
         if(this.racesPlayed==this.raceLimit){
             return true;
@@ -312,8 +316,8 @@ public class Event {
 
     public String preRaceString(){
         StringBuilder bob = new StringBuilder();
-        bob.append("Entering Data For: GP " + getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()
-                + "(Race " + (getRacesPlayed() + 1) + " overall)"+
+        bob.append("Entering Data For Race " + (getRacesPlayed() + 1)  + ", (GP "+getCurrentlyPlayingGpId() + ", Race " + getRaceNumberforUpcomingRace()+")"
+                +"\n" +
                 "\n" + "Races played: " + racesPlayed
                 + ", points: " + racePoints + ", dc points: " + dcPoints+", Total Points: "+totalPoints+"\n");
 
@@ -323,8 +327,8 @@ public class Event {
                 bob.append("\n"+"~~Last Race~~" +"\n"+
                         "Satout because of DC");
             }else{
-                bob.append("\n"+"~~Last Race~~" +"\n"+
-                        "Track: " + r.getTrack().getAbbreviation()+ ", players: " + r.getPlayers()+", start: " +
+                bob.append("\n"+"~~Last Race~~" +"\n"+ "Race "+r.getRace()+
+                        ", " + r.getTrack().getAbbreviation()+ ", players: " + r.getPlayers()+", start: " +
                         r.getStart() + ", finish: " + r.getFinish() +", points: " + r.getPoints());
             }
 

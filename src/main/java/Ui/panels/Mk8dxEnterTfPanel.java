@@ -113,11 +113,10 @@ public class Mk8dxEnterTfPanel extends JPanel {
             int racesPlayed = RaceDao.getRacesDStored();
             RaceD.setRaceCount(racesPlayed);
 
-            panel.setTrackTf();
+
             panel.setEvent(event);
-            panel.setTitle();
-            panel.setStatus();
-            panel.setInitialButtons();
+            panel.initialize();
+
             card.show(cardPane,"mk8dxRace");
             Gui.frame.setSize(450,480);
         }else{

@@ -205,7 +205,7 @@ public class SettingsPanel extends JPanel {
                 if(InputVerifier.verifyRandom(randomTf.getText())){
                     int a = JOptionPane.showConfirmDialog(null, "This will clear all existing events and disable" + "\n"+
                                     "the input of new events until all events are cleared again."  + "\n"+
-                                    "An equal of random event will be generated for both games."+ "\n"+
+                                    "An equal # of random event will be generated for both games."+ "\n"+
                                     "Generating more random events will take more time, up to several"+ "\n"+
                                     "minutes for 1000. The program will be disabled until"+ "\n"+
                                     "the all the events have been generated. You can do this before"+ "\n"+
@@ -239,7 +239,7 @@ public class SettingsPanel extends JPanel {
         }else{
             randomWarningLabel.setText("(limit 1000) - Random Mode is Off");
         }
-        dbLabel.setText(RaceDao.getEventsStored()+" MKW events stored, "+RaceDao.getEventsDStored()+" MK8DX events stored");
+        dbLabel.setText(RaceDao.getEventsStored()+" MKW event(s) stored, "+RaceDao.getEventsDStored()+" MK8DX event(s) stored");
     }
 
     public void fillAllButtons(){

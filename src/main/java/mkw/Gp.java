@@ -29,6 +29,22 @@ public class Gp {
         this.maxRaces = max;
     }
 
+    public boolean oneRaceIsPlayed(){
+        if(races.size()==1){
+            return true;
+        }
+        return false;
+    }
+
+    public int getMaxRaces(){
+        return maxRaces;
+    }
+
+    public int getRacesPlayedInGp(){
+        return races.size();
+    }
+
+
     public void playRace(Race r){
         System.out.println("");
         System.out.println("adding the following race to GP records");
