@@ -324,8 +324,8 @@ public class EventD {
                         "Satout because of DC");
             }else{
                 bob.append("\n"+"~~Last Race~~" +"\n"+ "Race "+r.getRace()+
-                        ", " + r.getTrack().getAbbreviation()+ ", players: " + r.getPlayers()+", start: " +
-                        r.getStart() + ", finish: " + r.getFinish() +", points: " + r.getPoints());
+                        ", " + r.getTrack().getAbbreviation() + ", finish: " +  r.getFinish()+ ", start: " +
+                        r.getStart() +", players: " + r.getPlayers()+", points: " + r.getPoints());
             }
 
         }

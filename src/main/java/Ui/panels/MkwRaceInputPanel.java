@@ -203,8 +203,27 @@ public class MkwRaceInputPanel extends JPanel {
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                try{
+                    Thread.sleep(150);
+                }catch(InterruptedException j){
+                    System.out.println(j.getMessage());
+                }
+
+                Race preRace = event.getMostRecentlyCompletedRace();
+                String preTrack = preRace.getTrack().getAbbreviation();
+                String preStart = String.valueOf(preRace.getStart());
+                String preFinish = String.valueOf(preRace.getFinish());
+                String prePlayers = String.valueOf(preRace.getPlayers());
+
                 event.undoProtocall();
                 event.preRaceStatus();
+
+                startTf.setText(preStart);
+                finishTf.setText(preFinish);
+                trackTf.setText(preTrack);
+                playersTf.setText(prePlayers);
+
                 dcCheck();
                 if(submitButton.isEnabled()){
                     submitButton.setEnabled(false);
@@ -224,9 +243,6 @@ public class MkwRaceInputPanel extends JPanel {
                     setStatusDc();
                 }
                 resetBox.setSelected(false);
-                startTf.setText("");
-                finishTf.setText("");
-                trackTf.setText("");
             }
         });
 

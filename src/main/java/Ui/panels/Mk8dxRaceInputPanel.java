@@ -3,6 +3,7 @@ package Ui.panels;
 import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.*;
+import mkw.Race;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -150,9 +151,24 @@ public class Mk8dxRaceInputPanel extends JPanel {
         undoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                event.undoProtocall();
+                try{
+                    Thread.sleep(150);
+                }catch(InterruptedException j){
+                    System.out.println(j.getMessage());
+                }
 
+                RaceD preRace = event.getMostRecentlyCompletedRace();
+                String preTrack = preRace.getTrack().getAbbreviation();
+                String preStart = String.valueOf(preRace.getStart());
+                String preFinish = String.valueOf(preRace.getFinish());
+
+                event.undoProtocall();
                 event.preRaceStatus();
+
+                startTf.setText(preStart);
+                finishTf.setText(preFinish);
+                trackTf.setText(preTrack);
+
                 if(submitButton.isEnabled()){
                     submitButton.setEnabled(false);
                 }
@@ -174,6 +190,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
                     rejoinButtonYes.setEnabled(true);
                 }
                 resetBox.setSelected(false);
+
             }
         });
 
