@@ -396,7 +396,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
             }
             String finishfinish = "finish";
             if(InputVerifier.verifySF(finishS)){
-                startstart = "";
+                finishfinish = "";
             }
             String statement = "invalid: "+tracktrack+" "+startstart+" "+finishfinish;
             InputVerifier.InputErrorBox(statement);
