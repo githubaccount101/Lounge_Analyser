@@ -127,9 +127,10 @@ public class MkwRaceInputPanel extends JPanel {
         summaryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 String races = event.getEventSummary();
-                final JOptionPane pane = new JOptionPane(races);
-                final JDialog d = pane.createDialog((JFrame)null, "All Races");
+                JOptionPane pane = new JOptionPane(races);
+                JDialog d = pane.createDialog((JFrame)null, "All Races");
                 d.setLocationRelativeTo(resetBox);
                 d.setVisible(true);
             }
@@ -167,7 +168,7 @@ public class MkwRaceInputPanel extends JPanel {
                     dcButtonOff.setEnabled(false);
                 }
                 onOff = false;
-                setPostRaceTF();
+                setPostDcTF();
             }
         });
 
@@ -240,9 +241,6 @@ public class MkwRaceInputPanel extends JPanel {
                     preFinish = "";
                     prePlayers = "";
                 }
-
-
-
                 event.undoProtocall();
                 event.preRaceStatus();
 
@@ -568,6 +566,9 @@ public class MkwRaceInputPanel extends JPanel {
                     gpStart = Integer.parseInt(startTf.getText());
                     System.out.println("since the start position of a new gp has been changed the new gpStart default is: "+gpStart);
                     startTf.setText(finishTf.getText());
+                }else{
+                    System.out.println("the initial start position to begin a gp has not changed");
+                    startTf.setText(finishTf.getText());
                 }
             }else if(event.currentGp.getRacesPlayedInGp()>1&&event.currentGp.getRacesPlayedInGp()<event.currentGp.getMaxRaces()){
                 //after at least 1 gp has been  played, and more than 1 race has been played in the gp
@@ -629,7 +630,7 @@ public class MkwRaceInputPanel extends JPanel {
             }
 
             String statement = "invalid: "+tracktrack+" "+playerplayer+" "+startstart+" "+finishfinish;
-            InputVerifier.InputErrorBox(statement);
+            InputVerifier.relativePopup(statement, "error", resetBox);
         }
     }
 

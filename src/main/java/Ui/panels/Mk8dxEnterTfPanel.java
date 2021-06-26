@@ -98,6 +98,7 @@ public class Mk8dxEnterTfPanel extends JPanel {
     public void initialize(){
         titleLabel.setText("Entering MK8DX Event ["+ (RaceDao.getEventsDStored()+1)+"]");
         tierTf.setText(RaceDao.getDefaultMk8dxTier());
+        EventQueue.invokeLater( () -> formatTf.requestFocusInWindow() );
     }
 
     public void startEvent(){

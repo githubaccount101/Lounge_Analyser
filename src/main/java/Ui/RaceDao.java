@@ -1046,7 +1046,7 @@ public class RaceDao {
         );
 
         XYPlot plot = chart.getXYPlot();
-        plot.getDomainAxis().setInverted(true);
+        plot.getDomainAxis().setInverted(false);
         plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         plot.getRangeAxis().setInverted(true);
         plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());

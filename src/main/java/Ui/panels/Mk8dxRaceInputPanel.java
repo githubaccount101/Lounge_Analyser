@@ -4,7 +4,6 @@ import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.*;
 
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -98,7 +97,6 @@ public class Mk8dxRaceInputPanel extends JPanel {
         rejoinButtonYes.setEnabled(true);
         s.addobjects(rejoinButtonYes,this, layout,gbc,2, 13,1,1,1,0.1,true);
 
-        JButton summaryButton = new JButton("All Races");
 
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -110,16 +108,14 @@ public class Mk8dxRaceInputPanel extends JPanel {
             }
         });
 
-        summaryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String races = event.getEventSummary();
-                final JOptionPane pane = new JOptionPane(races);
-                final JDialog d = pane.createDialog((JFrame)null, "All Races");
-                d.setLocationRelativeTo(resetBox);
-                d.setVisible(true);
-            }
-        });
+        summaryButton.addActionListener(x->{
+                    String races = event.getEventSummary();
+                    JOptionPane pane = new JOptionPane(races);
+                    JDialog d = pane.createDialog((JFrame)null, "All Races");
+                    d.setLocationRelativeTo(resetBox);
+                    d.setVisible(true);
+                }
+                );
 
         dcButtonOn.addActionListener(new ActionListener() {
             @Override
@@ -148,6 +144,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
                 dcEnable();
                 roomReset();
                 setStatus();
+                setPostRaceTF();
             }
         });
 
@@ -161,6 +158,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
                     setStatusDc();
                 }
                 resetBox.setSelected(false);
+                setPostRaceTF();
             }
         });
 
@@ -173,10 +171,24 @@ public class Mk8dxRaceInputPanel extends JPanel {
                     System.out.println(j.getMessage());
                 }
 
+                String preTrack;
+                String preStart ;
+                String preFinish ;
+                String prePlayers ;
+
                 RaceD preRace = event.getMostRecentlyCompletedRace();
-                String preTrack = preRace.getTrack().getAbbreviation();
-                String preStart = String.valueOf(preRace.getStart());
-                String preFinish = String.valueOf(preRace.getFinish());
+
+                if(preRace.isPlaceholder()==false){
+                    preTrack = preRace.getTrack().getAbbreviation();
+                    preStart = String.valueOf(preRace.getStart());
+                    preFinish = String.valueOf(preRace.getFinish());
+                    prePlayers = String.valueOf(preRace.getPlayers());
+                }else{
+                    preTrack = "";
+                    preStart = "";
+                    preFinish = "";
+                    prePlayers = "";
+                }
 
                 event.undoProtocall();
                 event.preRaceStatus();
@@ -328,7 +340,11 @@ public class Mk8dxRaceInputPanel extends JPanel {
         if(event.currentGpIsUnplayed()){
             startTf.setText("");
         }else{
-            startTf.setText(finishTf.getText());
+            if(event.getLatestRace().isPlaceholder()){
+                startTf.setText("12");
+            }else{
+                startTf.setText(finishTf.getText());
+            }
         }
         finishTf.setText("");
         trackTf.requestFocusInWindow();

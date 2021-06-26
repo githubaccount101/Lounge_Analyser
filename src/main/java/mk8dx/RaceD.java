@@ -127,11 +127,11 @@ public class RaceD {
         if(track == null){
             return "[Event"+event.getEventId()+"] Race:" + race + ", track=" + track+ ", "
                     + "start=" + start + ", finish=" + finish + ", players=" + players + ", "
-                    + "points=" + points + ", satOut=" + satOut + '}'+" raceid: "+raceId;
+                    + "points=" + points + ", satOut=" + satOut + ", raceid: "+raceId;
         }
         return "[Event"+event.getEventId()+"] Race:" + race + ", track=" + track.getFullName() + ", "
                 + "start=" + start + ", finish=" + finish + ", players=" + players + ", "
-                + "points=" + points + ", satOut=" + satOut + '}'+" raceid: "+raceId;
+                + "points=" + points + ", satOut=" + satOut + ", raceid: "+raceId;
     }
 
 

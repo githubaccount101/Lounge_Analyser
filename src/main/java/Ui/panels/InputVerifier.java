@@ -8,14 +8,11 @@ import mkw.Track;
 import shared.Format;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Scanner;
 
 public class InputVerifier {
 
-    public static void InputErrorBox(String infoMessage)
-    {
-        JOptionPane.showMessageDialog(null, infoMessage, "Input Error", JOptionPane.INFORMATION_MESSAGE);
-    }
 
     public static boolean VerifyTierD(String input) {
         if(TierD.fromString(input).isPresent()){
@@ -153,6 +150,19 @@ public class InputVerifier {
     public static boolean verifyRandom(String input){
         boolean properInt = input.matches("^([1-9][0-9]{0,2}|1000)$");
         return properInt;
+    }
+
+    public static void relativePopup(String content, String title, Component location){
+        final JOptionPane pane = new JOptionPane(content);
+        final JDialog d = pane.createDialog((JFrame)null, title);
+        d.setLocationRelativeTo(location);
+        d.setVisible(true);
+    }
+
+    @Deprecated
+    public static void InputErrorBox(String infoMessage)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, "Input Error", JOptionPane.INFORMATION_MESSAGE);
     }
 
 }

@@ -2,34 +2,55 @@ Ui/panels/Setter.java
  Ui.panels.Setter
 Ui/panels/SearchState.java
  Ui.panels.SearchState
-mkw/Gp.java
- mkw.Gp
+mk8dx/GpD.java
+ mk8dx.GpD
 shared/LineChartEx.java
  shared.LineChartEx
-Ui/panels/BarUpdate.java
- Ui.panels.BarUpdate
-mkw/Race.java
- mkw.Race
+Ui/panels/MkwSummaryPanel.java
+ Ui.panels.MkwSummaryPanel
+ Ui.panels.MkwSummaryPanel$1
+ Ui.panels.MkwSummaryPanel$2
+ Ui.panels.MkwSummaryPanel$3
+ Ui.panels.MkwSummaryPanel$4
+ Ui.panels.MkwSummaryPanel$5
+ Ui.panels.MkwSummaryPanel$6
+ Ui.panels.MkwSummaryPanel$7
+ Ui.panels.MkwSummaryPanel$8
+ Ui.panels.MkwSummaryPanel$8$1
+ Ui.panels.MkwSummaryPanel$9
+mk8dx/EventD.java
+ mk8dx.EventD
 shared/useless/CardPanel.java
  shared.useless.CardPanel
  shared.useless.CardPanel$1
  shared.useless.CardPanel$2
  shared.useless.CardPanel$3
-Ui/panels/Mk8dxTrackPanel.java
- Ui.panels.Mk8dxTrackPanel
- Ui.panels.Mk8dxTrackPanel$1
- Ui.panels.Mk8dxTrackPanel$10
- Ui.panels.Mk8dxTrackPanel$11
- Ui.panels.Mk8dxTrackPanel$11$1
- Ui.panels.Mk8dxTrackPanel$12
- Ui.panels.Mk8dxTrackPanel$2
- Ui.panels.Mk8dxTrackPanel$3
- Ui.panels.Mk8dxTrackPanel$4
- Ui.panels.Mk8dxTrackPanel$5
- Ui.panels.Mk8dxTrackPanel$6
- Ui.panels.Mk8dxTrackPanel$7
- Ui.panels.Mk8dxTrackPanel$8
- Ui.panels.Mk8dxTrackPanel$9
+shared/useless/Holder.java
+ shared.useless.Holder
+mkw/Race.java
+ mkw.Race
+mk8dx/RaceD.java
+ mk8dx.RaceD
+mkw/Gp.java
+ mkw.Gp
+shared/Format.java
+ shared.Format
+Ui/panels/CustomDialog.java
+ Ui.panels.CustomDialog
+mkw/Tier.java
+ mkw.Tier
+mk8dx/TierD.java
+ mk8dx.TierD
+mkw/Event.java
+ mkw.Event
+mkw/Track.java
+ mkw.Track
+mk8dx/TrackD.java
+ mk8dx.TrackD
+shared/useless/RaceStats.java
+ shared.useless.RaceStats
+Ui/Main.java
+ Ui.Main
 Ui/panels/Mk8dxSummaryPanel.java
  Ui.panels.Mk8dxSummaryPanel
  Ui.panels.Mk8dxSummaryPanel$1
@@ -57,60 +78,27 @@ Ui/panels/MkwTrackPanel.java
  Ui.panels.MkwTrackPanel$7
  Ui.panels.MkwTrackPanel$8
  Ui.panels.MkwTrackPanel$9
-Ui/Main.java
- Ui.Main
-shared/Format.java
- shared.Format
-Ui/panels/MkwSummaryPanel.java
- Ui.panels.MkwSummaryPanel
- Ui.panels.MkwSummaryPanel$1
- Ui.panels.MkwSummaryPanel$2
- Ui.panels.MkwSummaryPanel$3
- Ui.panels.MkwSummaryPanel$4
- Ui.panels.MkwSummaryPanel$5
- Ui.panels.MkwSummaryPanel$6
- Ui.panels.MkwSummaryPanel$7
- Ui.panels.MkwSummaryPanel$8
- Ui.panels.MkwSummaryPanel$8$1
- Ui.panels.MkwSummaryPanel$9
-mkw/Tier.java
- mkw.Tier
-mk8dx/TierD.java
- mk8dx.TierD
 Ui/panels/InputVerifier.java
  Ui.panels.InputVerifier
-mkw/Track.java
- mkw.Track
-mkw/Event.java
- mkw.Event
-mk8dx/TrackD.java
- mk8dx.TrackD
-shared/useless/Holder.java
- shared.useless.Holder
-Ui/panels/MkwAdvStatsPanel.java
- Ui.panels.MkwAdvStatsPanel
- Ui.panels.MkwAdvStatsPanel$1
- Ui.panels.MkwAdvStatsPanel$10
- Ui.panels.MkwAdvStatsPanel$11
- Ui.panels.MkwAdvStatsPanel$12
- Ui.panels.MkwAdvStatsPanel$13
- Ui.panels.MkwAdvStatsPanel$14
- Ui.panels.MkwAdvStatsPanel$15
- Ui.panels.MkwAdvStatsPanel$16
- Ui.panels.MkwAdvStatsPanel$17
- Ui.panels.MkwAdvStatsPanel$18
- Ui.panels.MkwAdvStatsPanel$19
- Ui.panels.MkwAdvStatsPanel$19$1
- Ui.panels.MkwAdvStatsPanel$2
- Ui.panels.MkwAdvStatsPanel$20
- Ui.panels.MkwAdvStatsPanel$20$1
- Ui.panels.MkwAdvStatsPanel$3
- Ui.panels.MkwAdvStatsPanel$4
- Ui.panels.MkwAdvStatsPanel$5
- Ui.panels.MkwAdvStatsPanel$6
- Ui.panels.MkwAdvStatsPanel$7
- Ui.panels.MkwAdvStatsPanel$8
- Ui.panels.MkwAdvStatsPanel$9
+Ui/panels/Mk8dxTrackPanel.java
+ Ui.panels.Mk8dxTrackPanel
+ Ui.panels.Mk8dxTrackPanel$1
+ Ui.panels.Mk8dxTrackPanel$10
+ Ui.panels.Mk8dxTrackPanel$11
+ Ui.panels.Mk8dxTrackPanel$11$1
+ Ui.panels.Mk8dxTrackPanel$12
+ Ui.panels.Mk8dxTrackPanel$2
+ Ui.panels.Mk8dxTrackPanel$3
+ Ui.panels.Mk8dxTrackPanel$4
+ Ui.panels.Mk8dxTrackPanel$5
+ Ui.panels.Mk8dxTrackPanel$6
+ Ui.panels.Mk8dxTrackPanel$7
+ Ui.panels.Mk8dxTrackPanel$8
+ Ui.panels.Mk8dxTrackPanel$9
+Ui/panels/BarUpdate.java
+ Ui.panels.BarUpdate
+Ui/Ui.java
+ Ui.Ui
 Ui/panels/Mk8dxAdvStatsPanel.java
  Ui.panels.Mk8dxAdvStatsPanel
  Ui.panels.Mk8dxAdvStatsPanel$1
@@ -135,8 +123,33 @@ Ui/panels/Mk8dxAdvStatsPanel.java
  Ui.panels.Mk8dxAdvStatsPanel$7
  Ui.panels.Mk8dxAdvStatsPanel$8
  Ui.panels.Mk8dxAdvStatsPanel$9
-Ui/panels/CustomDialog.java
- Ui.panels.CustomDialog
+Ui/panels/MkwAdvStatsPanel.java
+ Ui.panels.MkwAdvStatsPanel
+ Ui.panels.MkwAdvStatsPanel$1
+ Ui.panels.MkwAdvStatsPanel$10
+ Ui.panels.MkwAdvStatsPanel$11
+ Ui.panels.MkwAdvStatsPanel$12
+ Ui.panels.MkwAdvStatsPanel$13
+ Ui.panels.MkwAdvStatsPanel$14
+ Ui.panels.MkwAdvStatsPanel$15
+ Ui.panels.MkwAdvStatsPanel$16
+ Ui.panels.MkwAdvStatsPanel$17
+ Ui.panels.MkwAdvStatsPanel$18
+ Ui.panels.MkwAdvStatsPanel$19
+ Ui.panels.MkwAdvStatsPanel$19$1
+ Ui.panels.MkwAdvStatsPanel$2
+ Ui.panels.MkwAdvStatsPanel$20
+ Ui.panels.MkwAdvStatsPanel$20$1
+ Ui.panels.MkwAdvStatsPanel$3
+ Ui.panels.MkwAdvStatsPanel$4
+ Ui.panels.MkwAdvStatsPanel$5
+ Ui.panels.MkwAdvStatsPanel$6
+ Ui.panels.MkwAdvStatsPanel$7
+ Ui.panels.MkwAdvStatsPanel$8
+ Ui.panels.MkwAdvStatsPanel$9
+Ui/RaceDao.java
+ Ui.RaceDao
+ Ui.RaceDao$1
 Ui/panels/Mk8dxEnterTfPanel.java
  Ui.panels.Mk8dxEnterTfPanel
  Ui.panels.Mk8dxEnterTfPanel$1
@@ -148,7 +161,6 @@ Ui/panels/Mk8dxRaceInputPanel.java
  Ui.panels.Mk8dxRaceInputPanel$1
  Ui.panels.Mk8dxRaceInputPanel$10
  Ui.panels.Mk8dxRaceInputPanel$11
- Ui.panels.Mk8dxRaceInputPanel$12
  Ui.panels.Mk8dxRaceInputPanel$2
  Ui.panels.Mk8dxRaceInputPanel$3
  Ui.panels.Mk8dxRaceInputPanel$4
@@ -163,13 +175,9 @@ Ui/panels/MkwEnterTfPanel.java
  Ui.panels.MkwEnterTfPanel$2
  Ui.panels.MkwEnterTfPanel$3
  Ui.panels.MkwEnterTfPanel$4
-Ui/Ui.java
- Ui.Ui
 Ui/Gui.java
  Ui.Gui
  Ui.Gui$1
-shared/useless/RaceStats.java
- shared.useless.RaceStats
 Ui/panels/MkwRaceInputPanel.java
  Ui.panels.MkwRaceInputPanel
  Ui.panels.MkwRaceInputPanel$1
@@ -186,10 +194,6 @@ Ui/panels/MkwRaceInputPanel.java
  Ui.panels.MkwRaceInputPanel$7
  Ui.panels.MkwRaceInputPanel$8
  Ui.panels.MkwRaceInputPanel$9
-mk8dx/GpD.java
- mk8dx.GpD
-mk8dx/RaceD.java
- mk8dx.RaceD
 Ui/panels/MainMenu.java
  Ui.panels.MainMenu
  Ui.panels.MainMenu$1
@@ -211,8 +215,3 @@ Ui/panels/SettingsPanel.java
  Ui.panels.SettingsPanel$6
  Ui.panels.SettingsPanel$7
  Ui.panels.SettingsPanel$8
-mk8dx/EventD.java
- mk8dx.EventD
-Ui/RaceDao.java
- Ui.RaceDao
- Ui.RaceDao$1

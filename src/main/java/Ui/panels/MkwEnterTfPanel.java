@@ -99,6 +99,7 @@ public class MkwEnterTfPanel extends JPanel {
     public void initialize(){
         titleLabel.setText("Entering MKW Event ["+ (RaceDao.getEventsStored()+1)+"]");
         tierTf.setText(String.valueOf(RaceDao.getDefaultMkwTier()));
+        EventQueue.invokeLater( () -> formatTf.requestFocusInWindow() );
     }
 
     public void startEvent(){

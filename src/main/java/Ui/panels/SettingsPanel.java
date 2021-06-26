@@ -147,10 +147,10 @@ public class SettingsPanel extends JPanel {
                     RaceDao.updateDefaultTierMkw(Integer.parseInt(mkwTierTf.getText()));
                     sleep(150);
                     initialize();
-                    InputVerifier.InputErrorBox("Default Tier set to "+mkwTierTf.getText());
+                    InputVerifier.relativePopup("Default Tier set to "+mkwTierTf.getText(), "Success", randomWarningLabel);
                     mkwTierTf.setText("");
                 }else{
-                    InputVerifier.InputErrorBox("Invalid tier");
+                    InputVerifier.relativePopup("Invalid Tier", "error", randomWarningLabel);
                 }
             }
         });
@@ -162,10 +162,10 @@ public class SettingsPanel extends JPanel {
                     RaceDao.updateDefaultTierMk8dx(mk8dxTierTf.getText());
                     sleep(150);
                     initialize();
-                    InputVerifier.InputErrorBox("Default Tier set to "+mk8dxTierTf.getText());
+                    InputVerifier.relativePopup("Default Tier set to "+mk8dxTierTf.getText(), "Success", randomWarningLabel);
                     mk8dxTierTf.setText("");
                 }else{
-                    InputVerifier.InputErrorBox("Invalid tier");
+                    InputVerifier.relativePopup("Invalid Tier", "error", randomWarningLabel);
                 }
             }
         });
@@ -224,7 +224,7 @@ public class SettingsPanel extends JPanel {
                         System.out.println("no");
                     }
                 }else{
-                    InputVerifier.InputErrorBox("Invalid Number");
+                    InputVerifier.relativePopup("Invalid Number", "error", randomWarningLabel);
                 }
                 initialize();
             }
