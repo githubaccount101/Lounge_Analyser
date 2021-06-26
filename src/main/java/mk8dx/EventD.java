@@ -1,6 +1,7 @@
 
 package mk8dx;
 
+import mkw.Gp;
 import mkw.Race;
 import shared.Format;
 import java.util.ArrayList;
@@ -369,6 +370,20 @@ public class EventD {
                 + ", points: " + racePoints + ", dc points: " + dcPoints+", Total Points: "+totalPoints;
     }
 
+    public String getEventSummary(){
+        StringBuilder bob = new StringBuilder();
+        if(this.gpPlayed==0){
+            bob.append(currentGp.getGpString()+"\n");
+
+        }
+        for (GpD gp : completedGps) {
+            bob.append(gp.getGpString()+"\n");
+        }
+        if (this.racesPlayed < 12&&this.gpPlayed!=0) {
+            bob.append(currentGp.getGpString()+"\n");
+        }
+        return bob.toString();
+    }
     public void printEvent() {
         if(this.gpPlayed==0){
             currentGp.printRaces();
@@ -380,6 +395,8 @@ public class EventD {
             currentGp.printRaces();
         }
     }
+
+
 
     @Deprecated
     public void undoLastRaceOrDc(){

@@ -370,6 +370,27 @@ public class Event {
         }
     }
 
+    public String getGpStringTitle(Gp gp){
+        return "~~[GP "+gp.getGpId()+"]~~ Races-Played: "+gp.getRacesPlayedInGp()+
+                ", Points: "+gp.getRacePoints()+", DC Points: "+gp.getDcPts();
+    }
+
+
+    public String getEventSummary(){
+        StringBuilder bob = new StringBuilder();
+        if(this.gpPlayed==0){
+            bob.append(currentGp.getGpString()+"\n");
+
+        }
+        for (Gp gp : completedGps) {
+            bob.append(gp.getGpString()+"\n");
+        }
+        if (this.racesPlayed < 12&&this.gpPlayed!=0) {
+            bob.append(currentGp.getGpString()+"\n");
+        }
+        return bob.toString();
+    }
+
     public Race getMostRecentlyCompletedRace(){
 
         if(this.isEventDone()){

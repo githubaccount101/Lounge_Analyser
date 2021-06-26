@@ -96,6 +96,8 @@ public class Gp {
         racePoints = sum;
     }
 
+
+
     public int getRacePoints(){
         return racePoints;
     }
@@ -227,6 +229,17 @@ public class Gp {
 
     public String toString(){
         return "GP Status:: Event: "+event.getEventId()+", GP: "+gpId+", Races-Played: "+racesPlayedInGp+", Points: "+racePoints+", DC Points: "+dcPts;
+    }
+
+    public String getGpString(){
+        StringBuilder bob = new StringBuilder();
+        bob.append("~~[GP "+this.gpId+"]~~ Races-Played: "+racesPlayedInGp+", Total Points: "+totalPoints+", Points: "+racePoints+", DC Points: "+dcPts+"\n")
+                .append("-----------------------------------------------------------------------------------------------------------"+"\n");
+                for(Race r:races){
+                    bob.append(r.toString()+"\n");
+                }
+                bob.append("-----------------------------------------------------------------------------------------------------------"+"\n");
+        return bob.toString();
     }
 
     public void printRaces(){

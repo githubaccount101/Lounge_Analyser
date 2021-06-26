@@ -3,7 +3,7 @@ package Ui.panels;
 import Ui.Gui;
 import Ui.RaceDao;
 import mk8dx.*;
-import mkw.Race;
+
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Mk8dxRaceInputPanel extends JPanel {
@@ -50,6 +49,8 @@ public class Mk8dxRaceInputPanel extends JPanel {
     static EventD event = null;
     static String status = "n/a";
 
+    JButton summaryButton = new JButton("All Races");
+
     public Mk8dxRaceInputPanel(CardLayout card, JPanel cardPane){
 
         GridBagLayout layout = new GridBagLayout();
@@ -59,7 +60,9 @@ public class Mk8dxRaceInputPanel extends JPanel {
         gbc.insets = new Insets(2,10,2,10);
 
         Setter s = new Setter();
-        s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1, 1,0.1,true);
+        s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1, 1,0.1,true);
+        s.addobjects(summaryButton,this, layout,gbc,2,0,1 , 1, 1,0.1,true);
+
 
         s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.00001,1,true);
         s.addobjects(statusTA,this, layout,gbc,1,1,2 , 2,1,1,true);
@@ -95,7 +98,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
         rejoinButtonYes.setEnabled(true);
         s.addobjects(rejoinButtonYes,this, layout,gbc,2, 13,1,1,1,0.1,true);
 
-
+        JButton summaryButton = new JButton("All Races");
 
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -104,6 +107,17 @@ public class Mk8dxRaceInputPanel extends JPanel {
                 status = "n/a";
                 Gui.frame.setSize(450,480);
                 card.show(cardPane,"mk8dxTf");
+            }
+        });
+
+        summaryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String races = event.getEventSummary();
+                final JOptionPane pane = new JOptionPane(races);
+                final JDialog d = pane.createDialog((JFrame)null, "All Races");
+                d.setLocationRelativeTo(resetBox);
+                d.setVisible(true);
             }
         });
 
@@ -120,6 +134,8 @@ public class Mk8dxRaceInputPanel extends JPanel {
                     nextButton.setEnabled(false);
                     submitButton.setEnabled(true);
                 }
+                setPostRaceTF();
+                startTf.setText("12");
             }
         });
 

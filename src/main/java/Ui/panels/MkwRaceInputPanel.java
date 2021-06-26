@@ -60,11 +60,9 @@ public class MkwRaceInputPanel extends JPanel {
 
     boolean onOff = false;
 
+    JButton summaryButton = new JButton("All Races");
 
-
-
-
-    public MkwRaceInputPanel(CardLayout card, JPanel cardPane){
+    public MkwRaceInputPanel(CardLayout card, JPanel cardPane, JFrame gui){
 
         GridBagLayout layout = new GridBagLayout();
         statusTA.setEditable(false);
@@ -73,7 +71,8 @@ public class MkwRaceInputPanel extends JPanel {
         gbc.insets = new Insets(2,10,2,10);
 
         Setter s = new Setter();
-        s.addobjects(titleLabel,this, layout,gbc,0,0,3 , 1, 1,0.1,true);
+        s.addobjects(titleLabel,this, layout,gbc,0,0,2 , 1, 1,0.1,true);
+        s.addobjects(summaryButton,this, layout,gbc,2,0,1 , 1, 1,0.1,true);
 
         s.addobjects(statusLabel,this, layout,gbc,0,1,1, 1,0.0000001,1,true);
         s.addobjects(statusTA,this, layout,gbc,1,1,2 , 2,1,1,true);
@@ -125,6 +124,17 @@ public class MkwRaceInputPanel extends JPanel {
             }
         });
 
+        summaryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String races = event.getEventSummary();
+                final JOptionPane pane = new JOptionPane(races);
+                final JDialog d = pane.createDialog((JFrame)null, "All Races");
+                d.setLocationRelativeTo(resetBox);
+                d.setVisible(true);
+            }
+        });
+
         dcButtonOn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -138,6 +148,7 @@ public class MkwRaceInputPanel extends JPanel {
                     submitButton.setEnabled(true);
                 }
                 onOff = true;
+                setPostDcTF();
             }
         });
 
@@ -156,6 +167,7 @@ public class MkwRaceInputPanel extends JPanel {
                     dcButtonOff.setEnabled(false);
                 }
                 onOff = false;
+                setPostRaceTF();
             }
         });
 
@@ -210,11 +222,26 @@ public class MkwRaceInputPanel extends JPanel {
                     System.out.println(j.getMessage());
                 }
 
+                String preTrack;
+                String preStart ;
+                String preFinish ;
+                String prePlayers ;
+
                 Race preRace = event.getMostRecentlyCompletedRace();
-                String preTrack = preRace.getTrack().getAbbreviation();
-                String preStart = String.valueOf(preRace.getStart());
-                String preFinish = String.valueOf(preRace.getFinish());
-                String prePlayers = String.valueOf(preRace.getPlayers());
+
+                if(preRace.isPlaceholder()==false){
+                    preTrack = preRace.getTrack().getAbbreviation();
+                    preStart = String.valueOf(preRace.getStart());
+                    preFinish = String.valueOf(preRace.getFinish());
+                    prePlayers = String.valueOf(preRace.getPlayers());
+                }else{
+                    preTrack = "";
+                    preStart = "";
+                    preFinish = "";
+                    prePlayers = "";
+                }
+
+
 
                 event.undoProtocall();
                 event.preRaceStatus();
@@ -337,7 +364,7 @@ public class MkwRaceInputPanel extends JPanel {
     }
 
     public void setTitle(){
-        titleLabel.setText("[Event"+event.getEventId()+"] Tier:"+event.getTier().getTier()+" Format:"+event.getFormat().getFormat());
+        titleLabel.setText("[Event"+event.getEventId()+"] T"+event.getTier().getTier()+" "+event.getFormat().getFormat());
     }
 
     public void setStatusEnd(){
@@ -470,6 +497,44 @@ public class MkwRaceInputPanel extends JPanel {
 
     public void setTrackTf(){
         trackTf.setText(Track.randomTrack().getAbbreviation());
+    }
+
+    private void setPostDcTF(){
+        trackTf.setText("");
+
+        if(event.getNumberOfCompletedGps() == 0){
+            //no completed gps
+            if(event.currentGpIsUnplayed()){
+                //first gp, before first race
+                startTf.setText("");
+            } else if(event.currentGp.getRacesPlayedInGp()==1) {
+                //after the first race of the first GP
+                gpStart = 0;
+                System.out.println("after the first race of the first GP, gpStart is now: "+gpStart);
+                startTf.setText("");
+            }else if(event.currentGp.getRacesPlayedInGp()>1&&event.currentGp.getRacesPlayedInGp()<event.currentGp.getMaxRaces()){
+                //middle of first gp, after first before the max number of races in the gp are completed
+                startTf.setText("");
+            }
+        }else{
+            if(event.currentGpIsUnplayed()){
+                //after at least 1 gp is played, but before the first race of a new gp is played
+                System.out.println("at the start of a new gp, the default startTf text is the gpStart value of:" +gpStart);
+                gpStart = 0;
+                startTf.setText("");
+                System.out.println("");
+            }else if(event.currentGp.oneRaceIsPlayed()){
+                //after at least 1 gp has been  played, and one race has been played in the new gp
+                gpStart = 0;
+                startTf.setText("");
+            }else if(event.currentGp.getRacesPlayedInGp()>1&&event.currentGp.getRacesPlayedInGp()<event.currentGp.getMaxRaces()){
+                //after at least 1 gp has been  played, and more than 1 race has been played in the gp
+                startTf.setText("");
+                gpStart = 0;
+            }
+        }
+        finishTf.setText("");
+        trackTf.requestFocusInWindow();
     }
 
     private void setPostRaceTF(){

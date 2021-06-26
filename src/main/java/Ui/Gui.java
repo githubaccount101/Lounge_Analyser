@@ -20,7 +20,7 @@ public class Gui {
             @Override
             public Dimension getPreferredSize() {
                 // given some values of w & h
-                return new Dimension(420, 480);
+                return new Dimension(450, 480);
             }
         };
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,7 +34,7 @@ public class Gui {
         Mk8dxRaceInputPanel mk8dxRaceInput= new Mk8dxRaceInputPanel(card, cardPane );
         Mk8dxEnterTfPanel mk8dxTf= new Mk8dxEnterTfPanel(card, cardPane, mk8dxRaceInput);
 
-        MkwRaceInputPanel mkwRaceInput= new MkwRaceInputPanel(card, cardPane);
+        MkwRaceInputPanel mkwRaceInput= new MkwRaceInputPanel(card, cardPane, frame);
         MkwEnterTfPanel mkwTf = new MkwEnterTfPanel(card, cardPane, mkwRaceInput);
 
         MkwTrackPanel mkwTrackPanel = new MkwTrackPanel(card, cardPane);

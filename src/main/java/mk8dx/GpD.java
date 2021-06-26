@@ -1,6 +1,7 @@
 
 package mk8dx;
 
+import mkw.Race;
 import shared.Format;
 
 import java.util.ArrayList;
@@ -187,6 +188,17 @@ public class GpD {
             System.out.println(race);
         }
         System.out.println("-----------------------------------------------------------------------------------------------------------");
+    }
+
+    public String getGpString(){
+        StringBuilder bob = new StringBuilder();
+        bob.append("~~[GP "+this.gpId+"]~~ Races-Played: "+racesPlayedInGp+", Total Points: "+totalPoints+", Points: "+racePoints+", DC Points: "+dcPts+"\n")
+                .append("-----------------------------------------------------------------------------------------------------------"+"\n");
+        for(RaceD r:races){
+            bob.append(r.toString()+"\n");
+        }
+        bob.append("-----------------------------------------------------------------------------------------------------------"+"\n");
+        return bob.toString();
     }
 
     @Deprecated
