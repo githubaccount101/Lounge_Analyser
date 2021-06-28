@@ -847,14 +847,25 @@ public class RaceDao {
              ResultSet rs    = stmt.executeQuery(sql)){
 
             var series = new XYSeries("Total Event Score");
-            int x = 1;
+
+            ArrayList<Integer> holder = new ArrayList<>();
+
             while(rs.next()){
                 int points = rs.getInt("points");
-                series.add(x,points);
-                x++;
+                holder.add(points);
+            }
+
+            ArrayList<Integer> holder2 = new ArrayList<>();
+            for(int i=holder.size()-1;i>=0;i--){
+                holder2.add(holder.get(i));
+            }
+
+            int start = 1;
+            for(int a:holder2){
+                series.add(start,a);
+                start++;
             }
             return series;
-
 
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -868,11 +879,23 @@ public class RaceDao {
              ResultSet rs    = stmt.executeQuery(sql)){
 
             var series = new XYSeries("Race Finish Position");
-            int x = 1;
+
+            ArrayList<Integer> holder = new ArrayList<>();
+
             while(rs.next()){
-                int points = rs.getInt("finish");
-                series.add(x,points);
-                x++;
+                int points = rs.getInt(1);
+                holder.add(points);
+            }
+
+            ArrayList<Integer> holder2 = new ArrayList<>();
+            for(int i=holder.size()-1;i>=0;i--){
+                holder2.add(holder.get(i));
+            }
+
+            int start = 1;
+            for(int a:holder2){
+                series.add(start,a);
+                start++;
             }
             return series;
 
@@ -890,19 +913,27 @@ public class RaceDao {
 
             var series = new XYSeries("Moving Average");
 
-            ArrayList<Integer> host = new ArrayList<>();
+            ArrayList<Integer> holder = new ArrayList<>();
+
             while(rs.next()){
                 int points = rs.getInt(1);
-                host.add(points);
-            }
-            ArrayList<Double> movingAvg = movingAvgTransformation(host);
-            int x = 1;
-            for(Double d:movingAvg){
-                series.add(x,d);
-                x++;
+                holder.add(points);
             }
 
+            ArrayList<Integer> holder2 = new ArrayList<>();
+            for(int i=holder.size()-1;i>=0;i--){
+                holder2.add(holder.get(i));
+            }
+
+            ArrayList<Double> movingAvg = movingAvgTransformation(holder2);
+
+            int start = 1;
+            for(double a:movingAvg){
+                series.add(start,a);
+                start++;
+            }
             return series;
+
 
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -913,52 +944,47 @@ public class RaceDao {
 
 
     public static ArrayList<Double> movingAvgTransformation(ArrayList<Integer> original){
-        int divisor = original.size()/5+1;
+        int divisor = original.size()/4+1;
+        System.out.println("divisor: "+divisor);
+
         ArrayList<Double> neo = new ArrayList<>();
+
         int i = 0;
-
-        System.out.println("--------------");
-        System.out.println("divisor is: "+divisor);
-        System.out.println("transforming");
-        System.out.println("--------------");
         for(int a:original){
-            boolean smallEnough = (i+divisor)<original.size();
-            double newElement;
+            double output;
+            //if i is small enough
+            if((i+divisor)<=(original.size()-1)){
+                int sum = 0;
+                int index=0;
+                int summedDivisor = 0;
 
-            if(smallEnough){
-                int tempDivisor =divisor+1;
-                int weightDivisor = 0;
-
-                int sum = original.get(i)*tempDivisor;
-                weightDivisor +=tempDivisor;
-
-                for(int n = 0;n<divisor;n++){
-                    tempDivisor--;
-                    sum+=original.get(i+n+1)*(tempDivisor);
-                    weightDivisor +=tempDivisor;
-
+                for(int n = divisor; n>0;n--){
+                    sum+=original.get(i+index)*n;
+                    index++;
+                    summedDivisor+=n;
                 }
-                newElement = (1.0*(sum))/((1.0)*(weightDivisor));
+                output = 1.0*sum/(1.0*summedDivisor);
+                System.out.println(a+" is now "+output);
+                neo.add(output);
+            }else if((original.size()-1)-i==0){
+                output=a;
+                System.out.println(a+" is now "+output);
+                neo.add(output);
+            } else{//if we are too close to the end of the list
+                int newDivisor = (original.size()-1)-i;
+                int sum = 0;
+                int index=0;
+                int summedDivisor = 0;
 
-            }else if(original.size()-i-1>0){
-                int tempDivisor = original.size()-i-1;
-                int weightDivisor = 0;
-
-                int sum = original.get(i)*tempDivisor;
-                weightDivisor +=tempDivisor;
-
-                for(int n = 0;n<tempDivisor;n++){
-                    tempDivisor--;
-                    sum+=original.get(i+n+1)*(tempDivisor);
-                    weightDivisor +=tempDivisor;
+                for(int n = newDivisor; n>0;n--){
+                    sum+=original.get(i+index)*n;
+                    index++;
+                    summedDivisor+=n;
                 }
-                newElement = (1.0*(sum))/((1.0)*(weightDivisor));
-
-            }else{
-                newElement = 1.0*original.get(i);
-
+                output = 1.0*sum/(1.0*summedDivisor);
+                System.out.println(a+" is now "+output);
+                neo.add(output);
             }
-            neo.add(newElement);
             i++;
         }
         return neo;
@@ -1046,7 +1072,7 @@ public class RaceDao {
         );
 
         XYPlot plot = chart.getXYPlot();
-        plot.getDomainAxis().setInverted(false);
+        plot.getDomainAxis().setInverted(true);
         plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         plot.getRangeAxis().setInverted(true);
         plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
@@ -1146,4 +1172,58 @@ public class RaceDao {
             return null;
         }
     }
+
+    @Deprecated
+    public static ArrayList<Double> movingAvgTransformationOld(ArrayList<Integer> original){
+        int divisor = original.size()/5+1;
+        ArrayList<Double> neo = new ArrayList<>();
+        int i = 0;
+
+        System.out.println("--------------");
+        System.out.println("divisor is: "+divisor);
+        System.out.println("transforming");
+        System.out.println("--------------");
+        for(int a:original){
+            boolean smallEnough = (i+divisor)<original.size();
+            double newElement;
+
+            if(smallEnough){
+                int tempDivisor =divisor+1;
+                int weightDivisor = 0;
+
+                int sum = original.get(i)*tempDivisor;
+                weightDivisor +=tempDivisor;
+
+                for(int n = 0;n<divisor;n++){
+                    tempDivisor--;
+                    sum+=original.get(i+n+1)*(tempDivisor);
+                    weightDivisor +=tempDivisor;
+
+                }
+                newElement = (1.0*(sum))/((1.0)*(weightDivisor));
+
+            }else if(original.size()-i-1>0){
+                int tempDivisor = original.size()-i-1;
+                int weightDivisor = 0;
+
+                int sum = original.get(i)*tempDivisor;
+                weightDivisor +=tempDivisor;
+
+                for(int n = 0;n<tempDivisor;n++){
+                    tempDivisor--;
+                    sum+=original.get(i+n+1)*(tempDivisor);
+                    weightDivisor +=tempDivisor;
+                }
+                newElement = (1.0*(sum))/((1.0)*(weightDivisor));
+
+            }else{
+                newElement = 1.0*original.get(i);
+
+            }
+            neo.add(newElement);
+            i++;
+        }
+        return neo;
+    }
+
 }
