@@ -14,6 +14,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
     implementation 'org.xerial:sqlite-jdbc:3.34.0'
     implementation group: 'org.jfree', name: 'jfreechart', version: '1.5.3'
+    implementation 'com.squareup.retrofit2:converter-gson'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }
 
 test {

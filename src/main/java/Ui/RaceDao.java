@@ -1020,7 +1020,7 @@ public class RaceDao {
         plot.getDomainAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
-        var renderer = new XYSplineRenderer();
+        var renderer = new XYSplineRenderer(8);
 
         renderer.setSeriesShapesVisible(1, false);
 
@@ -1078,7 +1078,7 @@ public class RaceDao {
         plot.getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         plot.getRangeAxis().setRange(-2, 14);
 
-        var renderer = new XYSplineRenderer();
+        var renderer = new XYSplineRenderer(8);
 
         renderer.setSeriesShapesVisible(1, false);
 
