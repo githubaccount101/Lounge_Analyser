@@ -34,6 +34,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
     JTextField startTf = new JTextField("12");
     JTextField finishTf = new JTextField("12");
 
+
     JButton nextButton = new JButton("Next Race");
     JButton backButton = new JButton("Back");
     JButton undoButton = new JButton("Undo Race");

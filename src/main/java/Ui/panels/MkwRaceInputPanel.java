@@ -1,11 +1,12 @@
 package Ui.panels;
 
+import Ui.HtmlRace;
 import Ui.RaceDao;
 
 import Ui.Gui;
-import mk8dx.TrackD;
 import mkw.*;
 import mkw.Event;
+import Ui.MogiUpdater;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -39,7 +40,7 @@ public class MkwRaceInputPanel extends JPanel {
     JTextField startTf = new JTextField("");
     JTextField finishTf = new JTextField("");
 
-
+    JButton autoButton = new JButton("AutoFill");
     JButton nextButton = new JButton("Next Race");
     JButton backButton = new JButton("Back");
     JButton undoButton = new JButton("Undo Race");
@@ -55,8 +56,8 @@ public class MkwRaceInputPanel extends JPanel {
     static Event event = null;
     static String status = "n/a";
     static int gpStart;
-    static int completedGps;
     static boolean startChange = false;
+    static MogiUpdater mogiUpdater;
 
     boolean onOff = false;
 
@@ -93,6 +94,7 @@ public class MkwRaceInputPanel extends JPanel {
         s.addobjects(playersTf,this, layout,gbc,2, 9,1,1, 1,0.1,true);
 
         s.addobjects(resetBox,this, layout,gbc,1, 10,1,1,1,0.1,true);
+        s.addobjects(autoButton,this, layout,gbc,2, 10,1,1,1,0.1,true);
 
         undoButton.setEnabled(false);
         s.addobjects(undoButton,this, layout,gbc,1, 11,1,1,1,0.1,true);
@@ -121,6 +123,27 @@ public class MkwRaceInputPanel extends JPanel {
                 status = "n/a";
                 Gui.frame.setSize(450,480);
                 card.show(cardPane,"mkwTf");
+            }
+        });
+
+        autoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mogiUpdater.initializeRaces(RaceDao.getFc());
+                int raceNumber = event.getRacesPlayed()+1;
+
+                if(mogiUpdater.getRaces().containsKey(raceNumber)){
+                    HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
+                    trackTf.setText(race.getTrack());
+                    playersTf.setText(String.valueOf(race.getPlayers()));
+                    finishTf.setText(String.valueOf(race.getFinish()));
+                    if(raceNumber==1){
+                        startTf.setText(String.valueOf(mogiUpdater.initialStart));
+                    }
+                }else{
+                    InputVerifier.relativePopup("failed to find race/room","autofill error"
+                    ,resetBox);
+                }
             }
         });
 
@@ -416,6 +439,7 @@ public class MkwRaceInputPanel extends JPanel {
             event.postRacestatus();
             event.preRaceStatus();
             resetBox.setSelected(false);
+            autoButton.setEnabled(false);
         }
     }
 
@@ -642,6 +666,14 @@ public class MkwRaceInputPanel extends JPanel {
         playersTf.setText("12");
         startTf.setText("");
         finishTf.setText("");
+        mogiUpdater = new MogiUpdater();
+        mogiUpdater.setUp();
+        if(RaceDao.getFc().equals("nope")){
+            autoButton.setEnabled(false);
+        }else{
+            autoButton.setEnabled(true);
+        }
+
         EventQueue.invokeLater( () -> trackTf.requestFocusInWindow() );
     }
 }

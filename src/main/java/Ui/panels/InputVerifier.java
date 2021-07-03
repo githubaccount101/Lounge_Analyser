@@ -159,6 +159,10 @@ public class InputVerifier {
         d.setVisible(true);
     }
 
+    public static boolean verifyFc(String input){
+        return input.matches("^[0-9]{4}[-][0-9]{4}[-][0-9]{4}$");
+    }
+
     @Deprecated
     public static void InputErrorBox(String infoMessage)
     {

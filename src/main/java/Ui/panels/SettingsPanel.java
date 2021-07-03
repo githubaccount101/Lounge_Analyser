@@ -20,6 +20,12 @@ public class SettingsPanel extends JPanel {
 
     JLabel dbLabel = new JLabel("");
 
+    JLabel fcLabel = new JLabel("Set fc");
+    JTextField fcTf = new JTextField("");
+    JButton fcButton = new JButton("Set");
+
+    JLabel currentfcLabel = new JLabel();
+
     JLabel mkwTierLabel = new JLabel("Set new default MKW tier:");
     JTextField mkwTierTf = new JTextField("");
     JButton mkwTierButton = new JButton("Set");
@@ -67,17 +73,19 @@ public class SettingsPanel extends JPanel {
 
         s.addobjects(dbLabel,this, layout,gbc,0,1,3 , 1,1,1,true);
 
-        s.addobjects(mkwTierLabel,this, layout,gbc,0, 2,1,1,1,1, true);
-        s.addobjects(mkwTierTf,this, layout,gbc,1, 2,1,1,1,1, true);
-        s.addobjects(mkwTierButton,this, layout,gbc,2, 2,1,1,1,1, true);
+        s.addobjects(fcLabel,this, layout,gbc,0, 2,1,1,1,1, true);
+        s.addobjects(fcTf,this, layout,gbc,1, 2,1,1,1,1, true);
+        s.addobjects(fcButton,this, layout,gbc,2, 2,1,1,1,1, true);
 
-        s.addobjects(currentMkwTierLabel,this, layout,gbc,0, 3,1,1,1,1, true);
+        s.addobjects(currentfcLabel,this, layout,gbc,0, 2,1,1,1,1, true);
 
-        s.addobjects(mk8dxTierLabel,this, layout,gbc,0, 4,1,1,1,1, true);
-        s.addobjects(mk8dxTierTf,this, layout,gbc,1, 4,1,1,1,1, true);
-        s.addobjects(mkw8dxTierButton,this, layout,gbc,2, 4,1,1,1,1, true);
+        s.addobjects(mkwTierLabel,this, layout,gbc,0, 4,1,1,1,1, true);
+        s.addobjects(mkwTierTf,this, layout,gbc,1, 4,1,1,1,1, true);
+        s.addobjects(mkwTierButton,this, layout,gbc,2, 4,1,1,1,1, true);
 
-        s.addobjects(currentMk8dxTierLabel,this, layout,gbc,0, 5,1,1,1,1, true);
+        s.addobjects(mk8dxTierLabel,this, layout,gbc,0, 5,1,1,1,1, true);
+        s.addobjects(mk8dxTierTf,this, layout,gbc,1, 5,1,1,1,1, true);
+        s.addobjects(mkw8dxTierButton,this, layout,gbc,2, 5,1,1,1,1, true);
 
         s.addobjects(randomLabel,this, layout,gbc,0, 6,1,1,1,1, true);
         s.addobjects(randomTf,this, layout,gbc,1, 6,1,1,1,1, true);
@@ -104,6 +112,19 @@ public class SettingsPanel extends JPanel {
 
         resetButton.setOpaque(false);
         resetButton.setContentAreaFilled(false);
+
+        fcButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(InputVerifier.verifyFc(fcTf.getText())){
+                    RaceDao.updatefc(fcTf.getText());
+                    InputVerifier.relativePopup("fc set to "+fcTf.getText(), "Success", randomWarningLabel);
+                    fcTf.setText("");
+                }else {
+                    InputVerifier.relativePopup("Invalid fc", "error", randomWarningLabel);
+                }
+            }
+        });
 
         deleteMkwButton.addActionListener(new ActionListener() {
             @Override

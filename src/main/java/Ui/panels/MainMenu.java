@@ -26,6 +26,9 @@ public class MainMenu extends JPanel {
 
     JTextArea randomStatus = new JTextArea("Program has randomly generated events,"+"\n"+
             "clear all events in settings to enable event storage");
+    JTextArea fcStatus = new JTextArea("Set fc in settings to enable"+"\n"+
+            "race autofill for mkw races");
+
 
 
     public MainMenu(CardLayout card, JPanel cardPane, MkwEnterTfPanel mkwEnterTfPanel, Mk8dxEnterTfPanel mk8dxEnterTfPanel,
@@ -64,6 +67,11 @@ public class MainMenu extends JPanel {
 
         s.addobjects(mkwAdvButton,this, layout,gbc,0,5,1 , 1,1,1);
         s.addobjects(mk8dxAdvButton,this, layout,gbc,1,5,1, 1,1,1);
+
+        randomStatus.setEditable(false);
+        s.addobjects(fcStatus,this, layout,gbc,0,6,2 , 1,.000001,1, false, false);
+
+
 
 
         storeMkwButton.addActionListener(new ActionListener() {
@@ -150,6 +158,7 @@ public class MainMenu extends JPanel {
     }
 
     public void initialize(){
+
         if(RaceDao.isRandom()){
             storeMkwButton.setEnabled(false);
             storeMk8dxButton.setEnabled(false);
@@ -158,6 +167,11 @@ public class MainMenu extends JPanel {
             storeMkwButton.setEnabled(true);
             storeMk8dxButton.setEnabled(true);
             randomStatus.setVisible(false);
+        }
+        if(RaceDao.getFc().equals("nope")){
+            fcStatus.setVisible(true);
+        }else{
+            fcStatus.setVisible(false);
         }
     }
 

@@ -5,36 +5,49 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Scanner;
 
-@Deprecated
-public class Main {
+
+public class MogiUpdater {
 
     static String rId = "";
     static final String roomUrl = "https://wiimmfi.de/stats/mkwx/list/";
+    public String finalUrl = "";
+    public HashMap<Integer, HtmlRace> races = new HashMap<>();
+    public int initialStart = 0;
 
-
-    public static void main(String[] args) {
-        MogiUpdater mogi = new MogiUpdater();
-        mogi.setUp();
-        mogi.initializeRaces("2625-9382-5901");
-
-        for(HtmlRace race:mogi.getRaces().values()){
-            System.out.println(race);
-        }
+    public void setUp(){
+        races.clear();
     }
 
-    public static void testRoom(String friendCode){
-        Document doc = null;
-        try {
-            doc = Jsoup.connect("https://wiimmfi.de/stats/mkwx/list/r3113399").get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public HashMap<Integer, HtmlRace> getRaces() {
+        return races;
+    }
 
+    public void initializeRaces(String friendCode){
+        Document doc = null;
+
+        if(finalUrl.isBlank()){
+            try {
+                String url = roomUrl+getRoomId(friendCode);
+                if(url.equals(roomUrl)){
+                    System.out.println("not found in room");
+                    return;
+                }else{
+                    finalUrl=url;
+                }
+                doc = Jsoup.connect(url).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                doc = Jsoup.connect(finalUrl).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         Elements tables = doc.getElementsByClass("table11");
         for(Element table:tables){
@@ -44,17 +57,27 @@ public class Main {
 
                 int i = 0;
                 int finish = 0;
-                int raceCounter = 0;
+                boolean satOut = false;
+                int raceid = 0;
+
                 for(Element subElement: subElements){
                     if(subElement.hasAttr("id")){
                         Elements tableHeader = subElement.getAllElements();
                         for(Element e:tableHeader){
                             if(e.hasClass("tc")){
+
                                 if(i!=0||finish!=0){
                                     System.out.println(friendCode +" placed "+finish+" out of "+i);
                                 }
-                                i =0;
-                                finish = 0;
+
+                                if(races.containsKey(raceid)){
+                                    HtmlRace htmlRace = races.get(raceid);
+                                    htmlRace.setSatOut(satOut);
+                                    htmlRace.setPlayers(i);
+                                    htmlRace.setFinish(finish);
+                                }
+
+
                                 String longText = e.text();
                                 String raceNumber = longText.substring(longText.lastIndexOf("#") + 1);
                                 String race = raceNumber.substring( 0, raceNumber.indexOf(")"));
@@ -63,8 +86,20 @@ public class Main {
                                 String track = preTrack.substring(0,preTrack.indexOf(" ("));
                                 String track2 = track.substring(track.indexOf(" ")+1);
 
+
+
                                 System.out.println("race: "+race+"      ");
                                 System.out.print(track2+"\n");
+
+                                int raceInt = Integer.parseInt(race);
+                                raceid=raceInt;
+
+                                if(races.containsKey(raceInt)==false){
+                                    races.put(raceInt, new HtmlRace(raceInt, track2));
+                                }
+
+                                i =0;
+                                finish = 0;
                             }
                         }
                     }
@@ -77,7 +112,7 @@ public class Main {
                         i++;
                         if(fc.matches(friendCode)){
                             finish = i;
-                            System.out.println("fc found for this race");
+                            satOut = false;
                         }
                     }
                 }
@@ -85,14 +120,20 @@ public class Main {
                 if(i!=0||finish!=0){
                     System.out.println(friendCode +" placed "+finish+" out of "+i);
                 }
+                if(races.containsKey(raceid)){
+                    HtmlRace htmlRace = races.get(raceid);
+                    htmlRace.setSatOut(satOut);
+                    htmlRace.setPlayers(i);
+                    htmlRace.setFinish(finish);
+                }
                 i =0;
                 finish = 0;
+                System.out.println("=======================================");
             }
         }
     }
 
-
-    public static String getRoomId(String friendCode){
+    public String getRoomId(String friendCode){
         Document doc = null;
         try {
             doc = Jsoup.connect("https://wiimmfi.de/stats/mkwx").get();
@@ -105,23 +146,29 @@ public class Main {
         for(Element table:tables){
             Elements tableElements = table.children();
             for(Element tableElement:tableElements){
+                int i = 0;
                 Elements subElements = tableElement.children();
                 for(Element subElement: subElements){
 
                     if(subElement.hasAttr("id")){
                         String id = subElement.id();
-
+                        i=0;
                         rId = id;
-                        System.out.println("rId is now: "+id);
+                        System.out.println("Searching room id: "+id);
                     }
 
                     if(subElement.className().matches("tr0")||subElement.className().matches("tr1")) {
                         String fc = subElement.text();
                         fc = fc.replaceAll("\\s.*", "");
-                        System.out.println(fc);
+                        i++;
+
 
                         if(fc.matches(friendCode)){
-                            System.out.println(fc+ "is in room: "+rId);
+                            System.out.println(fc+ " found in room: "+rId);
+                            System.out.println("");
+                            System.out.println("---------------------");
+                            System.out.println("");
+                            initialStart=i;
                             return rId;
                         }
                     }
@@ -131,4 +178,6 @@ public class Main {
         rId = "";
         return "";
     }
+
+
 }

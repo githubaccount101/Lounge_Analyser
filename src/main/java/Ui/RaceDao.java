@@ -111,7 +111,7 @@ public class RaceDao {
         String sql5 = "CREATE TABLE IF NOT EXISTS events (eventid int, tier int, format varchar(10),points int, nodc boolean)";
         String sql7 = "CREATE TABLE IF NOT EXISTS eventsD (eventid int,tier varchar(10), format varchar(10),points int, nodc boolean)";
         String sql9 = "CREATE TABLE IF NOT EXISTS gps (gpid REAL,tier int, format varchar(10),points int, nodc boolean, fullgp boolean)";
-        String sql11 = "CREATE TABLE IF NOT EXISTS defaultTiers (mkw int, mk8dx varchar(10), randomized boolean)";
+        String sql11 = "CREATE TABLE IF NOT EXISTS defaultTiers (mkw int, mk8dx varchar(10), randomized boolean, fc varchar(14))";
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
 
@@ -213,12 +213,13 @@ public class RaceDao {
     }
 
     private  static  void insertDefaultTiers(){
-        String sql = "INSERT INTO defaultTiers (mkw,mk8dx,randomized) VALUES (?,?,?)";
+        String sql = "INSERT INTO defaultTiers (mkw,mk8dx,randomized, fc) VALUES (?,?,?,?)";
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, 1);
             pstmt.setString(2,"f");
             pstmt.setBoolean(3,false);
+            pstmt.setString(4,"nope");
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -238,6 +239,20 @@ public class RaceDao {
         }
     }
 
+    public static void updatefc(String fc){
+        String sql = "UPDATE defaultTiers SET fc = ? ";
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, fc);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
     public static void updateDefaultTierMk8dx(String tier){
         String sql = "UPDATE defaultTiers SET mk8dx = ? ";
 
@@ -248,6 +263,21 @@ public class RaceDao {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static String getFc(){
+        String sql = "SELECT fc       \n" +
+                "  FROM defaultTiers";
+        try (Connection conn = connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)){
+
+            String fc = rs.getString("fc");
+            return fc;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return "";
         }
     }
 
