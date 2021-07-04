@@ -867,7 +867,20 @@ public class RaceDao {
             }
             data.add(vector);
         }
-        DefaultTableModel table = new DefaultTableModel(data, columnNames);
+        DefaultTableModel table = new DefaultTableModel(data, columnNames){
+            @Override
+            public Class getColumnClass(int column){
+                if (column == 1){
+                    return Integer.class;
+                }else if (column==2){
+                    return Double.class;
+                }else if(column==3){
+                    return Double.class;
+                }else{
+                    return String.class;
+                }
+            }
+        };
         return table;
     }
 
