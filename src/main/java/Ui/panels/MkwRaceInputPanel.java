@@ -60,6 +60,8 @@ public class MkwRaceInputPanel extends JPanel {
     static MogiUpdater mogiUpdater;
 
     boolean onOff = false;
+    boolean reset = false;
+    int resetShift = 0;
 
     JButton summaryButton = new JButton("All Races");
 
@@ -129,20 +131,50 @@ public class MkwRaceInputPanel extends JPanel {
         autoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                roomReset();
                 mogiUpdater.initializeRaces(RaceDao.getFc());
-                int raceNumber = event.getRacesPlayed()+1;
 
-                if(mogiUpdater.getRaces().containsKey(raceNumber)){
-                    HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
-                    trackTf.setText(race.getTrack());
-                    playersTf.setText(String.valueOf(race.getPlayers()));
-                    finishTf.setText(String.valueOf(race.getFinish()));
+
+                if (reset == false) {
+                    int raceNumber = event.getRacesPlayed()+1;
                     if(raceNumber==1){
                         startTf.setText(String.valueOf(mogiUpdater.initialStart));
                     }
+
+                    if(mogiUpdater.getRaces().containsKey(raceNumber)){
+                        HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
+                        trackTf.setText(race.getTrack());
+                        playersTf.setText(String.valueOf(race.getPlayers()));
+                        finishTf.setText(String.valueOf(race.getFinish()));
+
+                    }else{
+                        if(mogiUpdater.roomFound){
+                            InputVerifier.relativePopup("room found but failed to find race "+(event.getRacesPlayed()+1)+" results","autofill error"
+                                    ,resetBox);
+                        }else{
+                            InputVerifier.relativePopup("Failed to find room with "+RaceDao.getFc()+" on wiimfi","autofill error"
+                                    ,resetBox);
+                        }
+
+                    }
                 }else{
-                    InputVerifier.relativePopup("failed to find race/room","autofill error"
-                    ,resetBox);
+                    int raceNumber = event.getRacesPlayed()+1+resetShift;
+                    if(raceNumber==1){
+                        startTf.setText(String.valueOf(mogiUpdater.initialStart));
+                    }
+
+                    if(mogiUpdater.getRaces().containsKey(raceNumber)){
+                        HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
+                        trackTf.setText(race.getTrack());
+                        playersTf.setText(String.valueOf(race.getPlayers()));
+                        finishTf.setText(String.valueOf(race.getFinish()));
+                        if(raceNumber==1){
+                            startTf.setText(String.valueOf(mogiUpdater.initialStart));
+                        }
+                    }else{
+                        InputVerifier.relativePopup("failed to find race/room","autofill error"
+                                ,resetBox);
+                    }
                 }
             }
         });
@@ -439,7 +471,9 @@ public class MkwRaceInputPanel extends JPanel {
             event.postRacestatus();
             event.preRaceStatus();
             resetBox.setSelected(false);
-            autoButton.setEnabled(false);
+            mogiUpdater=new MogiUpdater();
+            reset = true;
+            resetShift = event.getRacesPlayed();
         }
     }
 
