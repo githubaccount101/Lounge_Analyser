@@ -146,7 +146,7 @@ public class MogiUpdater {
             e.printStackTrace();
         }
 
-
+        roomFound = false;
         Elements tables = doc.getElementsByClass("table11");
         for(Element table:tables){
             Elements tableElements = table.children();

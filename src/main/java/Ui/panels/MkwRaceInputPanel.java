@@ -212,7 +212,7 @@ public class MkwRaceInputPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 roomReset();
-                unplayedOrCompletedCheck(true);
+                unplayedOrCompletedCheck(false);
                 dcCheck();
                 eventDoneCheck();
                 if(event.isEventDone()){
@@ -417,7 +417,7 @@ public class MkwRaceInputPanel extends JPanel {
     }
 
     public void setTitle(){
-        titleLabel.setText("[Event"+event.getEventId()+"] T"+event.getTier().getTier()+" "+event.getFormat().getFormat());
+        titleLabel.setText("[Event-"+event.getEventId()+"] T"+event.getTier().getTier()+" "+event.getFormat().getFormat());
     }
 
     public void setStatusEnd(){
@@ -579,6 +579,7 @@ public class MkwRaceInputPanel extends JPanel {
                 gpStart = 0;
                 startTf.setText("");
                 System.out.println("");
+                processInBackgroundGpStart();
             }else if(event.currentGp.oneRaceIsPlayed()){
                 //after at least 1 gp has been  played, and one race has been played in the new gp
                 gpStart = 0;
@@ -692,6 +693,26 @@ public class MkwRaceInputPanel extends JPanel {
         }
     }
 
+    public boolean postDcStartUpdate(){
+
+        mogiUpdater.getRoomId(RaceDao.getFc());
+        if(mogiUpdater.roomFound){
+            System.out.println("room found");
+            if(gpStart!=mogiUpdater.initialStart){
+                System.out.println("gpStart set to "+mogiUpdater.initialStart+" from " + gpStart);
+                gpStart=mogiUpdater.initialStart;
+                startTf.setText(String.valueOf(gpStart));
+                return true;
+            }else{
+                System.out.println("gpStart has not changed");
+                return false;
+            }
+        }else{
+            System.out.println("room not found");
+            return false;
+        }
+    }
+
     public void initialize(){
         setTrackTf();
         setTitle();
@@ -709,5 +730,30 @@ public class MkwRaceInputPanel extends JPanel {
         }
 
         EventQueue.invokeLater( () -> trackTf.requestFocusInWindow() );
+    }
+
+    public void processInBackgroundGpStart(){
+        SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                for(int i = 1;i<=11;i++){
+                    try{
+                        System.out.println("checking for new gp start position after dc: "+i+"/11 Attempts");
+                        if(postDcStartUpdate()){
+                            break;
+                        }
+                        Thread.sleep(20000);
+                    }catch(InterruptedException j){
+                        System.out.println(j.getMessage());
+                    }
+                }
+                return null;
+            }
+            @Override
+            protected void done() {
+                System.out.println("done looking");
+            }
+        };
+        worker.execute();
     }
 }
