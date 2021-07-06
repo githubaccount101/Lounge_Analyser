@@ -123,7 +123,7 @@ public class MkwRaceInputPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 event = null;
                 status = "n/a";
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mkwTf");
             }
         });
@@ -382,7 +382,7 @@ public class MkwRaceInputPanel extends JPanel {
                 event = null;
                 status = "n/a";
                 card.show(cardPane,"mainMenu");
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 setInitialButtons();
             }
         });

@@ -12,6 +12,11 @@ public class Gui {
     public static JFrame frame;
     JPanel cardPane;
     CardLayout card;
+    public static final int defaultWidth = 450;
+    public static final int defaultHeight = 480;
+    public static final int bigWidth = 900;
+    public static final int bigHeight = 660;
+
 
     public Gui() {
         RaceDao.setUp();

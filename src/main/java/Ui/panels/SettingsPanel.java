@@ -116,9 +116,10 @@ public class SettingsPanel extends JPanel {
         fcButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(InputVerifier.verifyFc(fcTf.getText())){
-                    RaceDao.updatefc(fcTf.getText());
-                    InputVerifier.relativePopup("fc set to "+fcTf.getText(), "Success", randomWarningLabel);
+                String input = fcTf.getText().trim();
+                if(InputVerifier.verifyFc(input)){
+                    RaceDao.updatefc(input);
+                    InputVerifier.relativePopup("fc set to "+input, "Success", randomWarningLabel);
                     fcTf.setText("");
                 }else {
                     InputVerifier.relativePopup("Invalid fc", "error", randomWarningLabel);
@@ -194,7 +195,7 @@ public class SettingsPanel extends JPanel {
         buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mainMenu");
                 mainMenu.initialize();
             }

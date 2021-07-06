@@ -198,7 +198,7 @@ public class Mk8dxTrackPanel extends JPanel {
         buttonBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mainMenu");
             }
         });

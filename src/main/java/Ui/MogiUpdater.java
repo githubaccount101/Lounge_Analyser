@@ -16,6 +16,7 @@ public class MogiUpdater {
     public String finalUrl = "";
     public HashMap<Integer, HtmlRace> races = new HashMap<>();
     public int initialStart = 0;
+    public boolean roomFound = false;
 
     public void setUp(){
         races.clear();
@@ -43,7 +44,9 @@ public class MogiUpdater {
             }
         }else{
             try {
+                System.out.println("connecting...");
                 doc = Jsoup.connect(finalUrl).get();
+                System.out.println("connected");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -136,7 +139,9 @@ public class MogiUpdater {
     public String getRoomId(String friendCode){
         Document doc = null;
         try {
+            System.out.println("connecting...");
             doc = Jsoup.connect("https://wiimmfi.de/stats/mkwx").get();
+            System.out.println("connected");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -169,6 +174,7 @@ public class MogiUpdater {
                             System.out.println("---------------------");
                             System.out.println("");
                             initialStart=i;
+                            roomFound = true;
                             return rId;
                         }
                     }

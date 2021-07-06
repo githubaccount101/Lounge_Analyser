@@ -206,7 +206,7 @@ public class Mk8dxAdvStatsPanel extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mainMenu");
                 scrollPane.setViewportView(RaceDao.getTrackTableBasic());
                 enableAllBoxesAndConstraintButtons(false);

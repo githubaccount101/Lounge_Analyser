@@ -77,7 +77,7 @@ public class MainMenu extends JPanel {
         storeMkwButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mkwTf");
                 mkwEnterTfPanel.initialize();
             }
@@ -86,7 +86,7 @@ public class MainMenu extends JPanel {
         storeMk8dxButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mk8dxTf");
                 mk8dxEnterTfPanel.initialize();
             }
@@ -95,7 +95,7 @@ public class MainMenu extends JPanel {
         mkwTrackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(900,660);
+                Gui.frame.setSize(Gui.bigWidth,Gui.bigHeight);
                 card.show(cardPane,"mkwTrack");
                 mkwTrackPanel.initialize();
             }
@@ -104,7 +104,7 @@ public class MainMenu extends JPanel {
         mk8dxTrackButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(900,660);
+                Gui.frame.setSize(Gui.bigWidth,Gui.bigHeight);
                 card.show(cardPane,"mk8dxTrack");
                 mk8dxTrackPanel.initialize();
             }
@@ -113,7 +113,7 @@ public class MainMenu extends JPanel {
         mkwSummaryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(900,660);
+                Gui.frame.setSize(Gui.bigWidth,Gui.bigHeight);
                 card.show(cardPane,"mkwStats");
                 mkwSummaryPanel.initialize();
             }
@@ -122,7 +122,7 @@ public class MainMenu extends JPanel {
         mk8dxSummaryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(900,660);
+                Gui.frame.setSize(Gui.bigWidth,Gui.bigHeight);
                 card.show(cardPane,"mk8dxStats");
                 mk8dxSummaryPanel.initialize();
             }
@@ -131,7 +131,7 @@ public class MainMenu extends JPanel {
         mkwAdvButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(900,660);
+                Gui.frame.setSize(Gui.bigWidth,Gui.bigHeight);
                 card.show(cardPane,"mkwAdvStats");
                 mkwAdvStatsPanel.initialize();
             }
@@ -140,7 +140,7 @@ public class MainMenu extends JPanel {
         mk8dxAdvButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(900,660);
+                Gui.frame.setSize(Gui.bigWidth,Gui.bigHeight);
                 card.show(cardPane,"mk8dxAdvStats");
                 mk8dxAdvStatsPanel.initialize();
             }
@@ -149,7 +149,7 @@ public class MainMenu extends JPanel {
         settingsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"settings");
                 settingsPanel.initialize();
             }

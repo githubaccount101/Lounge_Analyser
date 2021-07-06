@@ -118,7 +118,7 @@ public class MkwEnterTfPanel extends JPanel {
             panel.setEvent(event);
             panel.initialize();
             card.show(cardPane,"mkwRace");
-            Gui.frame.setSize(450,480);
+            Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
         }else{
             if(InputVerifier.VerifyTier(tierInput)==false&&InputVerifier.verifyFormat(formatInput)==false){
                 InputVerifier.InputErrorBox("Invalid Tier and Format");

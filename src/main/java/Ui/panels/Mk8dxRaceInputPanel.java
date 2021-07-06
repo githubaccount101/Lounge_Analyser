@@ -104,7 +104,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 event = null;
                 status = "n/a";
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mk8dxTf");
             }
         });
@@ -268,7 +268,7 @@ public class Mk8dxRaceInputPanel extends JPanel {
                 RaceDao.refresh();
                 event = null;
                 status = "n/a";
-                Gui.frame.setSize(450,480);
+                Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 card.show(cardPane,"mainMenu");
                 setInitialButtons();
             }
