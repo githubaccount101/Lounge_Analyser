@@ -14,9 +14,10 @@ public class MogiUpdater {
     static String rId = "";
     static final String roomUrl = "https://wiimmfi.de/stats/mkwx/list/";
     public String finalUrl = "";
-    public HashMap<Integer, HtmlRace> races = new HashMap<>();
+    public static HashMap<Integer, HtmlRace> races = new HashMap<>();
     public int initialStart = 0;
     public boolean roomFound = false;
+    public int resetShift = 0;
 
     public void setUp(){
         races.clear();
@@ -80,7 +81,6 @@ public class MogiUpdater {
                                     htmlRace.setFinish(finish);
                                 }
 
-
                                 String longText = e.text();
                                 String raceNumber = longText.substring(longText.lastIndexOf("#") + 1);
                                 String race = raceNumber.substring( 0, raceNumber.indexOf(")"));
@@ -89,13 +89,11 @@ public class MogiUpdater {
                                 String track = preTrack.substring(0,preTrack.indexOf(" ("));
                                 String track2 = track.substring(track.indexOf(" ")+1);
 
-
-
-                                System.out.println("race: "+race+"      ");
-                                System.out.print(track2+"\n");
-
-                                int raceInt = Integer.parseInt(race);
+                                int raceInt = Integer.parseInt(race)+resetShift;
                                 raceid=raceInt;
+
+                                System.out.println("race: "+raceid+"      ");
+                                System.out.print(track2+"\n");
 
                                 if(races.containsKey(raceInt)==false){
                                     races.put(raceInt, new HtmlRace(raceInt, track2));
@@ -147,6 +145,7 @@ public class MogiUpdater {
         }
 
         roomFound = false;
+        initialStart = 0;
         Elements tables = doc.getElementsByClass("table11");
         for(Element table:tables){
             Elements tableElements = table.children();
