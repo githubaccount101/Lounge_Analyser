@@ -859,14 +859,24 @@ public class RaceDao {
         }
 
         // data of the table
+
+        Object obj = null;
+
         Vector<Vector<Object>> data = new Vector<Vector<Object>>();
         while (rs.next()) {
             Vector<Object> vector = new Vector<Object>();
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                vector.add(rs.getObject(columnIndex));
+                if(columnIndex==1){
+                    obj = rs.getObject(columnIndex);
+                    vector.add(obj);
+                }else{
+                    vector.add(rs.getObject(columnIndex));
+                }
             }
             data.add(vector);
         }
+
+        Object finalObj = obj;
         DefaultTableModel table = new DefaultTableModel(data, columnNames){
             @Override
             public Class getColumnClass(int column){
@@ -874,10 +884,10 @@ public class RaceDao {
                     return Integer.class;
                 }else if (column==2){
                     return Double.class;
-                }else if(column==3){
+                }else if(column>=3){
                     return Double.class;
                 }else{
-                    return String.class;
+                    return finalObj.getClass();
                 }
             }
         };

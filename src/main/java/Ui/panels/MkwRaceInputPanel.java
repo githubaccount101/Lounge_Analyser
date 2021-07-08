@@ -60,7 +60,7 @@ public class MkwRaceInputPanel extends JPanel {
     static MogiUpdater mogiUpdater;
 
     boolean onOff = false;
-    boolean reset = false;
+    boolean reseted = false;
 
     JButton summaryButton = new JButton("All Races");
 
@@ -139,13 +139,14 @@ public class MkwRaceInputPanel extends JPanel {
                 }
 
                 if(mogiUpdater.getRaces().containsKey(raceNumber)){
+                    if(reseted){
+                        resetBox.setSelected(true);
+                        reseted = false;
+                    }
                     HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
                     trackTf.setText(race.getTrack());
                     playersTf.setText(String.valueOf(race.getPlayers()));
                     finishTf.setText(String.valueOf(race.getFinish()));
-                    if(reset){
-                        resetBox.setSelected(true);
-                    }
 
                 }else{
                     if(mogiUpdater.roomFound){
@@ -218,6 +219,7 @@ public class MkwRaceInputPanel extends JPanel {
                 dcCheck();
                 setStatus();
                 resetBox.setSelected(false);
+                setPostDcTF();
             }
         });
 
@@ -232,6 +234,7 @@ public class MkwRaceInputPanel extends JPanel {
                     eventDoneCheck();
                     dcCheck();
                     setStatus();
+                    setPostDcTF();
                 }else{
                     event.updateScoring();
                     eventDoneCheck();
@@ -452,10 +455,9 @@ public class MkwRaceInputPanel extends JPanel {
             event.postRacestatus();
             event.preRaceStatus();
             resetBox.setSelected(false);
-            reset = true;
-            mogiUpdater=new MogiUpdater();
+            reseted = true;
             mogiUpdater.resetShift = event.getRacesPlayed();
-            reset = false;
+            mogiUpdater.getRoomId(RaceDao.getFc());
         }
     }
 
@@ -507,6 +509,7 @@ public class MkwRaceInputPanel extends JPanel {
             rejoinButtonNo.setEnabled(true);
             rejoinButtonYes.setEnabled(true);
             nextButton.setEnabled(false);
+            autoButton.setEnabled(false);
             setStatusDc();
         }else{
             dcButtonOn.setEnabled(true);
@@ -514,6 +517,7 @@ public class MkwRaceInputPanel extends JPanel {
             nextButton.setEnabled(true);
             rejoinButtonNo.setEnabled(false);
             rejoinButtonYes.setEnabled(false);
+            autoButton.setEnabled(true);
             setStatus();
         }
         if(event.getRacesPlayed()==0){
@@ -721,6 +725,8 @@ public class MkwRaceInputPanel extends JPanel {
                 for(int i = 1;i<=11;i++){
                     try{
                         System.out.println("checking for new gp start position after dc: "+i+"/11 Attempts");
+                        setStatus();
+                        statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after dc: "+i+"/11 Attempts");
                         if(postDcStartUpdate()){
                             break;
                         }
@@ -734,6 +740,8 @@ public class MkwRaceInputPanel extends JPanel {
             @Override
             protected void done() {
                 System.out.println("done looking");
+                setStatus();
+                statusTA.setText(statusTA.getText()+"\n\n(new) room/gp start position found: "+mogiUpdater.initialStart);
             }
         };
         worker.execute();
