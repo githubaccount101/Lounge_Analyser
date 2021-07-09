@@ -11,13 +11,13 @@ import java.util.HashMap;
 
 public class MogiUpdater {
 
-    static String rId = "";
+    public String rId = "";
     static final String roomUrl = "https://wiimmfi.de/stats/mkwx/list/";
-    public String finalUrl = "";
-    public static HashMap<Integer, HtmlRace> races = new HashMap<>();
+    public HashMap<Integer, HtmlRace> races = new HashMap<>();
     public int initialStart = 0;
     public boolean roomFound = false;
     public int resetShift = 0;
+
 
     public void setUp(){
         races.clear();
@@ -30,14 +30,12 @@ public class MogiUpdater {
     public void initializeRaces(String friendCode){
         Document doc = null;
 
-        if(finalUrl.isBlank()){
+        if(rId.isBlank()){
             try {
                 String url = roomUrl+getRoomId(friendCode);
                 if(url.equals(roomUrl)){
                     System.out.println("not found in room");
                     return;
-                }else{
-                    finalUrl=url;
                 }
                 doc = Jsoup.connect(url).get();
             } catch (IOException e) {
@@ -46,7 +44,7 @@ public class MogiUpdater {
         }else{
             try {
                 System.out.println("connecting...");
-                doc = Jsoup.connect(finalUrl).get();
+                doc = Jsoup.connect(roomUrl+rId).get();
                 System.out.println("connected");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -144,8 +142,10 @@ public class MogiUpdater {
             e.printStackTrace();
         }
 
+        rId = "";
         roomFound = false;
         initialStart = 0;
+
         Elements tables = doc.getElementsByClass("table11");
         for(Element table:tables){
             Elements tableElements = table.children();
@@ -165,7 +165,6 @@ public class MogiUpdater {
                         String fc = subElement.text();
                         fc = fc.replaceAll("\\s.*", "");
                         i++;
-
 
                         if(fc.matches(friendCode)){
                             System.out.println(fc+ " found in room: "+rId);

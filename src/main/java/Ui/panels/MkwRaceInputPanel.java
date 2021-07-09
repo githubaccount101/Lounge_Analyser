@@ -131,33 +131,47 @@ public class MkwRaceInputPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 roomReset();
-                mogiUpdater.initializeRaces(RaceDao.getFc());
-
-                int raceNumber = event.getRacesPlayed()+1;
-                if(raceNumber==1){
-                    startTf.setText(String.valueOf(mogiUpdater.initialStart));
+                if(event.getRacesPlayed()>0){
+                    if(event.getMostRecentlyCompletedRace().isPlaceholder()){
+                        setPostDcTF();
+                    }
                 }
 
-                if(mogiUpdater.getRaces().containsKey(raceNumber)){
-                    if(reseted){
-                        resetBox.setSelected(true);
-                        reseted = false;
-                    }
-                    HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
-                    trackTf.setText(race.getTrack());
-                    playersTf.setText(String.valueOf(race.getPlayers()));
-                    finishTf.setText(String.valueOf(race.getFinish()));
+                if(reseted){
+                    mogiUpdater.resetShift = event.getRacesPlayed();
+                    undoButton.setEnabled(false);
+                    nextButton.setEnabled(false);
+                    dcButtonOff.setEnabled(false);
+                    dcButtonOn.setEnabled(false);
+                    processInBackgroundResetRoomSearch();
+                }
 
-                }else{
-                    if(mogiUpdater.roomFound){
-                        InputVerifier.relativePopup("room found but failed to find race "+(event.getRacesPlayed()+1)+" results"+
-                                "\nRoom position is "+mogiUpdater.initialStart,"autofill error",resetBox);
+                if (reseted == false) {
+                    mogiUpdater.initializeRaces(RaceDao.getFc());
+                    int raceNumber = event.getRacesPlayed()+1;
+
+                    if(raceNumber==1){
+                        startTf.setText(String.valueOf(mogiUpdater.initialStart));
+                    }
+
+                    if(mogiUpdater.getRaces().containsKey(raceNumber)){
+                        HtmlRace race  = mogiUpdater.getRaces().get(raceNumber);
+                        trackTf.setText(race.getTrack());
+                        playersTf.setText(String.valueOf(race.getPlayers()));
+                        finishTf.setText(String.valueOf(race.getFinish()));
+
                     }else{
-                        InputVerifier.relativePopup("Failed to find room with "+RaceDao.getFc()+" on wiimmfi site","autofill error"
-                                ,resetBox);
-                    }
+                        if(mogiUpdater.roomFound){
+                            InputVerifier.relativePopup("room found but failed to find race "+(event.getRacesPlayed()+1)+" results"+
+                                    "\nRoom position is "+mogiUpdater.initialStart,"autofill error",resetBox);
+                        }else{
+                            InputVerifier.relativePopup("Failed to find room with "+RaceDao.getFc()+" on wiimmfi site","autofill error"
+                                    ,resetBox);
+                        }
 
+                    }
                 }
+                reseted = false;
             }
         });
 
@@ -456,8 +470,6 @@ public class MkwRaceInputPanel extends JPanel {
             event.preRaceStatus();
             resetBox.setSelected(false);
             reseted = true;
-            mogiUpdater.resetShift = event.getRacesPlayed();
-            mogiUpdater.getRoomId(RaceDao.getFc());
         }
     }
 
@@ -578,6 +590,7 @@ public class MkwRaceInputPanel extends JPanel {
         }
         finishTf.setText("");
         trackTf.requestFocusInWindow();
+        reseted = false;
     }
 
     private void setPostRaceTF(){
@@ -623,6 +636,7 @@ public class MkwRaceInputPanel extends JPanel {
 
         finishTf.setText("");
         trackTf.requestFocusInWindow();
+        reseted = false;
     }
 
     public void nextRace(){
@@ -722,11 +736,11 @@ public class MkwRaceInputPanel extends JPanel {
         SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                for(int i = 1;i<=11;i++){
+                for(int i = 1;i<=15;i++){
                     try{
-                        System.out.println("checking for new gp start position after dc: "+i+"/11 Attempts");
+                        System.out.println("checking for new gp start position after dc: "+i+"/15 Attempts");
                         setStatus();
-                        statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after dc: "+i+"/11 Attempts");
+                        statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after dc: "+i+"/15 Attempts");
                         if(postDcStartUpdate()){
                             break;
                         }
@@ -739,9 +753,57 @@ public class MkwRaceInputPanel extends JPanel {
             }
             @Override
             protected void done() {
-                System.out.println("done looking");
+
+                setPostRaceTF();
                 setStatus();
                 statusTA.setText(statusTA.getText()+"\n\n(new) room/gp start position found: "+mogiUpdater.initialStart);
+            }
+        };
+        worker.execute();
+    }
+
+    public void processInBackgroundResetRoomSearch(){
+
+        SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+
+                String id = mogiUpdater.rId;
+                for(int i = 1;i<=20;i++){
+                    try{
+                        System.out.println("checking for new gp start position after reset: "+i+"/20 Attempts");
+                        setStatus();
+                        statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after reset: "+i+"/20 Attempts");
+                        String newId = mogiUpdater.getRoomId(RaceDao.getFc());
+                        if(id.matches(newId)){
+                            System.out.println(RaceDao.getFc()+" still found in previous room");
+                            statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" still found in past room");
+                        }else if(newId.isBlank()){
+                            System.out.println(RaceDao.getFc()+" not found in any room");
+                            statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" not found in any room");
+                        }else{
+                            System.out.println(RaceDao.getFc()+" found in new room: "+newId);
+                            statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" found in new room: "+newId);
+                            break;
+                        }
+                        Thread.sleep(10000);
+                    }catch(InterruptedException j){
+                        System.out.println(j.getMessage());
+                    }
+                }
+                return null;
+            }
+            @Override
+            protected void done() {
+                setPostRaceTF();
+                setStatus();
+                startTf.setText(String.valueOf((mogiUpdater.initialStart)));
+                statusTA.setText(statusTA.getText()+"\n(new) room/gp start position after reset found: "+mogiUpdater.initialStart
+                +"\n+Autofill again  when next race is completed to get track/finish/players");
+                undoButton.setEnabled(true);
+                nextButton.setEnabled(true);
+                dcButtonOff.setEnabled(true);
+                dcButtonOn.setEnabled(true);
             }
         };
         worker.execute();
