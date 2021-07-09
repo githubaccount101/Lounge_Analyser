@@ -64,6 +64,9 @@ public class MkwRaceInputPanel extends JPanel {
 
     JButton summaryButton = new JButton("All Races");
 
+    SwingWorker<Void,Void> workerReset = null;
+    SwingWorker<Void,Void> workerDc = null;
+
     public MkwRaceInputPanel(CardLayout card, JPanel cardPane, JFrame gui){
 
         GridBagLayout layout = new GridBagLayout();
@@ -139,7 +142,9 @@ public class MkwRaceInputPanel extends JPanel {
 
                 if(reseted){
                     mogiUpdater.resetShift = event.getRacesPlayed();
-                    undoButton.setEnabled(false);
+                    undoButton.setEnabled(true);
+                    undoButton.setText("Stop");
+                    backButton.setEnabled(false);
                     nextButton.setEnabled(false);
                     dcButtonOff.setEnabled(false);
                     dcButtonOn.setEnabled(false);
@@ -276,6 +281,24 @@ public class MkwRaceInputPanel extends JPanel {
                     System.out.println(j.getMessage());
                 }
 
+                if(workerReset!=null){
+                    if(workerReset.isDone()==false){
+                        workerReset.cancel(true);
+                        workerReset=null;
+                        setStatus();
+                        return;
+                    }
+                }
+
+                if(workerDc!=null){
+                    if(workerDc.isDone()==false){
+                        workerDc.cancel(true);
+                        workerDc=null;
+                        setStatus();
+                        return;
+                    }
+                }
+
                 String preTrack;
                 String preStart ;
                 String preFinish ;
@@ -382,6 +405,7 @@ public class MkwRaceInputPanel extends JPanel {
                 card.show(cardPane,"mainMenu");
                 Gui.frame.setSize(Gui.defaultWidth,Gui.defaultHeight);
                 setInitialButtons();
+                mogiUpdater=null;
             }
         });
 
@@ -577,6 +601,12 @@ public class MkwRaceInputPanel extends JPanel {
                 gpStart = 0;
                 startTf.setText("");
                 System.out.println("");
+                undoButton.setEnabled(true);
+                undoButton.setText("Stop");
+                backButton.setEnabled(false);
+                nextButton.setEnabled(false);
+                dcButtonOff.setEnabled(false);
+                dcButtonOn.setEnabled(false);
                 processInBackgroundGpStart();
             }else if(event.currentGp.oneRaceIsPlayed()){
                 //after at least 1 gp has been  played, and one race has been played in the new gp
@@ -721,76 +751,90 @@ public class MkwRaceInputPanel extends JPanel {
         playersTf.setText("12");
         startTf.setText("");
         finishTf.setText("");
-        mogiUpdater = new MogiUpdater();
-        mogiUpdater.setUp();
+
         if(RaceDao.getFc().equals("nope")){
             autoButton.setEnabled(false);
         }else{
             autoButton.setEnabled(true);
+            mogiUpdater = new MogiUpdater(event);
+            mogiUpdater.setUp();
         }
 
         EventQueue.invokeLater( () -> trackTf.requestFocusInWindow() );
     }
 
     public void processInBackgroundGpStart(){
-        SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
+        SwingWorker<Void,Void> workerDc = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                for(int i = 1;i<=15;i++){
-                    try{
-                        System.out.println("checking for new gp start position after dc: "+i+"/15 Attempts");
-                        setStatus();
-                        statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after dc: "+i+"/15 Attempts");
-                        if(postDcStartUpdate()){
-                            break;
+                if(!isCancelled()){
+                    for(int i = 1;i<=15;i++){
+                        try{
+                            System.out.println("checking for new gp start position after dc: "+i+"/15 Attempts");
+                            setStatus();
+                            statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after dc: "+i+"/15 Attempts");
+                            if(postDcStartUpdate()){
+                                break;
+                            }
+                            Thread.sleep(20000);
+                        }catch(InterruptedException j){
+                            System.out.println(j.getMessage());
                         }
-                        Thread.sleep(20000);
-                    }catch(InterruptedException j){
-                        System.out.println(j.getMessage());
                     }
                 }
+                System.out.println("background process ended");
                 return null;
             }
             @Override
             protected void done() {
-
+                undoButton.setText("Undo Race");
+                nextButton.setEnabled(true);
+                dcButtonOff.setEnabled(true);
+                dcButtonOn.setEnabled(true);
+                if(event.getRacesPlayed()==0){
+                    backButton.setEnabled(true);
+                }
                 setPostRaceTF();
                 setStatus();
                 statusTA.setText(statusTA.getText()+"\n\n(new) room/gp start position found: "+mogiUpdater.initialStart);
             }
         };
-        worker.execute();
+        this.workerDc=workerDc;
+        workerDc.execute();
     }
 
     public void processInBackgroundResetRoomSearch(){
 
-        SwingWorker<Void,Void> worker = new SwingWorker<Void, Void>() {
+        SwingWorker<Void,Void> workerReset = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
 
                 String id = mogiUpdater.rId;
                 for(int i = 1;i<=20;i++){
-                    try{
-                        System.out.println("checking for new gp start position after reset: "+i+"/20 Attempts");
-                        setStatus();
-                        statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after reset: "+i+"/20 Attempts");
-                        String newId = mogiUpdater.getRoomId(RaceDao.getFc());
-                        if(id.matches(newId)){
-                            System.out.println(RaceDao.getFc()+" still found in previous room");
-                            statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" still found in past room");
-                        }else if(newId.isBlank()){
-                            System.out.println(RaceDao.getFc()+" not found in any room");
-                            statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" not found in any room");
-                        }else{
-                            System.out.println(RaceDao.getFc()+" found in new room: "+newId);
-                            statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" found in new room: "+newId);
-                            break;
+                    if(!isCancelled()){
+                        try{
+                            System.out.println("checking for new gp start position after reset: "+i+"/20 Attempts");
+                            setStatus();
+                            statusTA.setText(statusTA.getText()+"\n\nchecking for new gp start position after reset: "+i+"/20 Attempts");
+                            String newId = mogiUpdater.getRoomId(RaceDao.getFc());
+                            if(newId.isBlank()){
+                                System.out.println(RaceDao.getFc()+" not found in any room");
+                                statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" not found in any room");
+                            }else if(id.matches(newId)){
+                                System.out.println(RaceDao.getFc()+" still found in previous room");
+                                statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" still found in past room");
+                            }else{
+                                System.out.println(RaceDao.getFc()+" found in new room: "+newId);
+                                statusTA.setText(statusTA.getText()+"\n"+RaceDao.getFc()+" found in new room: "+newId);
+                                break;
+                            }
+                            Thread.sleep(10000);
+                        }catch(InterruptedException j){
+                            System.out.println(j.getMessage());
                         }
-                        Thread.sleep(10000);
-                    }catch(InterruptedException j){
-                        System.out.println(j.getMessage());
                     }
                 }
+                System.out.println("background process ended");
                 return null;
             }
             @Override
@@ -800,12 +844,16 @@ public class MkwRaceInputPanel extends JPanel {
                 startTf.setText(String.valueOf((mogiUpdater.initialStart)));
                 statusTA.setText(statusTA.getText()+"\n(new) room/gp start position after reset found: "+mogiUpdater.initialStart
                 +"\n+Autofill again  when next race is completed to get track/finish/players");
-                undoButton.setEnabled(true);
+                undoButton.setText("Undo Race");
                 nextButton.setEnabled(true);
                 dcButtonOff.setEnabled(true);
                 dcButtonOn.setEnabled(true);
+                if(event.getRacesPlayed()==0){
+                    backButton.setEnabled(true);
+                }
             }
         };
-        worker.execute();
+        this.workerReset=workerReset;
+        workerReset.execute();
     }
 }

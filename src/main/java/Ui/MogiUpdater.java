@@ -1,5 +1,6 @@
 package Ui;
 
+import mkw.Event;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +19,11 @@ public class MogiUpdater {
     public boolean roomFound = false;
     public int resetShift = 0;
 
+    Event event;
+
+    public MogiUpdater(Event event) {
+        this.event = event;
+    }
 
     public void setUp(){
         races.clear();
@@ -27,7 +33,19 @@ public class MogiUpdater {
         return races;
     }
 
+    public boolean needMoreRaces(){
+        if(event.getRacesPlayed()<races.size()){
+            return false;
+        }
+        return true;
+    }
+
     public void initializeRaces(String friendCode){
+
+        if(needMoreRaces()==false){
+            return;
+        }
+
         Document doc = null;
 
         if(rId.isBlank()){
@@ -182,6 +200,4 @@ public class MogiUpdater {
         rId = "";
         return "";
     }
-
-
 }

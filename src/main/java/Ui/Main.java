@@ -18,13 +18,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-        MogiUpdater mogi = new MogiUpdater();
-        mogi.setUp();
-        mogi.initializeRaces("2625-9382-5901");
 
-        for(HtmlRace race:mogi.getRaces().values()){
-            System.out.println(race);
-        }
     }
 
     public static void testRoom(String friendCode){
