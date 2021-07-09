@@ -134,6 +134,7 @@ public class MkwRaceInputPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 roomReset();
+
                 if(event.getRacesPlayed()>0){
                     if(event.getMostRecentlyCompletedRace().isPlaceholder()){
                         setPostDcTF();
@@ -281,19 +282,19 @@ public class MkwRaceInputPanel extends JPanel {
                     System.out.println(j.getMessage());
                 }
 
-                if(workerReset!=null){
-                    if(workerReset.isDone()==false){
-                        workerReset.cancel(true);
-                        workerReset=null;
+                if(workerDc!=null){
+                    if(workerDc.isDone()==false){
+                        workerDc.cancel(true);
+                        workerDc=null;
                         setStatus();
                         return;
                     }
                 }
 
-                if(workerDc!=null){
-                    if(workerDc.isDone()==false){
-                        workerDc.cancel(true);
-                        workerDc=null;
+                if(workerReset!=null){
+                    if(workerReset.isDone()==false){
+                        workerReset.cancel(true);
+                        workerReset=null;
                         setStatus();
                         return;
                     }
@@ -607,7 +608,7 @@ public class MkwRaceInputPanel extends JPanel {
                 nextButton.setEnabled(false);
                 dcButtonOff.setEnabled(false);
                 dcButtonOn.setEnabled(false);
-                processInBackgroundGpStart();
+                processInBackgroundDcStartSearch();
             }else if(event.currentGp.oneRaceIsPlayed()){
                 //after at least 1 gp has been  played, and one race has been played in the new gp
                 gpStart = 0;
@@ -721,6 +722,9 @@ public class MkwRaceInputPanel extends JPanel {
             String statement = "invalid: "+tracktrack+" "+playerplayer+" "+startstart+" "+finishfinish;
             InputVerifier.relativePopup(statement, "error", resetBox);
         }
+
+        workerDc=null;
+        workerReset=null;
     }
 
     public boolean postDcStartUpdate(){
@@ -763,12 +767,13 @@ public class MkwRaceInputPanel extends JPanel {
         EventQueue.invokeLater( () -> trackTf.requestFocusInWindow() );
     }
 
-    public void processInBackgroundGpStart(){
+    public void processInBackgroundDcStartSearch(){
         SwingWorker<Void,Void> workerDc = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                if(!isCancelled()){
-                    for(int i = 1;i<=15;i++){
+
+                for(int i = 1;i<=15;i++){
+                    if(!isCancelled()){
                         try{
                             System.out.println("checking for new gp start position after dc: "+i+"/15 Attempts");
                             setStatus();
@@ -781,7 +786,9 @@ public class MkwRaceInputPanel extends JPanel {
                             System.out.println(j.getMessage());
                         }
                     }
+
                 }
+
                 System.out.println("background process ended");
                 return null;
             }
